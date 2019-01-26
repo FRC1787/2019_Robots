@@ -69,7 +69,7 @@ public class Robot extends TimedRobot
 
   public void teleopPeriodic() 
   {
-
+    vision.pollCameras();
   }
 
   public void testPeriodic() 
@@ -82,4 +82,5 @@ public class Robot extends TimedRobot
     // Poll cameras
     vision.pollCameras();
   }
+
 }
