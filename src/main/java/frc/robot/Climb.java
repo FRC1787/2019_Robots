@@ -8,13 +8,11 @@ public class Climb
 {
     private static final int CLIMBING_MOTOR_ID = 10;
 
-    private WPI_TalonSRX climber = new WPI_TalonSRX(CLIMBING_MOTOR_ID);
-    private Servo leftActuator = new Servo(0);
-    private Servo rightActuator = new Servo(1);
+    private final WPI_TalonSRX climber = new WPI_TalonSRX(CLIMBING_MOTOR_ID);
+    private final Servo leftActuator = new Servo(0);
+    private final Servo rightActuator = new Servo(1);
 
     private static final Climb instance = new Climb();
-
-
     
     public static Climb getInstance()
     {
