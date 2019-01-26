@@ -8,12 +8,10 @@ public class Hatch
     private static final int HATCH_GRABBING_MOTOR_ID = 8;
     private static final int HATCH_ARTICULATING_MOTOR_ID = 9;
 
-    private WPI_VictorSPX hatchGrabber = new WPI_VictorSPX(HATCH_GRABBING_MOTOR_ID);
-    private WPI_VictorSPX hatchArticulating = new WPI_VictorSPX(HATCH_ARTICULATING_MOTOR_ID);
+    private final WPI_VictorSPX hatchGrabber = new WPI_VictorSPX(HATCH_GRABBING_MOTOR_ID);
+    private final WPI_VictorSPX hatchArticulating = new WPI_VictorSPX(HATCH_ARTICULATING_MOTOR_ID);
 
     private static final Hatch instance = new Hatch();
-
-
     
     public static Hatch getInstance()
     {
