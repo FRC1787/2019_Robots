@@ -12,7 +12,7 @@ public class Cargo
     private final int INTAKE_ARTICULATING_MOTOR_ID = 6;
     private final int SHOOTER_MOTOR_ID = 7;
 
-    private WPI_TalonSRX cargoGrabber = new WPI_TalonSRX(CARGO_GRABBING_MOTOR_ID);
+    private WPI_TalonSRX cargoGrabberMotor = new WPI_TalonSRX(CARGO_GRABBING_MOTOR_ID);
     private WPI_VictorSPX articulatingIntake = new WPI_VictorSPX(INTAKE_ARTICULATING_MOTOR_ID);
     private WPI_TalonSRX shooter = new WPI_TalonSRX(SHOOTER_MOTOR_ID);
 
@@ -23,5 +23,20 @@ public class Cargo
     public static Cargo getInstance()
     {
         return instance;
+    }
+    
+    public void cargoIntake(double speed)
+    {
+        cargoGrabberMotor.set(speed);
+    }
+
+    public void cargoGrabber(double speed)
+    {
+        articulatingIntake.set(speed);
+    }
+
+    public void cargoShooter(double speed)
+    {
+        shooter.set(speed);
     }
 }

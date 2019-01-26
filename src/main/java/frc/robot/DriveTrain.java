@@ -21,10 +21,48 @@ public class DriveTrain
 
     private static final DriveTrain instance = new DriveTrain();
     
+    private static double leftSideRobot;
+    private static double rightSideRobot;
+
 
     
     public static DriveTrain getInstance()
     {
         return instance;
+    }
+
+    public void arcadeDrive(double xAxis, double yAxis)
+    {
+        yAxis = yAxis * Math.abs(yAxis);
+        xAxis = xAxis * Math.abs(xAxis);
+
+        //checks the range to see if the value is greater than 1 or less than -1 and if so corrects the value to be in that range
+        yAxis = rangeCorrection(yAxis);
+        xAxis = rangeCorrection(xAxis);
+
+        leftSideRobot = yAxis + xAxis;
+        rightSideRobot = yAxis - xAxis;
+
+        leftMaster.set(leftSideRobot);
+        rightMaster.set(rightSideRobot);
+
+        leftFollower.set(leftSideRobot);
+        rightFollower.set(rightSideRobot);
+    }
+
+    public double rangeCorrection(double num)
+    {
+        if(num > 1)
+        {
+            return 1;
+        }
+        else if(num < -1)
+        {
+            return -1;
+        }
+        else
+        {
+            return num;
+        }
     }
 }
