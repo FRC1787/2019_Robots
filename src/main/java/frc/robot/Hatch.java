@@ -19,4 +19,14 @@ public class Hatch
     {
         return instance;
     }
+
+    public void articulateHatch(double speed)
+    {
+        hatchArticulating.set(speed);
+    }
+
+    public void grabHatch(double speed)
+    {
+        hatchGrabber.set(speed);
+    }
 }
