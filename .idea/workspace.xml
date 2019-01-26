@@ -1,70 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="90516cde-9d3e-4e49-ad0d-fe0b23c1e931" name="Default Changelist" comment="">
+    <list default="true" id="b3151ba3-1532-4313-9159-30a583ab32b5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Vision.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Cargo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Cargo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Climb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Climb.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/DriveTrain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/DriveTrain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Hatch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Hatch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" afterDir="false" />
     </list>
-    <ignored path="$PROJECT_DIR$/.gradle/" />
-    <ignored path="$PROJECT_DIR$/build/" />
-    <ignored path="$PROJECT_DIR$/out/" />
-    <ignored path=".idea/" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="ExternalProjectsData">
-    <projectState path="$PROJECT_DIR$">
-      <ProjectState />
-    </projectState>
-  </component>
-  <component name="ExternalProjectsManager">
-    <system id="GRADLE">
-      <state>
-        <task path="$PROJECT_DIR$">
-          <activation />
-        </task>
-        <projects_view>
-          <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="2019 Robot" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="2019 Robot" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="2019 Robot" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="2019 Robot" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="embeddedtools" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="2019 Robot" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="gradlerio" type="c8890929:TasksNode$1" />
-              </path>
-            </expand>
-            <select />
-          </tree_state>
-        </projects_view>
-      </state>
-    </system>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -84,8 +33,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/DriveTrain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+            <state relative-caret-position="230">
+              <caret line="26" column="31" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
               <folding>
                 <element signature="e#1046#1047#0" expanded="true" />
                 <element signature="e#1077#1078#0" expanded="true" />
@@ -97,8 +46,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Cargo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+            <state relative-caret-position="300">
+              <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
               <folding>
                 <element signature="e#632#633#0" expanded="true" />
                 <element signature="e#663#664#0" expanded="true" />
@@ -116,8 +65,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Climb.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="83">
-              <caret line="14" column="54" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
+            <state relative-caret-position="113">
+              <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
               <folding>
                 <element signature="e#510#511#0" expanded="true" />
                 <element signature="e#541#542#0" expanded="true" />
@@ -128,11 +77,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Hatch.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="20" column="33" lean-forward="true" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
+            <state relative-caret-position="210">
+              <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -140,20 +89,205 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Robot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="129">
-              <caret line="36" column="17" selection-start-line="36" selection-start-column="17" selection-end-line="36" selection-end-column="17" />
+            <state relative-caret-position="323">
+              <caret line="81" column="19" selection-start-line="81" selection-start-column="19" selection-end-line="81" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Vision.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="353">
+              <caret line="45" column="30" lean-forward="true" selection-start-line="45" selection-start-column="30" selection-end-line="45" selection-end-column="30" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1548#1549#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.thirdparty.frc2019.opencv/opencv-java/3.4.4-4/d433924d21ac1a7c0375495d982f61eb047484cb/opencv-java-3.4.4-4-sources.jar!/org/opencv/core/Mat.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+              <folding>
+                <element signature="n#!!doc;n#Mat#0" />
+                <element signature="e#330#332#0" />
+                <element signature="e#368#466#0" />
+                <element signature="e#472#474#0" />
+                <element signature="e#538#696#0" />
+                <element signature="e#702#704#0" />
+                <element signature="e#780#967#0" />
+                <element signature="e#973#975#0" />
+                <element signature="e#1030#1186#0" />
+                <element signature="e#1192#1194#0" />
+                <element signature="e#1268#1479#0" />
+                <element signature="e#1485#1487#0" />
+                <element signature="e#1552#1761#0" />
+                <element signature="e#1767#1769#0" />
+                <element signature="e#1857#2084#0" />
+                <element signature="e#2090#2261#0" />
+                <element signature="e#2267#2269#0" />
+                <element signature="e#2320#2503#0" />
+                <element signature="e#2509#2511#0" />
+                <element signature="e#2601#2849#0" />
+                <element signature="e#2855#2857#0" />
+                <element signature="e#2923#3079#0" />
+                <element signature="e#3085#3219#0" />
+                <element signature="e#3225#3227#0" />
+                <element signature="e#3272#3406#0" />
+                <element signature="e#3412#3414#0" />
+                <element signature="e#3532#3807#0" />
+                <element signature="e#3813#4023#0" />
+                <element signature="e#4029#4214#0" />
+                <element signature="e#4220#4222#0" />
+                <element signature="e#4264#4398#0" />
+                <element signature="e#4404#4406#0" />
+                <element signature="e#4451#4588#0" />
+                <element signature="e#4594#4596#0" />
+                <element signature="e#4665#4866#0" />
+                <element signature="e#4872#4874#0" />
+                <element signature="e#4926#5093#0" />
+                <element signature="e#5099#5101#0" />
+                <element signature="e#5142#5264#0" />
+                <element signature="e#5270#5272#0" />
+                <element signature="e#5313#5435#0" />
+                <element signature="e#5441#5443#0" />
+                <element signature="e#5549#5764#0" />
+                <element signature="e#5770#5960#0" />
+                <element signature="e#5966#6128#0" />
+                <element signature="e#6134#6136#0" />
+                <element signature="e#6186#6314#0" />
+                <element signature="e#6320#6322#0" />
+                <element signature="e#6382#6542#0" />
+                <element signature="e#6548#6550#0" />
+                <element signature="e#6622#6793#0" />
+                <element signature="e#6799#6801#0" />
+                <element signature="e#6864#7033#0" />
+                <element signature="e#7039#7041#0" />
+                <element signature="e#7088#7241#0" />
+                <element signature="e#7247#7249#0" />
+                <element signature="e#7295#7431#0" />
+                <element signature="e#7437#7439#0" />
+                <element signature="e#7481#7606#0" />
+                <element signature="e#7612#7614#0" />
+                <element signature="e#7664#7804#0" />
+                <element signature="e#7810#7944#0" />
+                <element signature="e#7950#7952#0" />
+                <element signature="e#8005#8151#0" />
+                <element signature="e#8157#8159#0" />
+                <element signature="e#8207#8351#0" />
+                <element signature="e#8357#8359#0" />
+                <element signature="e#8407#8543#0" />
+                <element signature="e#8549#8551#0" />
+                <element signature="e#8600#8739#0" />
+                <element signature="e#8745#8747#0" />
+                <element signature="e#8790#8923#0" />
+                <element signature="e#8929#8931#0" />
+                <element signature="e#9006#9192#0" />
+                <element signature="e#9198#9200#0" />
+                <element signature="e#9266#9450#0" />
+                <element signature="e#9456#9458#0" />
+                <element signature="e#9520#9672#0" />
+                <element signature="e#9678#9806#0" />
+                <element signature="e#9812#9814#0" />
+                <element signature="e#9864#10018#0" />
+                <element signature="e#10024#10026#0" />
+                <element signature="e#10075#10226#0" />
+                <element signature="e#10815#10990#0" />
+                <element signature="e#10996#11143#0" />
+                <element signature="e#11149#11151#0" />
+                <element signature="e#11227#11416#0" />
+                <element signature="e#11422#11424#0" />
+                <element signature="e#11491#11678#0" />
+                <element signature="e#11684#11686#0" />
+                <element signature="e#11738#11875#0" />
+                <element signature="e#11881#11883#0" />
+                <element signature="e#11928#12040#0" />
+                <element signature="e#12046#12048#0" />
+                <element signature="e#12112#12286#0" />
+                <element signature="e#12292#12444#0" />
+                <element signature="e#12450#12452#0" />
+                <element signature="e#12534#12740#0" />
+                <element signature="e#12746#12748#0" />
+                <element signature="e#12793#12930#0" />
+                <element signature="e#12936#12938#0" />
+                <element signature="e#13007#13208#0" />
+                <element signature="e#13214#13216#0" />
+                <element signature="e#13268#13435#0" />
+                <element signature="e#13441#13443#0" />
+                <element signature="e#13484#13606#0" />
+                <element signature="e#13612#13614#0" />
+                <element signature="e#13669#13857#0" />
+                <element signature="e#13863#13865#0" />
+                <element signature="e#13937#14176#0" />
+                <element signature="e#14182#14184#0" />
+                <element signature="e#14253#14450#0" />
+                <element signature="e#14456#14621#0" />
+                <element signature="e#14627#14629#0" />
+                <element signature="e#14671#14805#0" />
+                <element signature="e#14811#14813#0" />
+                <element signature="e#14859#14995#0" />
+                <element signature="e#15001#15003#0" />
+                <element signature="e#15057#15193#0" />
+                <element signature="e#15199#15326#0" />
+                <element signature="e#15332#15334#0" />
+                <element signature="e#15438#15702#0" />
+                <element signature="e#15708#15710#0" />
+                <element signature="e#15787#16039#0" />
+                <element signature="e#16045#16047#0" />
+                <element signature="e#16102#16291#0" />
+                <element signature="e#16297#16299#0" />
+                <element signature="e#16337#16459#0" />
+                <element signature="e#16465#16467#0" />
+                <element signature="e#16512#16639#0" />
+                <element signature="e#16645#16647#0" />
+                <element signature="e#16688#16810#0" />
+                <element signature="e#16816#16818#0" />
+                <element signature="e#16895#17087#0" />
+                <element signature="e#17093#17095#0" />
+                <element signature="e#17163#17353#0" />
+                <element signature="e#17359#17478#0" />
+                <element signature="e#17484#17894#0" />
+                <element signature="e#17994#18558#0" />
+                <element signature="e#18564#19288#0" />
+                <element signature="e#19105#19182#1" />
+                <element signature="e#19294#20016#0" />
+                <element signature="e#19833#19910#1" />
+                <element signature="e#20022#20782#0" />
+                <element signature="e#20599#20676#1" />
+                <element signature="e#20788#21545#0" />
+                <element signature="e#21362#21439#1" />
+                <element signature="e#21551#22351#0" />
+                <element signature="e#22158#22245#1" />
+                <element signature="e#22357#23114#0" />
+                <element signature="e#22931#23008#1" />
+                <element signature="e#23120#23880#0" />
+                <element signature="e#23697#23774#1" />
+                <element signature="e#23886#24608#0" />
+                <element signature="e#24425#24502#1" />
+                <element signature="e#24614#25338#0" />
+                <element signature="e#25155#25232#1" />
+                <element signature="e#25344#26069#0" />
+                <element signature="e#25886#25963#1" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.thirdparty.frc2019.opencv/opencv-java/3.4.4-4/d433924d21ac1a7c0375495d982f61eb047484cb/opencv-java-3.4.4-4-sources.jar!/org/opencv/core/MatOfPoint.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="5" column="37" lean-forward="true" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
@@ -172,24 +306,15 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/Main.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/subsystem/Subsystem.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/subsystem/DriveTrain.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/subsystem/Hatch.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/subsystem/Climb.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/subsystem/Cargo.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/Constants.java" />
+        <option value="$PROJECT_DIR$/src/main/java/frc/robot/Camera.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/Climb.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/DriveTrain.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/Cargo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/frc/robot/DriveTrain.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/Hatch.java" />
+        <option value="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" />
+        <option value="$PROJECT_DIR$/src/main/java/frc/robot/Vision.java" />
       </list>
     </option>
-  </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1280" />
-    <option name="height" value="800" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -295,23 +420,37 @@
               <item name="first" type="462c0819:PsiDirectoryNode" />
               <item name="wpilibj" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="2019 Robot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: edu.wpi.first.thirdparty.frc2019.opencv:opencv-java:3.4.4-4" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="2019 Robot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: edu.wpi.first.thirdparty.frc2019.opencv:opencv-java:3.4.4-4" type="70bed36:NamedLibraryElementNode" />
+              <item name="opencv-java-3.4.4-4.jar" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2019 Robot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: edu.wpi.first.thirdparty.frc2019.opencv:opencv-java:3.4.4-4" type="70bed36:NamedLibraryElementNode" />
+              <item name="opencv-java-3.4.4-4.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="opencv" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2019 Robot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: edu.wpi.first.thirdparty.frc2019.opencv:opencv-java:3.4.4-4" type="70bed36:NamedLibraryElementNode" />
+              <item name="opencv-java-3.4.4-4.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="opencv" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
     </panes>
-  </component>
-  <component name="PropertiesComponent">
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1548535173851" />
-    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-    <property name="run.code.analysis.last.selected.profile" value="pProject Default copy" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -324,54 +463,6 @@
         </RuleState>
       </list>
     </option>
-  </component>
-  <component name="RunManager" selected="Gradle.2019 Robot [discoverRoborio]">
-    <configuration name="2019 Robot [ShuffleBoard]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="ShuffleBoard" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="2019 Robot [discoverRoborio]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="discoverRoborio" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Gradle.2019 Robot [ShuffleBoard]" />
-        <item itemvalue="Gradle.2019 Robot [discoverRoborio]" />
-        <item itemvalue="Gradle.2019 Robot [discoverRoborio]" />
-        <item itemvalue="Gradle.2019 Robot [ShuffleBoard]" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -390,7 +481,7 @@
       <workItem from="1548417386530" duration="52000" />
       <workItem from="1548417501178" duration="184000" />
       <workItem from="1548440416050" duration="2188000" />
-      <workItem from="1548533449179" duration="1734000" />
+      <workItem from="1548533449179" duration="3229000" />
     </task>
     <task id="LOCAL-00001" summary="changed from depreciated IterativeRobot to TimedRobot">
       <created>1548191992978</created>
@@ -406,26 +497,16 @@
       <option name="project" value="LOCAL" />
       <updated>1548441290419</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11799000" />
-  </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
+    <option name="totallyTimeSpent" value="943000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24959612" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24959612" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -441,7 +522,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32876712" />
       <window_info anchor="bottom" id="Build" order="7" weight="0.32876712" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.32876712" />
+      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.32876712" />
       <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="FRC" order="11" />
@@ -463,34 +544,7 @@
       <window_info anchor="right" id="Mongo Explorer" order="10" />
     </layout>
   </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
-  </component>
   <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="RECENTLY_FILTERED_USER_GROUPS">
-                <collection />
-              </option>
-              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-                <collection />
-              </option>
-              <option name="COLUMN_ORDER">
-                <list>
-                  <option value="0" />
-                  <option value="1" />
-                  <option value="2" />
-                  <option value="3" />
-                </list>
-              </option>
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="Branch">
@@ -1225,23 +1279,177 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Climb.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="83">
-          <caret line="14" column="54" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
+        <state relative-caret-position="315">
+          <caret line="29" column="25" selection-start-line="29" selection-start-column="25" selection-end-line="29" selection-end-column="25" />
           <folding>
-            <element signature="e#510#511#0" expanded="true" />
-            <element signature="e#541#542#0" expanded="true" />
-            <element signature="e#713#714#0" expanded="true" />
-            <element signature="e#747#748#0" expanded="true" />
+            <element signature="e#1025#1026#0" expanded="true" />
+            <element signature="e#1067#1068#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.cameraserver/cameraserver-java/2019.2.1/cd388eaa08113ae1ca4199507c05eadc62aa0456/cameraserver-java-2019.2.1-sources.jar!/edu/wpi/first/cameraserver/CameraServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="68" column="41" selection-start-line="68" selection-start-column="41" selection-end-line="68" selection-end-column="41" />
+          <folding>
+            <element signature="docComment;class#CameraServer#0" />
+            <element signature="e#1912#1957#0" />
+            <element signature="e#1912#2105#0" />
+            <element signature="e#2040#2082#1" />
+            <element signature="e#2583#3136#0" />
+            <element signature="e#2751#3132#0" />
+            <element signature="e#2854#3046#1" />
+            <element signature="e#2952#2997#1" />
+            <element signature="e#3003#3038#1" />
+            <element signature="e#3140#3316#0" />
+            <element signature="e#3320#4416#0" />
+            <element signature="e#3578#3613#1" />
+            <element signature="e#3896#4016#1" />
+            <element signature="e#4022#4369#1" />
+            <element signature="e#4214#4363#1" />
+            <element signature="e#4254#4306#1" />
+            <element signature="e#4420#5561#0" />
+            <element signature="e#4700#4735#1" />
+            <element signature="e#4869#4915#1" />
+            <element signature="e#5025#5537#1" />
+            <element signature="e#5249#5531#1" />
+            <element signature="e#5565#6910#0" />
+            <element signature="e#5752#6451#1" />
+            <element signature="e#5930#5957#1" />
+            <element signature="e#6032#6445#1" />
+            <element signature="e#6222#6253#1" />
+            <element signature="e#6366#6437#1" />
+            <element signature="e#6529#6906#1" />
+            <element signature="e#6704#6900#1" />
+            <element signature="e#6821#6892#1" />
+            <element signature="e#6914#7306#0" />
+            <element signature="e#7045#7302#0" />
+            <element signature="e#7310#7647#0" />
+            <element signature="e#7651#8016#0" />
+            <element signature="e#7929#7988#1" />
+            <element signature="e#8020#9780#0" />
+            <element signature="e#8262#8361#1" />
+            <element signature="e#8367#8460#1" />
+            <element signature="e#8522#9721#0" />
+            <element signature="e#8558#9715#0" />
+            <element signature="e#8604#8672#1" />
+            <element signature="e#8678#8739#1" />
+            <element signature="e#8821#9405#1" />
+            <element signature="e#9411#9466#1" />
+            <element signature="e#9527#9592#1" />
+            <element signature="e#9598#9656#1" />
+            <element signature="e#9784#16883#0" />
+            <element signature="e#10226#10295#0" />
+            <element signature="e#10902#14777#0" />
+            <element signature="e#10939#14771#0" />
+            <element signature="e#10970#12005#1" />
+            <element signature="e#11574#11843#0" />
+            <element signature="e#12037#12361#1" />
+            <element signature="e#12133#12334#1" />
+            <element signature="e#12393#12782#1" />
+            <element signature="e#12489#12755#1" />
+            <element signature="e#12817#13012#1" />
+            <element signature="e#12913#12985#1" />
+            <element signature="e#13052#13281#1" />
+            <element signature="e#13148#13254#1" />
+            <element signature="e#13320#13533#1" />
+            <element signature="e#13416#13506#1" />
+            <element signature="e#13571#13763#1" />
+            <element signature="e#13667#13736#1" />
+            <element signature="e#13806#13999#1" />
+            <element signature="e#13902#13972#1" />
+            <element signature="e#14044#14475#1" />
+            <element signature="e#14140#14448#1" />
+            <element signature="e#14158#14365#0" />
+            <element signature="e#14605#14729#1" />
+            <element signature="e#14799#14834#0" />
+            <element signature="e#15108#16817#0" />
+            <element signature="e#15320#15349#1" />
+            <element signature="e#15501#15530#1" />
+            <element signature="e#15715#15859#1" />
+            <element signature="e#15906#15964#1" />
+            <element signature="e#16014#16073#1" />
+            <element signature="e#16079#16119#1" />
+            <element signature="e#16261#16809#0" />
+            <element signature="e#16887#17399#0" />
+            <element signature="e#16887#17640#0" />
+            <element signature="e#17644#17901#0" />
+            <element signature="e#17644#18164#0" />
+            <element signature="e#18168#18353#0" />
+            <element signature="e#18168#18614#0" />
+            <element signature="e#18618#18813#0" />
+            <element signature="e#18618#19079#0" />
+            <element signature="e#19083#19220#0" />
+            <element signature="e#19083#19398#0" />
+            <element signature="e#19402#19610#0" />
+            <element signature="e#19714#19914#0" />
+            <element signature="e#20022#20173#0" />
+            <element signature="e#20022#20491#0" />
+            <element signature="e#20495#20636#0" />
+            <element signature="e#20495#20958#0" />
+            <element signature="e#20962#21236#0" />
+            <element signature="e#20962#21598#0" />
+            <element signature="e#21314#21478#0" />
+            <element signature="e#21355#21421#1" />
+            <element signature="e#21503#21565#1" />
+            <element signature="e#21602#21824#0" />
+            <element signature="e#21602#22352#0" />
+            <element signature="e#21945#22233#0" />
+            <element signature="e#22013#22227#1" />
+            <element signature="e#22101#22189#1" />
+            <element signature="e#22356#22536#0" />
+            <element signature="e#22356#22804#0" />
+            <element signature="e#22625#22771#0" />
+            <element signature="e#22689#22765#1" />
+            <element signature="e#22808#23081#0" />
+            <element signature="e#22808#23295#0" />
+            <element signature="e#23299#23395#0" />
+            <element signature="e#23299#23570#0" />
+            <element signature="e#23480#23532#0" />
+            <element signature="e#23574#23643#0" />
+            <element signature="e#23574#23799#0" />
+            <element signature="e#23803#23880#0" />
+            <element signature="e#23803#24005#0" />
+            <element signature="e#23949#24001#0" />
+            <element signature="e#24009#24083#0" />
+            <element signature="e#24009#24189#0" />
+            <element signature="e#24150#24185#0" />
+            <element signature="e#24193#24372#0" />
+            <element signature="e#24193#24603#0" />
+            <element signature="e#24430#24599#0" />
+            <element signature="e#24471#24537#1" />
+            <element signature="e#24607#24678#0" />
+            <element signature="e#24607#24790#0" />
+            <element signature="e#24747#24786#0" />
+            <element signature="e#24794#24871#0" />
+            <element signature="e#24794#25109#0" />
+            <element signature="e#24978#25105#0" />
+            <element signature="e#25019#25064#1" />
+            <element signature="e#25113#25187#0" />
+            <element signature="e#25113#25295#0" />
+            <element signature="e#25254#25291#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/DriveTrain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="26" column="31" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
+          <folding>
+            <element signature="e#1046#1047#0" expanded="true" />
+            <element signature="e#1077#1078#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Cargo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        <state relative-caret-position="300">
+          <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
           <folding>
             <element signature="e#632#633#0" expanded="true" />
             <element signature="e#663#664#0" expanded="true" />
@@ -1255,92 +1463,225 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Robot.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Climb.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="36" column="17" selection-start-line="36" selection-start-column="17" selection-end-line="36" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/DriveTrain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        <state relative-caret-position="113">
+          <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
           <folding>
-            <element signature="e#1046#1047#0" expanded="true" />
-            <element signature="e#1077#1078#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="29" column="25" selection-start-line="29" selection-start-column="25" selection-end-line="29" selection-end-column="25" />
-          <folding>
-            <element signature="e#1025#1026#0" expanded="true" />
-            <element signature="e#1067#1068#0" expanded="true" />
+            <element signature="e#510#511#0" expanded="true" />
+            <element signature="e#541#542#0" expanded="true" />
+            <element signature="e#713#714#0" expanded="true" />
+            <element signature="e#747#748#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Hatch.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="20" column="33" lean-forward="true" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
+        <state relative-caret-position="210">
+          <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
         </state>
       </provider>
     </entry>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <last-edited>1.12.2</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Targeting.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Robot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="81" column="19" selection-start-line="81" selection-start-column="19" selection-end-line="81" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.thirdparty.frc2019.opencv/opencv-java/3.4.4-4/d433924d21ac1a7c0375495d982f61eb047484cb/opencv-java-3.4.4-4-sources.jar!/org/opencv/core/MatOfPoint.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="5" column="37" lean-forward="true" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.thirdparty.frc2019.opencv/opencv-java/3.4.4-4/d433924d21ac1a7c0375495d982f61eb047484cb/opencv-java-3.4.4-4-sources.jar!/org/opencv/core/Mat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+          <folding>
+            <element signature="n#!!doc;n#Mat#0" />
+            <element signature="e#330#332#0" />
+            <element signature="e#368#466#0" />
+            <element signature="e#472#474#0" />
+            <element signature="e#538#696#0" />
+            <element signature="e#702#704#0" />
+            <element signature="e#780#967#0" />
+            <element signature="e#973#975#0" />
+            <element signature="e#1030#1186#0" />
+            <element signature="e#1192#1194#0" />
+            <element signature="e#1268#1479#0" />
+            <element signature="e#1485#1487#0" />
+            <element signature="e#1552#1761#0" />
+            <element signature="e#1767#1769#0" />
+            <element signature="e#1857#2084#0" />
+            <element signature="e#2090#2261#0" />
+            <element signature="e#2267#2269#0" />
+            <element signature="e#2320#2503#0" />
+            <element signature="e#2509#2511#0" />
+            <element signature="e#2601#2849#0" />
+            <element signature="e#2855#2857#0" />
+            <element signature="e#2923#3079#0" />
+            <element signature="e#3085#3219#0" />
+            <element signature="e#3225#3227#0" />
+            <element signature="e#3272#3406#0" />
+            <element signature="e#3412#3414#0" />
+            <element signature="e#3532#3807#0" />
+            <element signature="e#3813#4023#0" />
+            <element signature="e#4029#4214#0" />
+            <element signature="e#4220#4222#0" />
+            <element signature="e#4264#4398#0" />
+            <element signature="e#4404#4406#0" />
+            <element signature="e#4451#4588#0" />
+            <element signature="e#4594#4596#0" />
+            <element signature="e#4665#4866#0" />
+            <element signature="e#4872#4874#0" />
+            <element signature="e#4926#5093#0" />
+            <element signature="e#5099#5101#0" />
+            <element signature="e#5142#5264#0" />
+            <element signature="e#5270#5272#0" />
+            <element signature="e#5313#5435#0" />
+            <element signature="e#5441#5443#0" />
+            <element signature="e#5549#5764#0" />
+            <element signature="e#5770#5960#0" />
+            <element signature="e#5966#6128#0" />
+            <element signature="e#6134#6136#0" />
+            <element signature="e#6186#6314#0" />
+            <element signature="e#6320#6322#0" />
+            <element signature="e#6382#6542#0" />
+            <element signature="e#6548#6550#0" />
+            <element signature="e#6622#6793#0" />
+            <element signature="e#6799#6801#0" />
+            <element signature="e#6864#7033#0" />
+            <element signature="e#7039#7041#0" />
+            <element signature="e#7088#7241#0" />
+            <element signature="e#7247#7249#0" />
+            <element signature="e#7295#7431#0" />
+            <element signature="e#7437#7439#0" />
+            <element signature="e#7481#7606#0" />
+            <element signature="e#7612#7614#0" />
+            <element signature="e#7664#7804#0" />
+            <element signature="e#7810#7944#0" />
+            <element signature="e#7950#7952#0" />
+            <element signature="e#8005#8151#0" />
+            <element signature="e#8157#8159#0" />
+            <element signature="e#8207#8351#0" />
+            <element signature="e#8357#8359#0" />
+            <element signature="e#8407#8543#0" />
+            <element signature="e#8549#8551#0" />
+            <element signature="e#8600#8739#0" />
+            <element signature="e#8745#8747#0" />
+            <element signature="e#8790#8923#0" />
+            <element signature="e#8929#8931#0" />
+            <element signature="e#9006#9192#0" />
+            <element signature="e#9198#9200#0" />
+            <element signature="e#9266#9450#0" />
+            <element signature="e#9456#9458#0" />
+            <element signature="e#9520#9672#0" />
+            <element signature="e#9678#9806#0" />
+            <element signature="e#9812#9814#0" />
+            <element signature="e#9864#10018#0" />
+            <element signature="e#10024#10026#0" />
+            <element signature="e#10075#10226#0" />
+            <element signature="e#10815#10990#0" />
+            <element signature="e#10996#11143#0" />
+            <element signature="e#11149#11151#0" />
+            <element signature="e#11227#11416#0" />
+            <element signature="e#11422#11424#0" />
+            <element signature="e#11491#11678#0" />
+            <element signature="e#11684#11686#0" />
+            <element signature="e#11738#11875#0" />
+            <element signature="e#11881#11883#0" />
+            <element signature="e#11928#12040#0" />
+            <element signature="e#12046#12048#0" />
+            <element signature="e#12112#12286#0" />
+            <element signature="e#12292#12444#0" />
+            <element signature="e#12450#12452#0" />
+            <element signature="e#12534#12740#0" />
+            <element signature="e#12746#12748#0" />
+            <element signature="e#12793#12930#0" />
+            <element signature="e#12936#12938#0" />
+            <element signature="e#13007#13208#0" />
+            <element signature="e#13214#13216#0" />
+            <element signature="e#13268#13435#0" />
+            <element signature="e#13441#13443#0" />
+            <element signature="e#13484#13606#0" />
+            <element signature="e#13612#13614#0" />
+            <element signature="e#13669#13857#0" />
+            <element signature="e#13863#13865#0" />
+            <element signature="e#13937#14176#0" />
+            <element signature="e#14182#14184#0" />
+            <element signature="e#14253#14450#0" />
+            <element signature="e#14456#14621#0" />
+            <element signature="e#14627#14629#0" />
+            <element signature="e#14671#14805#0" />
+            <element signature="e#14811#14813#0" />
+            <element signature="e#14859#14995#0" />
+            <element signature="e#15001#15003#0" />
+            <element signature="e#15057#15193#0" />
+            <element signature="e#15199#15326#0" />
+            <element signature="e#15332#15334#0" />
+            <element signature="e#15438#15702#0" />
+            <element signature="e#15708#15710#0" />
+            <element signature="e#15787#16039#0" />
+            <element signature="e#16045#16047#0" />
+            <element signature="e#16102#16291#0" />
+            <element signature="e#16297#16299#0" />
+            <element signature="e#16337#16459#0" />
+            <element signature="e#16465#16467#0" />
+            <element signature="e#16512#16639#0" />
+            <element signature="e#16645#16647#0" />
+            <element signature="e#16688#16810#0" />
+            <element signature="e#16816#16818#0" />
+            <element signature="e#16895#17087#0" />
+            <element signature="e#17093#17095#0" />
+            <element signature="e#17163#17353#0" />
+            <element signature="e#17359#17478#0" />
+            <element signature="e#17484#17894#0" />
+            <element signature="e#17994#18558#0" />
+            <element signature="e#18564#19288#0" />
+            <element signature="e#19105#19182#1" />
+            <element signature="e#19294#20016#0" />
+            <element signature="e#19833#19910#1" />
+            <element signature="e#20022#20782#0" />
+            <element signature="e#20599#20676#1" />
+            <element signature="e#20788#21545#0" />
+            <element signature="e#21362#21439#1" />
+            <element signature="e#21551#22351#0" />
+            <element signature="e#22158#22245#1" />
+            <element signature="e#22357#23114#0" />
+            <element signature="e#22931#23008#1" />
+            <element signature="e#23120#23880#0" />
+            <element signature="e#23697#23774#1" />
+            <element signature="e#23886#24608#0" />
+            <element signature="e#24425#24502#1" />
+            <element signature="e#24614#25338#0" />
+            <element signature="e#25155#25232#1" />
+            <element signature="e#25344#26069#0" />
+            <element signature="e#25886#25963#1" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Vision.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="45" column="30" lean-forward="true" selection-start-line="45" selection-start-column="30" selection-end-line="45" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1548#1549#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>

@@ -26,6 +26,7 @@ public class Robot extends TimedRobot
   private final Climb climb = Climb.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Hatch hatch = Hatch.getInstance();
+  private final Vision vision = Vision.getInstance();
 
   private static final int RIGHT_JOYSTICK_ID = 0;
   private static final int LEFT_JOYSTICK_ID = 1;
@@ -74,5 +75,11 @@ public class Robot extends TimedRobot
   public void testPeriodic() 
   {
 
+  }
+
+  @Override
+  public void disabledPeriodic() {
+    // Poll cameras
+    vision.pollCameras();
   }
 }

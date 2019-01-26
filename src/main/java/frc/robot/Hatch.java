@@ -13,7 +13,7 @@ public class Hatch
 
     private static final Hatch instance = new Hatch();
     
-    public static Hatch getInstance()
+    public static synchronized Hatch getInstance()
     {
         return instance;
     }

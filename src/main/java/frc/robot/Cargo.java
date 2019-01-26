@@ -20,7 +20,7 @@ public class Cargo
 
 
     
-    public static Cargo getInstance()
+    public static synchronized Cargo getInstance()
     {
         return instance;
     }

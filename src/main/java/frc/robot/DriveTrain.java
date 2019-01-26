@@ -24,7 +24,7 @@ public class DriveTrain
     private volatile double leftSideRobot;
     private volatile double rightSideRobot;
     
-    public static DriveTrain getInstance()
+    public static synchronized DriveTrain getInstance()
     {
         return instance;
     }

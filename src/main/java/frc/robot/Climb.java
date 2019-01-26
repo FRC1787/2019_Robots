@@ -14,7 +14,7 @@ public class Climb
 
     private static final Climb instance = new Climb();
     
-    public static Climb getInstance()
+    public static synchronized Climb getInstance()
     {
         return instance;
     }
