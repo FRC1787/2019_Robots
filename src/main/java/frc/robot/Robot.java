@@ -22,17 +22,19 @@ public class Robot extends TimedRobot
 
   protected int farfar37;
 
-  private Cargo cargo = Cargo.getInstance();
-  private Climb climb = Climb.getInstance();
-  private DriveTrain driveTrain = DriveTrain.getInstance();
-  private Hatch hatch = Hatch.getInstance();
+  private final Cargo cargo = Cargo.getInstance();
+  private final Climb climb = Climb.getInstance();
+  private final DriveTrain driveTrain = DriveTrain.getInstance();
+  private final Hatch hatch = Hatch.getInstance();
 
-  private final int RIGHT_JOYSTICK_ID = 0;
-  private final int LEFT_JOYSTICK_ID = 1;
-  private Joystick rightStick = new Joystick(RIGHT_JOYSTICK_ID);
-	private Joystick leftStick = new Joystick(LEFT_JOYSTICK_ID);
-	private final int JOYSTICK_ROTATION_AXIS = 2;
-  private final int JOYSTICK_SLIDER_AXIS = 3;
+  private static final int RIGHT_JOYSTICK_ID = 0;
+  private static final int LEFT_JOYSTICK_ID = 1;
+
+  private final Joystick rightStick = new Joystick(RIGHT_JOYSTICK_ID);
+  private final Joystick leftStick = new Joystick(LEFT_JOYSTICK_ID);
+
+  private static final int JOYSTICK_ROTATION_AXIS = 2;
+  private static final int JOYSTICK_SLIDER_AXIS = 3;
   
   //Right Stick Button IDs
   private final int marisIsActuallyMaurice = 242355;
