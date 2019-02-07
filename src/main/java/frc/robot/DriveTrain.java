@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain
-{
+{ 
 
-    private static final int LEFT_MASTER_TALON_ID = 1;
-    private static final int LEFT_FOLLOWER_VICTOR_ID = 2;
-    private static final int RIGHT_MASTER_TALON_ID = 3;
-    private static final int RIGHT_FOLLOWER_VICTOR_ID = 4;
+    private static final int LEFT_MASTER_TALON_ID = 9;
+    private static final int LEFT_FOLLOWER_VICTOR_ID = 10;
+    private static final int RIGHT_MASTER_TALON_ID = 1;
+    private static final int RIGHT_FOLLOWER_VICTOR_ID = 2;
 
     private final WPI_TalonSRX leftMaster = new WPI_TalonSRX(LEFT_MASTER_TALON_ID);
     private final WPI_VictorSPX leftFollower = new WPI_VictorSPX(LEFT_FOLLOWER_VICTOR_ID);
