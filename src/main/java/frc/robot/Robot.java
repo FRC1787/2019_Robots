@@ -30,14 +30,14 @@ public class Robot extends TimedRobot
   private static final int RIGHT_JOYSTICK_ID = 0;
   private static final int LEFT_JOYSTICK_ID = 1;
 
-  private final Joystick rightStick = new Joystick(RIGHT_JOYSTICK_ID);
-  private final Joystick leftStick = new Joystick(LEFT_JOYSTICK_ID);
+  private final Joystick rightJoyStick = new Joystick(RIGHT_JOYSTICK_ID);
+  private final Joystick leftJoyStick = new Joystick(LEFT_JOYSTICK_ID);
 
   private static final int JOYSTICK_ROTATION_AXIS = 2;
   private static final int JOYSTICK_SLIDER_AXIS = 3;
   
   //Right Stick Button IDs
-  private final int marisIsActuallyMaurice = 242355;
+  private final int ASSISTED_HATCH_INTAKE_BTN_ID = 1;
 
   //Left Stick Button IDs
   private final int vansFirstNameIsVandad = 98765;
@@ -68,7 +68,11 @@ public class Robot extends TimedRobot
 
   public void teleopPeriodic() 
   {
-
+    if (rightJoyStick.getRawButton(ASSISTED_HATCH_INTAKE_BTN_ID))
+     {
+       hatch.intakeHatch(0.1, 0.1);
+     }
+    driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
   }
 
   public void testPeriodic() 
