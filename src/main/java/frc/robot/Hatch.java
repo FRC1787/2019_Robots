@@ -11,17 +11,12 @@ public class Hatch
     //Satic variables, IDs, channels
     private static final int HATCH_GRABBING_MOTOR_ID = 11;
     private static final int HATCH_ARTICULATING_MOTOR_ID = 3;
-    private static final int HATCH_ARTICULATION_OUT_LIMITSWITCH_CHANNEL = 0;
-    private static final int HATCH_ARTICULATION_IN_LIMITSWITCH_CHANNEL = 1;
-    private static final int HATCH_INTAKE_LIMITSWITCH_CHANNEL = 2;
     
-    private static boolean hatchGrabberOut = false;
-    private static boolean hatchGrabbed = false;
+    private boolean hatchMechanismDeployed = false;
+    private boolean hatchMechanismStowed = false;
+    private boolean hatchGrabbed = false;
 
-    //construct limit switch objects
-    private final DigitalInput HATCH_ATICULATION_OUT_LIMITSWITCH = new DigitalInput(HATCH_ARTICULATION_OUT_LIMITSWITCH_CHANNEL);
-    private final DigitalInput HATCH_ARTICULATION_IN_LIMIT_SWITCH = new DigitalInput(HATCH_ARTICULATION_IN_LIMITSWITCH_CHANNEL);
-    private final DigitalInput HATCH_INTAKE_LIMITSWITCH = new DigitalInput(HATCH_INTAKE_LIMITSWITCH_CHANNEL);
+    
 
     //construct motor controller objects
     private final WPI_VictorSPX hatchGrabber = new WPI_VictorSPX(HATCH_GRABBING_MOTOR_ID);
@@ -47,23 +42,59 @@ public class Hatch
         hatchGrabber.set(speed);
     }
 
-    public void intakeHatch(double intakeSpeed, double articulateSpeed )
+    //deploy hatch mechanism
+    // public void deployHatchMechanism(double deploySpeed)
+    // {
+    //     if (!HATCH_MECHANISM_DEPLOYED_SWITCH. get() && !hatchMechanismDeployed)
+    //     {
+    //         articulateHatch(deploySpeed);
+    //     }
+    //     else
+    //     {
+    //         articulateHatch(0);
+    //         hatchMechanismDeployed = true;
+    //         hatchMechanismStowed = false;
+    //     }
+    // }
+
+    // //stow hatch mechanism
+    // public void stowHatchMechanism (double stowSpeed)
+    // {
+    //     if(!HATCH_MEHANISM_STOWED_SWITCH.get() && !hatchMechanismStowed)
+    //     {
+    //         articulateHatch(-stowSpeed);
+    //     }
+    //     else
+    //     {
+    //         articulateHatch(0);
+    //         hatchMechanismStowed = true;
+    //         hatchMechanismDeployed = false;
+    //     }
+
+    // }
+
+    // //intake hatch until limit switch is hit
+    // public void intakeHatch(double intakeSpeed)
+    // {
+    //     if (!HATCH_INTAKE_LIMITSWITCH.get() && !hatchGrabbed)
+    //     {
+    //         grabHatch(intakeSpeed);
+    //     }
+    //     else
+    //     {
+    //         grabHatch(0);
+    //         hatchGrabbed = true;
+    //     }
+    // }
+
+    // public boolean getSwitchValue()
+    // {
+    //     return HATCH_MECHANISM_DEPLOYED_SWITCH.get();
+    // }
+
+    //deliver hatch
+    public void deliverHatch (double deploySpeed)
     {
-        
-        //rotates hatch mechanism out for intaking
-        if (HATCH_ATICULATION_OUT_LIMITSWITCH.get() == false)
-        {
-            articulateHatch(articulateSpeed);
-        }
-        else if (HATCH_INTAKE_LIMITSWITCH.get() == false && hatchGrabberOut == true)
-        {
-            grabHatch(intakeSpeed);
-        }
+        grabHatch(deploySpeed);
     }
-
-    public String limitTesting()
-        {
-            return ("Limit switch 0:" + HATCH_ATICULATION_OUT_LIMITSWITCH.get() + "\nLimit switch 2: " + HATCH_INTAKE_LIMITSWITCH.get());
-
-        }
 }
