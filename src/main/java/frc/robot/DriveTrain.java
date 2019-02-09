@@ -28,8 +28,8 @@ public class DriveTrain
 
     private static final DriveTrain instance = new DriveTrain();
     
-    private volatile double leftSideRobot;
-    private volatile double rightSideRobot;
+    private volatile double leftDriveMotorVoltage;
+    private volatile double rightDriveMotorVoltage;
     
     private DriveTrain() {
         leftMaster.setInverted(LEFT_MASTER_INVERTED);
@@ -83,12 +83,19 @@ public class DriveTrain
         yAxis = rangeCorrection(yAxis);
         xAxis = rangeCorrection(xAxis);
 
-        leftSideRobot = yAxis + xAxis;
-        rightSideRobot = yAxis - xAxis;
+        
+        leftDriveMotorVoltage = yAxis + xAxis;
+        rightDriveMotorVoltage = yAxis - xAxis;
 
-        leftMaster.set(leftSideRobot);
-        rightMaster.set(rightSideRobot);
-        leftFollower.set(leftSideRobot);
-        rightFollower.set(rightSideRobot);
+        leftMaster.set(leftDriveMotorVoltage);
+        leftFollower.set(leftDriveMotorVoltage);
+
+        rightMaster.set(rightDriveMotorVoltage);
+        rightFollower.set(rightDriveMotorVoltage);
+    }
+
+    public void deferntialDrive()
+    {
+        
     }
 }

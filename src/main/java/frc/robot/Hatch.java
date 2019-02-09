@@ -20,7 +20,7 @@ public class Hatch
 
     //construct motor controller objects
     private final WPI_VictorSPX hatchGrabber = new WPI_VictorSPX(HATCH_GRABBING_MOTOR_ID);
-    private final WPI_VictorSPX hatchArticulating = new WPI_VictorSPX(HATCH_ARTICULATING_MOTOR_ID);
+    private final WPI_VictorSPX hatchArticulator = new WPI_VictorSPX(HATCH_ARTICULATING_MOTOR_ID);
 
     //singelton instance
     private static final Hatch instance = new Hatch();
@@ -33,7 +33,7 @@ public class Hatch
     //rotates hatch grabbing mechanism 
     public void articulateHatch(double speed)
     {
-        hatchArticulating.set(speed);
+        hatchArticulator.set(speed);
     }
 
     //controls hatch grabber wheels
