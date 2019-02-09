@@ -9,7 +9,7 @@ public class Hatch
     private static final int HATCH_ARTICULATING_MOTOR_ID = 9;
 
     private final WPI_VictorSPX hatchGrabber = new WPI_VictorSPX(HATCH_GRABBING_MOTOR_ID);
-    private final WPI_VictorSPX hatchArticulating = new WPI_VictorSPX(HATCH_ARTICULATING_MOTOR_ID);
+    private final WPI_VictorSPX hatchArticulator = new WPI_VictorSPX(HATCH_ARTICULATING_MOTOR_ID);
 
     private static final Hatch instance = new Hatch();
     
@@ -20,7 +20,7 @@ public class Hatch
 
     public void articulateHatch(double speed)
     {
-        hatchArticulating.set(speed);
+        hatchArticulator.set(speed);
     }
 
     public void grabHatch(double speed)
