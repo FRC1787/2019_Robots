@@ -21,8 +21,8 @@ public class DriveTrain
 
     private static final DriveTrain instance = new DriveTrain();
     
-    private volatile double leftSideRobot;
-    private volatile double rightSideRobot;
+    private volatile double leftDriveMotorVoltage;
+    private volatile double rightDriveMotorVoltage;
     
     public static DriveTrain getInstance()
     {
@@ -38,14 +38,20 @@ public class DriveTrain
         yAxis = rangeCorrection(yAxis);
         xAxis = rangeCorrection(xAxis);
 
-        leftSideRobot = yAxis + xAxis;
-        rightSideRobot = yAxis - xAxis;
+        
+        leftDriveMotorVoltage = yAxis + xAxis;
+        rightDriveMotorVoltage = yAxis - xAxis;
 
-        leftMaster.set(leftSideRobot);
-        rightMaster.set(rightSideRobot);
+        leftMaster.set(leftDriveMotorVoltage);
+        leftFollower.set(leftDriveMotorVoltage);
 
-        leftFollower.set(leftSideRobot);
-        rightFollower.set(rightSideRobot);
+        rightMaster.set(rightDriveMotorVoltage);
+        rightFollower.set(rightDriveMotorVoltage);
+    }
+
+    public void deferntialDrive()
+    {
+        
     }
 
     public double rangeCorrection(double num)
