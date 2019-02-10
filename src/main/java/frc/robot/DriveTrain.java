@@ -28,14 +28,14 @@ public class DriveTrain
 
     private static final DriveTrain instance = new DriveTrain();
     
-    private volatile double leftDriveMotorVoltage;
-    private volatile double rightDriveMotorVoltage;
+    private volatile double leftDriveTrainMotorsVoltage;
+    private volatile double rightDriveTrainMotorsVoltage;
     
     private DriveTrain() {
         leftMaster.setInverted(LEFT_MASTER_INVERTED);
         leftFollower.setInverted(LEFT_FOLLOWER_INVERTED);
         rightMaster.setInverted(RIGHT_MASTER_INVERTED);
-        rightFollower.setInverted(RIGHT_FOLLOWER_INVERTED);
+        rightFollower.setInverted(RIGHT_FOLLOWER_INVERTED); 
 
         leftMaster.configVoltageCompSaturation(12, 10);
         leftFollower.configVoltageCompSaturation(12, 10);
@@ -72,7 +72,7 @@ public class DriveTrain
         {
             return num;
         }
-    }
+    } 
 
     public void arcadeDrive(double xAxis, double yAxis)
     {
@@ -83,19 +83,12 @@ public class DriveTrain
         yAxis = rangeCorrection(yAxis);
         xAxis = rangeCorrection(xAxis);
 
-        
-        leftDriveMotorVoltage = yAxis + xAxis;
-        rightDriveMotorVoltage = yAxis - xAxis;
+        leftDriveTrainMotorsVoltage = xAxis + yAxis;
+        rightDriveTrainMotorsVoltage = xAxis - yAxis;
 
-        leftMaster.set(leftDriveMotorVoltage);
-        leftFollower.set(leftDriveMotorVoltage);
-
-        rightMaster.set(rightDriveMotorVoltage);
-        rightFollower.set(rightDriveMotorVoltage);
-    }
-
-    public void deferntialDrive()
-    {
-        
+        leftMaster.set(leftDriveTrainMotorsVoltage);
+        rightMaster.set(rightDriveTrainMotorsVoltage);
+        leftFollower.set(leftDriveTrainMotorsVoltage);
+        rightFollower.set(rightDriveTrainMotorsVoltage);
     }
 }

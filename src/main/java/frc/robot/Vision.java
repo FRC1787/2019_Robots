@@ -61,7 +61,6 @@ public class Vision
 		//configureCamera(bottomCam, 0);
 	}
 
-
 	public static Vision getInstance()
 	{
 		return instance;

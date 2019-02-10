@@ -2,25 +2,30 @@ package frc.robot;
 
 import javax.lang.model.util.ElementScanner6;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Hatch 
 {
-    //Satic variables, IDs, channels
+    //Hatch motor controller variables
     private static final int HATCH_GRABBING_MOTOR_ID = 11;
     private static final int HATCH_ARTICULATING_MOTOR_ID = 3;
     
-    private boolean hatchMechanismDeployed = false;
-    private boolean hatchMechanismStowed = false;
-    private boolean hatchGrabbed = false;
-
-    
-
-    //construct motor controller objects
+    //Construct motor controller objects
     private final WPI_VictorSPX hatchGrabber = new WPI_VictorSPX(HATCH_GRABBING_MOTOR_ID);
     private final WPI_VictorSPX hatchArticulator = new WPI_VictorSPX(HATCH_ARTICULATING_MOTOR_ID);
+
+    //Hatch limit switche variables
+    private static final int HATCH_MECHANISM_DEPLOYED_LIMITSWITCH_CHANNEL = 0;
+    private static final int HATCH_MECHANISM_STOWED_LIMITSWITCH_CHANNEL = 1;
+    private static final int HATCH_INTAKE_LIMITSWITCH_CHANNEL = 2;
+    
+    //Construct hatch limit switch objects
+    private final DigitalInput hatchMechanismDeployedSwitch = new DigitalInput(HATCH_MECHANISM_DEPLOYED_LIMITSWITCH_CHANNEL);
+    private final DigitalInput hatchMechanismStowedSwitch = new DigitalInput(HATCH_MECHANISM_STOWED_LIMITSWITCH_CHANNEL);
+    private final DigitalInput hatchIntakedSiwtch = new DigitalInput(HATCH_INTAKE_LIMITSWITCH_CHANNEL);
 
     //singelton instance
     private static final Hatch instance = new Hatch();
@@ -33,68 +38,29 @@ public class Hatch
     //rotates hatch grabbing mechanism 
     public void articulateHatch(double speed)
     {
+        hatchArticulator.setNeutralMode(NeutralMode.Brake);
         hatchArticulator.set(speed);
     }
 
     //controls hatch grabber wheels
     public void grabHatch(double speed)
     {
+        hatchGrabber.setNeutralMode(NeutralMode.Brake);
         hatchGrabber.set(speed);
     }
 
-    //deploy hatch mechanism
-    // public void deployHatchMechanism(double deploySpeed)
-    // {
-    //     if (!HATCH_MECHANISM_DEPLOYED_SWITCH. get() && !hatchMechanismDeployed)
-    //     {
-    //         articulateHatch(deploySpeed);
-    //     }
-    //     else
-    //     {
-    //         articulateHatch(0);
-    //         hatchMechanismDeployed = true;
-    //         hatchMechanismStowed = false;
-    //     }
-    // }
-
-    // //stow hatch mechanism
-    // public void stowHatchMechanism (double stowSpeed)
-    // {
-    //     if(!HATCH_MEHANISM_STOWED_SWITCH.get() && !hatchMechanismStowed)
-    //     {
-    //         articulateHatch(-stowSpeed);
-    //     }
-    //     else
-    //     {
-    //         articulateHatch(0);
-    //         hatchMechanismStowed = true;
-    //         hatchMechanismDeployed = false;
-    //     }
-
-    // }
-
-    // //intake hatch until limit switch is hit
-    // public void intakeHatch(double intakeSpeed)
-    // {
-    //     if (!HATCH_INTAKE_LIMITSWITCH.get() && !hatchGrabbed)
-    //     {
-    //         grabHatch(intakeSpeed);
-    //     }
-    //     else
-    //     {
-    //         grabHatch(0);
-    //         hatchGrabbed = true;
-    //     }
-    // }
-
-    // public boolean getSwitchValue()
-    // {
-    //     return HATCH_MECHANISM_DEPLOYED_SWITCH.get();
-    // }
-
-    //deliver hatch
-    public void deliverHatch (double deploySpeed)
+    //accessor methods for getting limit switch states
+    public boolean getHatchMechanismDeploeyedSwitchState()
     {
-        grabHatch(deploySpeed);
+        return hatchMechanismDeployedSwitch.get();
     }
+    public boolean getHatchMechanismStowedSwitchState()
+    {
+        return hatchMechanismStowedSwitch.get();
+    }
+    public boolean getHatchIntakedSwitchState()
+    {
+        return hatchIntakedSiwtch.get();
+    }
+
 }
