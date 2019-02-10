@@ -16,7 +16,7 @@ public class Cargo
 
     //Construct cargo motor controller objects
     private final WPI_TalonSRX cargoGrabberMotor = new WPI_TalonSRX(CARGO_GRABBING_MOTOR_ID);
-    private final WPI_VictorSPX articulatingIntake = new WPI_VictorSPX(INTAKE_ARTICULATING_MOTOR_ID);
+    private final WPI_VictorSPX intakeArticulator = new WPI_VictorSPX(INTAKE_ARTICULATING_MOTOR_ID);
     private final WPI_TalonSRX shooter = new WPI_TalonSRX(SHOOTER_MOTOR_ID);
 
     //Cargo limit switch variables
@@ -40,8 +40,8 @@ public class Cargo
     //articulates the intake mechanism between deployed and stowed
     public void articulateCargoIntake(double articulationSpeed)
     {
-        articulatingIntake.setNeutralMode(NeutralMode.Brake);
-        articulatingIntake.set(articulationSpeed);
+        intakeArticulator.setNeutralMode(NeutralMode.Brake);
+        intakeArticulator.set(articulationSpeed);
     }
     
     //Sntake cargo

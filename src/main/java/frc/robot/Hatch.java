@@ -15,7 +15,7 @@ public class Hatch
     
     //Construct motor controller objects
     private final WPI_VictorSPX hatchGrabber = new WPI_VictorSPX(HATCH_GRABBING_MOTOR_ID);
-    private final WPI_VictorSPX hatchArticulating = new WPI_VictorSPX(HATCH_ARTICULATING_MOTOR_ID);
+    private final WPI_VictorSPX hatchArticulator = new WPI_VictorSPX(HATCH_ARTICULATING_MOTOR_ID);
 
     //Hatch limit switche variables
     private static final int HATCH_MECHANISM_DEPLOYED_LIMITSWITCH_CHANNEL = 0;
@@ -38,8 +38,8 @@ public class Hatch
     //rotates hatch grabbing mechanism 
     public void articulateHatch(double speed)
     {
-        hatchArticulating.setNeutralMode(NeutralMode.Brake);
-        hatchArticulating.set(speed);
+        hatchArticulator.setNeutralMode(NeutralMode.Brake);
+        hatchArticulator.set(speed);
     }
 
     //controls hatch grabber wheels

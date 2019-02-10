@@ -31,6 +31,7 @@ public class Robot extends TimedRobot
   private final Climb climb = Climb.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Hatch hatch = Hatch.getInstance();
+  private final Vision vision = Vision.getInstance();
 
 
   //Joystick 
@@ -90,6 +91,8 @@ public class Robot extends TimedRobot
 
   public void teleopPeriodic() 
   {
+    
+    
 
     /*************************/
     /*************************/

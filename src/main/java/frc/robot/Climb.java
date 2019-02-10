@@ -8,7 +8,7 @@ public class Climb
 {
     private static final int CLIMBING_MOTOR_ID = 10;
 
-    private final WPI_TalonSRX climber = new WPI_TalonSRX(CLIMBING_MOTOR_ID);
+    private final WPI_TalonSRX climbMotor = new WPI_TalonSRX(CLIMBING_MOTOR_ID);
     private final Servo leftActuator = new Servo(0);
     private final Servo rightActuator = new Servo(1);
 
@@ -19,14 +19,14 @@ public class Climb
         return instance;
     }
 
-    public void setActuators(double angle)
+    public void setActuators(double position)  //Actuanix linear servo range: 0.2 (completely retracted) 1.0 (completely extended)
     {
-        leftActuator.set(angle);
-        rightActuator.set(angle);
+        leftActuator.set(position);
+        rightActuator.set(position);
     }
 
     public void moveClimber(double speed)
     {
-        climber.set(speed);
+        climbMotor.set(speed);
     }
 }
