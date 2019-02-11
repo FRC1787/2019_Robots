@@ -91,9 +91,9 @@ public class Robot extends TimedRobot
 
   public void teleopPeriodic() 
   {
-    
-    
 
+    if (rightJoyStick.getRawAxis(JOYSTICK_SLIDER_AXIS) > 0)
+    {
     /*************************/
     /*************************/
     /*Right Joystick controls*/
@@ -187,6 +187,66 @@ public class Robot extends TimedRobot
     {
       cargo.shootCargo(CARGO_SHOOT_SPEED);
     }
+  }
+
+
+  //test code without limit switches///////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  if(rightJoyStick.getRawAxis(JOYSTICK_SLIDER_AXIS) < 0)
+  {
+
+    //right joystick test controls
+    if(rightJoyStick.getRawButton(HATCH_MECHANISM_DEPLOY_BTN_ID))
+    {
+      hatch.articulateHatch(HATCH_DEPLOY_SPEED);
+    }
+    else if(rightJoyStick.getRawButton(HATCH_MECHANISM_STOW_BTN_ID))
+    {
+      hatch.articulateHatch(HATCH_STOW_SPEED);
+    }
+    else if(rightJoyStick.getRawButton(HATCH_INTAKE_BTN_ID))
+    {
+      hatch.articulateHatch(0);
+      hatch.grabHatch(HATCH_INTAKE_SPEED);
+    }
+    else if(rightJoyStick.getRawButton(HATCH_DELIVER_BTN_ID))
+    {
+      hatch.articulateHatch(0);
+      hatch.grabHatch(HATCH_DELIVER_SPEED);
+    }
+    else
+    {
+      hatch.articulateHatch(0);
+      hatch.grabHatch(0);
+    }
+
+
+    //left joystick test controls
+    if(leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID))
+    {
+      cargo.articulateCargoIntake(CARGO_MECHANISM_DEPLOY_SPEED);
+    }
+    else if(leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID))
+    {
+      cargo.articulateCargoIntake(CARGO_MEHCANISM_STOW_SPEED);
+    }
+    else if(leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID))
+    {
+      cargo.articulateCargoIntake(0);
+      cargo.intakeCargo(CARGO_INTAKE_SPEED);
+    }
+    else if(leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID))
+    {
+      cargo.shootCargo(CARGO_SHOOT_SPEED);
+    }
+    else
+    {
+      cargo.shootCargo(0);
+      cargo.intakeCargo(0);
+      cargo.articulateCargoIntake(0);
+    }
+    
+  }
 
     driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
   }
