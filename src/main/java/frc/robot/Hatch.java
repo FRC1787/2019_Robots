@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class Hatch 
 {
     //Hatch motor controller variables
-    private static final int HATCH_GRABBING_MOTOR_ID = 11;
-    private static final int HATCH_ARTICULATING_MOTOR_ID = 3;
+    private static final int HATCH_GRABBING_MOTOR_ID = 7;
+    private static final int HATCH_ARTICULATING_MOTOR_ID = 12;
     
     //Construct motor controller objects
     private final WPI_VictorSPX hatchGrabber = new WPI_VictorSPX(HATCH_GRABBING_MOTOR_ID);
@@ -27,29 +27,35 @@ public class Hatch
     private final DigitalInput hatchMechanismStowedSwitch = new DigitalInput(HATCH_MECHANISM_STOWED_LIMITSWITCH_CHANNEL);
     private final DigitalInput hatchIntakedSiwtch = new DigitalInput(HATCH_INTAKE_LIMITSWITCH_CHANNEL);
 
-    //singelton instance
+    //Singelton instance
     private static final Hatch instance = new Hatch();
+
+    //Default contructor 
+    public Hatch()
+    {
+        hatchArticulator.setNeutralMode(NeutralMode.Brake);
+        hatchGrabber.setNeutralMode(NeutralMode.Brake);
+    }
     
+    //Return method for singelton instance
     public static Hatch getInstance()
     {
         return instance;
     }
 
-    //rotates hatch grabbing mechanism 
+    //Rotates hatch grabbing mechanism 
     public void articulateHatch(double speed)
     {
-        hatchArticulator.setNeutralMode(NeutralMode.Brake);
         hatchArticulator.set(speed);
     }
 
-    //controls hatch grabber wheels
+    //Controls hatch grabber wheels
     public void grabHatch(double speed)
     {
-        hatchGrabber.setNeutralMode(NeutralMode.Brake);
         hatchGrabber.set(speed);
     }
 
-    //accessor methods for getting limit switch states
+    //Accessor methods for getting limit switch states
     public boolean getHatchMechanismDeploeyedSwitchState()
     {
         return hatchMechanismDeployedSwitch.get();

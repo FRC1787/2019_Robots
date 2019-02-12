@@ -37,14 +37,14 @@ public class Vision
 	private DriveTrain driveTrain = DriveTrain.getInstance();
 	private CameraServer server = CameraServer.getInstance();
 
-	// private configureCamera(UsbCamera inputCam, int exposureValue)
-	// {
-	// 	inputCam.setResolution(STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
-	// 	inputCam.setFPS(20);
-	// 	inputCam.setExposureManual(exposureValue);
-	// 	inputCam.setBrightness(100);
-	// 	inputCam.setWhiteBalanceManual(WhiteBalance.kFixedIndoor);
-	// }
+	 private void configureCamera(UsbCamera inputCam, int exposureValue)
+	{
+		inputCam.setResolution(STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
+		inputCam.setFPS(20);
+		inputCam.setExposureManual(exposureValue);
+		inputCam.setBrightness(100);
+		inputCam.setWhiteBalanceManual(WhiteBalance.kFixedIndoor);
+	}
 
 	public Vision()
 	{
@@ -53,12 +53,14 @@ public class Vision
 
 		topFrameGrabber = server.getVideo(topCam);
 		bottomFrameGrabber = server.getVideo(bottomCam);
+
+		//Exposure value for vision is 0, for regular sight it was 5 but idk what the best value is
+		configureCamera(topCam, 5);
+		configureCamera(bottomCam, 0);
 		
 		outputStream = server.putVideo("Processed Video Stream", STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
 
-		//Exposure value for vision is 0, for regular sight it was 5 but idk what the best value is
-		// configureCamera(topCam, 5);
-		// configureCamera(bottomCam, 0);
+		
 	}
 
 

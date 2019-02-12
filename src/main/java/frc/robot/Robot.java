@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.util.ElementScanner6;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -60,13 +61,17 @@ public class Robot extends TimedRobot
     //hatch speeds
   private final double HATCH_DEPLOY_SPEED = -0.9;
   private final double HATCH_STOW_SPEED = 0.9;
-  private final double HATCH_INTAKE_SPEED = 1;
-  private final double HATCH_DELIVER_SPEED = -1;
+  private final double HATCH_INTAKE_SPEED = -1;
+  private final double HATCH_DELIVER_SPEED = 1;
     //cargo speeds
-  private final double CARGO_MECHANISM_DEPLOY_SPEED = 0.1;
-  private final double CARGO_MEHCANISM_STOW_SPEED = 0.1;
-  private final double CARGO_INTAKE_SPEED = 0.5;
+  private final double CARGO_MECHANISM_DEPLOY_SPEED = 0.25;
+  private final double CARGO_MEHCANISM_STOW_SPEED = -0.25;
+  private final double CARGO_INTAKE_SPEED = 1;
   private final double CARGO_SHOOT_SPEED = 0.5;
+
+  //Other varibales
+  private boolean deployCargoIntakeState = false;
+  private int hatchDecelerationCounter = 0;
   
 
   public void robotInit() 
@@ -92,7 +97,7 @@ public class Robot extends TimedRobot
   public void teleopPeriodic() 
   {
 
-    if (rightJoyStick.getRawAxis(JOYSTICK_SLIDER_AXIS) > 0)
+    if (rightJoyStick.getRawAxis(JOYSTICK_SLIDER_AXIS) < 0)
     {
     /*************************/
     /*************************/
@@ -141,6 +146,12 @@ public class Robot extends TimedRobot
     {
       hatch.grabHatch(HATCH_DELIVER_SPEED);
     }
+    
+    if(!rightJoyStick.getRawButton(HATCH_DELIVER_BTN_ID) && !rightJoyStick.getRawButton(HATCH_INTAKE_BTN_ID) && !hatch.getHatchIntakedSwitchState())
+    {
+      hatch.grabHatch(0);
+    }
+    
 
     /************************/
     /************************/
@@ -150,7 +161,11 @@ public class Robot extends TimedRobot
 
     //Cargo controls
       //deploy cargo intake mechanism
-    if(leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID) && !cargo.getCargoIntakeMechanismDployedSwitchState())
+    if (leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID))
+    {
+      deployCargoIntakeState = true;
+    }
+    if(deployCargoIntakeState && !cargo.getCargoIntakeMechanismDployedSwitchState())
     {
       cargo.articulateCargoIntake(CARGO_MECHANISM_DEPLOY_SPEED);
     }
@@ -192,7 +207,7 @@ public class Robot extends TimedRobot
 
   //test code without limit switches///////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
-  if(rightJoyStick.getRawAxis(JOYSTICK_SLIDER_AXIS) < 0)
+  if(rightJoyStick.getRawAxis(JOYSTICK_SLIDER_AXIS) > 0)
   {
 
     //right joystick test controls
@@ -253,6 +268,26 @@ public class Robot extends TimedRobot
 
   public void testPeriodic() 
   {
-
+    if (rightJoyStick.getRawButton(HATCH_MECHANISM_DEPLOY_BTN_ID) && !hatch.getHatchMechanismDeploeyedSwitchState())
+    {
+      hatchDecelerationCounter ++;
+      hatch.articulateHatch(HATCH_DEPLOY_SPEED);
+    }
+    if (!rightJoyStick.getRawButton(HATCH_MECHANISM_STOW_BTN_ID)  && hatch.getHatchMechanismDeploeyedSwitchState())
+    {
+      System.out.println(hatchDecelerationCounter);
+      hatch.articulateHatch(0);
+    }
+      //stow hatch mechanism
+    if (rightJoyStick.getRawButton(HATCH_MECHANISM_STOW_BTN_ID) && !hatch.getHatchMechanismStowedSwitchState())
+    {
+      hatchDecelerationCounter++;
+      hatch.articulateHatch(HATCH_STOW_SPEED);
+    }
+    if (!rightJoyStick.getRawButton(HATCH_MECHANISM_DEPLOY_BTN_ID) && hatch.getHatchMechanismStowedSwitchState())
+    {
+      System.out.println(hatchDecelerationCounter);
+      hatch.articulateHatch(0);
+    }
   }
 }
