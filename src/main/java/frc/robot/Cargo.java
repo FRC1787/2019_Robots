@@ -57,7 +57,7 @@ public class Cargo
     }
 
     //Deploy cargo intake mechanism 
-    public void deployCargoIntaleMechanism(double deploySpeed)
+    public void deployCargoIntake(double deploySpeed)
     {
         //Fold cargo intake out until limit switch is pressed
         if(!cargoIntakeMehcanismDeployedSwitch.get())
