@@ -41,7 +41,7 @@ public class Vision
 	{
 		inputCam.setResolution(STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
 		inputCam.setFPS(20);
-		inputCam.setExposureManual(exposureValue);
+		inputCam.setExposureAuto();
 		inputCam.setBrightness(100);
 		inputCam.setWhiteBalanceManual(WhiteBalance.kFixedIndoor);
 	}
