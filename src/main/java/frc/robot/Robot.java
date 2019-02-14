@@ -27,47 +27,49 @@ public class Robot extends TimedRobot
 
   protected int farfar37;
 
-  //mechanism class instances
+  //Mechanism class instances
   private final Cargo cargo = Cargo.getInstance();
   private final Climb climb = Climb.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Hatch hatch = Hatch.getInstance();
   private final Vision vision = Vision.getInstance();
 
-
   //Joystick 
+    //Joystick IDs
   private static final int RIGHT_JOYSTICK_ID = 0;
   private static final int LEFT_JOYSTICK_ID = 1;
-
+    //Create joystick objects
   private final Joystick rightJoyStick = new Joystick(RIGHT_JOYSTICK_ID);
   private final Joystick leftJoyStick = new Joystick(LEFT_JOYSTICK_ID);
-
+    //Joystick axis 
   private static final int JOYSTICK_ROTATION_AXIS = 2;
   private static final int JOYSTICK_SLIDER_AXIS = 3;
   
-  //Right Stick Button IDs
+  //Button IDs
+    //Right Stick Button IDs
   private final int HATCH_INTAKE_BTN_ID = 1;
   private final int HATCH_DELIVER_BTN_ID = 2;
   private final int HATCH_MECHANISM_STOW_BTN_ID = 3;
   private final int HATCH_MECHANISM_DEPLOY_BTN_ID = 4;
-
-  //Left Stick Button IDs
+    //Left Stick Button IDs
   private final int CARGO_INTAKE_BTN_ID = 1;
   private final int CARGO_SHOOT_BTN_ID = 2;
   private final int CARGO_INTAKE_MECHANISM_STOW_BTN_ID = 3;
   private final int CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID = 4;
 
   //Motor Voltages
-    //hatch speeds
+    //Hatch speeds
   private final double HATCH_DEPLOY_SPEED = -0.9;
   private final double HATCH_STOW_SPEED = 0.9;
   private final double HATCH_INTAKE_SPEED = -1;
   private final double HATCH_DELIVER_SPEED = 1;
-    //cargo speeds
+    //Cargo speeds
   private final double CARGO_MECHANISM_DEPLOY_SPEED = 0.25;
   private final double CARGO_MEHCANISM_STOW_SPEED = -0.25;
   private final double CARGO_INTAKE_SPEED = 1;
   private final double CARGO_SHOOT_SPEED = 0.5;
+    //Climb speed
+  private final double CLIMB_SPEED = 1;
 
   //Other varibales
   private boolean deployCargoIntakeState = false;
@@ -111,7 +113,7 @@ public class Robot extends TimedRobot
     {
       hatch.articulateHatch(HATCH_DEPLOY_SPEED);
     }
-    if (!rightJoyStick.getRawButton(HATCH_MECHANISM_STOW_BTN_ID)  && hatch.getHatchMechanismDeploeyedSwitchState())
+    if (!rightJoyStick.getRawButton(HATCH_MECHANISM_STOW_BTN_ID)  && hatch.getHatchMechanismDeploeyedSwitchState() )
     {
       hatch.articulateHatch(0);
     }
@@ -137,7 +139,7 @@ public class Robot extends TimedRobot
       hatch.grabHatch(HATCH_INTAKE_SPEED);
     }
       //stop once hatch is on
-    if(!rightJoyStick.getRawButton(HATCH_DELIVER_BTN_ID) && hatch.getHatchIntakedSwitchState())
+    if((!rightJoyStick.getRawButton(HATCH_DELIVER_BTN_ID) && hatch.getHatchIntakedSwitchState()) || !rightJoyStick.getRawButton(HATCH_INTAKE_BTN_ID))
     {
       hatch.grabHatch(0);
     }
@@ -196,6 +198,7 @@ public class Robot extends TimedRobot
     else 
     {
       cargo.intakeCargo(0);
+      cargo.articulateCargoIntake(CARGO_MEHCANISM_STOW_SPEED);
     }
     //shoot cargo
     if(leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID))

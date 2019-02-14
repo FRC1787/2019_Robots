@@ -44,7 +44,7 @@ public class Cargo
         intakeArticulator.set(articulationSpeed);
     }
     
-    //Sntake cargo
+    //Intake cargo
     public void intakeCargo(double speed)
     {
         cargoGrabberMotor.set(speed);
@@ -56,7 +56,37 @@ public class Cargo
         shooter.set(speed);
     }
 
-    //accessor methods for limit sitch states
+    //Deploy cargo intake mechanism 
+    public void deployCargoIntaleMechanism(double deploySpeed)
+    {
+        //Fold cargo intake out until limit switch is pressed
+        if(!cargoIntakeMehcanismDeployedSwitch.get())
+        {
+            articulateCargoIntake(deploySpeed);
+        }
+        //Stop the motor once the limit switch is pressed
+        else
+        {
+            articulateCargoIntake(0);
+        }
+    }
+
+    //Stow cargo intake mechanism 
+    public void stowCargoIntake(double stowSpeed)
+    {
+        //Fold cargo intake in until limit switch is pressed
+        if(!cargoIntakeMechanismStowedSwitch.get())
+        {
+            articulateCargoIntake(-stowSpeed);
+        }
+        //Stop the motor once the limit switch is pressed
+        else
+        {
+            articulateCargoIntake(0);
+        }
+    }
+
+    //Accessor methods for limit sitch states
     public boolean getCargoIntakeMechanismDployedSwitchState()
     {
         return cargoIntakeMehcanismDeployedSwitch.get();
