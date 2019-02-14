@@ -7,8 +7,7 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-// import org.usfirst.frc.team1787.subsystems.Autonomous;
-// import org.usfirst.frc.team1787.subsystems.DriveTrain;
+import frc.robot.DriveTrain;
 
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
@@ -36,17 +35,10 @@ public class Processing
 	    int mode = Imgproc.RETR_EXTERNAL;
 		int method = Imgproc.CHAIN_APPROX_SIMPLE;
 		
-	    //Imgproc.findContours(frame, listOfContours, hierarchy, mode, method);
-	    
+	    Imgproc.findContours(currentFrame, listOfContours, hierarchy, mode, method);
 	    return listOfContours;
 	}
-
-	// public MatOfPoint bestContour(ArrayList<MatOfPoint> contours)
-	// {
-
-	// }
-
-
+	
 	public static Processing getInstance()
 	{
 		return instance;

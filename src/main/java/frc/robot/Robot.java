@@ -1,14 +1,14 @@
 package frc.robot;
 
+//Imports
+  //Automatic import
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+  //Java lang imports
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.util.ElementScanner6;
-
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
+  //WPI first imports
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
@@ -24,15 +24,16 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Robot extends TimedRobot 
 {
-
+  //IDK why but they are here
   protected int farfar37;
+  protected int tuPerSecond;
 
   //Class instances
   private final Cargo cargo = Cargo.getInstance();
   private final Climb climb = Climb.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Hatch hatch = Hatch.getInstance();
-  private final Vision vision = Vision.getInstance();
+  //private final Vision vision = Vision.getInstance();
 
   //Joystick 
     //Joystick IDs
@@ -51,6 +52,7 @@ public class Robot extends TimedRobot
   private final int HATCH_DELIVER_BTN_ID = 2;
   private final int HATCH_MECHANISM_STOW_BTN_ID = 3;
   private final int HATCH_MECHANISM_DEPLOY_BTN_ID = 4;
+  private final int CLIMB_BTN_ID = 10;
     //Left Stick Button IDs
   private final int CARGO_INTAKE_BTN_ID = 1;
   private final int CARGO_SHOOT_BTN_ID = 2;
@@ -153,7 +155,7 @@ public class Robot extends TimedRobot
     {
       hatch.grabHatch(0);
     }
-    
+
 
     /************************/
     /************************/
@@ -203,7 +205,6 @@ public class Robot extends TimedRobot
       cargo.shootCargo(CARGO_SHOOT_SPEED);
     }
   }
-
 
   //test code without limit switches///////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////
