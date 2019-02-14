@@ -27,7 +27,7 @@ public class Robot extends TimedRobot
 
   protected int farfar37;
 
-  //Mechanism class instances
+  //Class instances
   private final Cargo cargo = Cargo.getInstance();
   private final Climb climb = Climb.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();

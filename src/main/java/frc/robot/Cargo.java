@@ -32,6 +32,12 @@ public class Cargo
     //Singelton instance
     private static final Cargo instance = new Cargo();
 
+    //Default contructor
+    public Cargo()
+    {
+        intakeArticulator.setNeutralMode(NeutralMode.Brake);
+    }
+
     public static Cargo getInstance()
     {
         return instance;
@@ -40,7 +46,6 @@ public class Cargo
     //Articulates the intake mechanism between deployed and stowed
     public void articulateCargoIntake(double articulationSpeed)
     {
-        intakeArticulator.setNeutralMode(NeutralMode.Brake);
         intakeArticulator.set(articulationSpeed);
     }
     
