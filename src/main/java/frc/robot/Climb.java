@@ -50,9 +50,10 @@ public class Climb
         }
     }
 
-    //Elivate the robot using climb motor
+    //Moves the robot using climb motor
     public void moveClimber(double speed)
     {
         climbMotor.set(speed);
     }
+
 }
