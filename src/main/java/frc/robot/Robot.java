@@ -33,7 +33,7 @@ public class Robot extends TimedRobot
   private final Climb climb = Climb.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Hatch hatch = Hatch.getInstance();
-  //private final Vision vision = Vision.getInstance();
+  private final Vision vision = Vision.getInstance();
 
   //Joystick 
     //Joystick IDs
@@ -52,7 +52,6 @@ public class Robot extends TimedRobot
   private final int HATCH_DELIVER_BTN_ID = 2;
   private final int HATCH_MECHANISM_STOW_BTN_ID = 3;
   private final int HATCH_MECHANISM_DEPLOY_BTN_ID = 4;
-  private final int CLIMB_BTN_ID = 10;
     //Left Stick Button IDs
   private final int CARGO_INTAKE_BTN_ID = 1;
   private final int CARGO_SHOOT_BTN_ID = 2;
@@ -194,11 +193,12 @@ public class Robot extends TimedRobot
       cargo.deployCargoIntake(CARGO_MECHANISM_DEPLOY_SPEED);
       cargo.intakeCargo(CARGO_INTAKE_SPEED);
     }
-    else 
+    if(!leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState())
     {
       cargo.stowCargoIntake(CARGO_MEHCANISM_STOW_SPEED);
       cargo.intakeCargo(0);
     }
+
     //shoot cargo
     if(leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID))
     {
@@ -242,17 +242,18 @@ public class Robot extends TimedRobot
     {
       cargo.articulateCargoIntake(CARGO_MECHANISM_DEPLOY_SPEED);
     }
-    else if(leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID))
+    if(leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID))
     {
       cargo.articulateCargoIntake(CARGO_MEHCANISM_STOW_SPEED);
     }
-    else if(leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID))
+    if(leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID))
     {
-      cargo.articulateCargoIntake(0);
+      cargo.articulateCargoIntake(CARGO_MECHANISM_DEPLOY_SPEED);
       cargo.intakeCargo(CARGO_INTAKE_SPEED);
     }
-    else if(leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID))
+    if(leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID))
     {
+      cargo.articulateCargoIntake(0);
       cargo.shootCargo(CARGO_SHOOT_SPEED);
     }
     else
