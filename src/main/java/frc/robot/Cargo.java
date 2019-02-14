@@ -15,7 +15,7 @@ public class Cargo
     private static final int SHOOTER_MOTOR_ID = 6;
 
     //Construct cargo motor controller objects
-    private final WPI_VictorSPX cargoGrabberMotor = new WPI_VictorSPX(CARGO_GRABBING_MOTOR_ID);
+    private final WPI_TalonSRX cargoGrabberMotor = new WPI_TalonSRX(CARGO_GRABBING_MOTOR_ID);
     private final WPI_VictorSPX intakeArticulator = new WPI_VictorSPX(INTAKE_ARTICULATING_MOTOR_ID);
     private final WPI_TalonSRX shooter = new WPI_TalonSRX(SHOOTER_MOTOR_ID);
 
@@ -28,17 +28,10 @@ public class Cargo
     private final DigitalInput cargoIntakeMehcanismDeployedSwitch = new DigitalInput(CARGO_INTAKE_MECHANISM_DEPLOYED_LIMIT_SWITCH_CHANNEL);
     private final DigitalInput cargoIntakeMechanismStowedSwitch = new DigitalInput(CARGO_INTAKE_MEHCANISM_STOWED_LIMIT_SWITCH_CHANNEL);
     private final DigitalInput cargoIntaked = new DigitalInput(CARGO_INTAKED_LIMIT_SWITCH_CHANNEL);
-    
+
     //Singelton instance
     private static final Cargo instance = new Cargo();
 
-    //Default contructor
-    public Cargo()
-    {
-        intakeArticulator.setNeutralMode(NeutralMode.Brake);
-    }
-
-    //Return method for our singelton instance
     public static Cargo getInstance()
     {
         return instance;
@@ -47,6 +40,7 @@ public class Cargo
     //Articulates the intake mechanism between deployed and stowed
     public void articulateCargoIntake(double articulationSpeed)
     {
+        intakeArticulator.setNeutralMode(NeutralMode.Brake);
         intakeArticulator.set(articulationSpeed);
     }
     
@@ -62,7 +56,7 @@ public class Cargo
         shooter.set(speed);
     }
 
-    //Accessor methods for limit sitch states
+    //accessor methods for limit sitch states
     public boolean getCargoIntakeMechanismDployedSwitchState()
     {
         return cargoIntakeMehcanismDeployedSwitch.get();
