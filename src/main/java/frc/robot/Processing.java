@@ -7,7 +7,8 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-
+// import org.usfirst.frc.team1787.subsystems.Autonomous;
+// import org.usfirst.frc.team1787.subsystems.DriveTrain;
 
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
@@ -39,12 +40,12 @@ public class Processing
 	    
 	    return listOfContours;
 	}
-/*
-	public MatOfPoint bestContour(ArrayList<MatOfPoint> contours)
-	{
 
-	}
-*/
+	// public MatOfPoint bestContour(ArrayList<MatOfPoint> contours)
+	// {
+
+	// }
+
 
 	public static Processing getInstance()
 	{

@@ -7,7 +7,8 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-
+// import org.usfirst.frc.team1787.subsystems.Autonomous;
+// import org.usfirst.frc.team1787.subsystems.DriveTrain;
 
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
@@ -35,16 +36,15 @@ public class Vision
 	private Processing processing = Processing.getInstance();
 	private DriveTrain driveTrain = DriveTrain.getInstance();
 	private CameraServer server = CameraServer.getInstance();
-/*
-	private configureCamera(UsbCamera inputCam, int exposureValue)
+
+	 private void configureCamera(UsbCamera inputCam, int exposureValue)
 	{
 		inputCam.setResolution(STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
 		inputCam.setFPS(20);
-		inputCam.setExposureManual(exposureValue);
+		inputCam.setExposureAuto();
 		inputCam.setBrightness(100);
 		inputCam.setWhiteBalanceManual(WhiteBalance.kFixedIndoor);
 	}
-	*/
 
 	public Vision()
 	{
@@ -53,13 +53,16 @@ public class Vision
 
 		topFrameGrabber = server.getVideo(topCam);
 		bottomFrameGrabber = server.getVideo(bottomCam);
+
+		//Exposure value for vision is 0, for regular sight it was 5 but idk what the best value is
+		configureCamera(topCam, 5);
+		configureCamera(bottomCam, 0);
 		
 		outputStream = server.putVideo("Processed Video Stream", STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
 
-		//Exposure value for vision is 0, for regular sight it was 5 but idk what the best value is
-		//configureCamera(topCam, 5);
-		//configureCamera(bottomCam, 0);
+		
 	}
+
 
 	public static Vision getInstance()
 	{

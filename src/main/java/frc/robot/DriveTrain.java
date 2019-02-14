@@ -31,7 +31,8 @@ public class DriveTrain
     private volatile double leftDriveTrainMotorsVoltage;
     private volatile double rightDriveTrainMotorsVoltage;
     
-    private DriveTrain() {
+    private DriveTrain() 
+    {
         leftMaster.setInverted(LEFT_MASTER_INVERTED);
         leftFollower.setInverted(LEFT_FOLLOWER_INVERTED);
         rightMaster.setInverted(RIGHT_MASTER_INVERTED);

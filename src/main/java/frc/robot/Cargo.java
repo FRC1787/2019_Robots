@@ -32,19 +32,24 @@ public class Cargo
     //Singelton instance
     private static final Cargo instance = new Cargo();
 
+    //Default contructor
+    public Cargo()
+    {
+        intakeArticulator.setNeutralMode(NeutralMode.Brake);
+    }
+
     public static Cargo getInstance()
     {
         return instance;
     }
 
-    //articulates the intake mechanism between deployed and stowed
+    //Articulates the intake mechanism between deployed and stowed
     public void articulateCargoIntake(double articulationSpeed)
     {
-        intakeArticulator.setNeutralMode(NeutralMode.Brake);
         intakeArticulator.set(articulationSpeed);
     }
     
-    //Sntake cargo
+    //Intake cargo
     public void intakeCargo(double speed)
     {
         cargoGrabberMotor.set(speed);
@@ -56,7 +61,37 @@ public class Cargo
         shooter.set(speed);
     }
 
-    //accessor methods for limit sitch states
+    //Deploy cargo intake mechanism 
+    public void deployCargoIntake(double deploySpeed)
+    {
+        //Fold cargo intake out until limit switch is pressed
+        if(!cargoIntakeMehcanismDeployedSwitch.get())
+        {
+            articulateCargoIntake(deploySpeed);
+        }
+        //Stop the motor once the limit switch is pressed
+        else
+        {
+            articulateCargoIntake(0);
+        }
+    }
+
+    //Stow cargo intake mechanism 
+    public void stowCargoIntake(double stowSpeed)
+    {
+        //Fold cargo intake in until limit switch is pressed
+        if(!cargoIntakeMechanismStowedSwitch.get())
+        {
+            articulateCargoIntake(-stowSpeed);
+        }
+        //Stop the motor once the limit switch is pressed
+        else
+        {
+            articulateCargoIntake(0);
+        }
+    }
+
+    //Accessor methods for limit sitch states
     public boolean getCargoIntakeMechanismDployedSwitchState()
     {
         return cargoIntakeMehcanismDeployedSwitch.get();
