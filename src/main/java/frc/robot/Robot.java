@@ -100,13 +100,17 @@ public class Robot extends TimedRobot
   public void teleopPeriodic() 
   {
 
+    //Listen to limit switches
     if (rightJoyStick.getRawAxis(JOYSTICK_SLIDER_AXIS) < 0)
     {
+
     /*************************/
     /*************************/
     /*Right Joystick controls*/
     /*************************/
     /*************************/
+
+
 
     //hatch mechanism controls
       //deploy hatch mechanism
@@ -114,46 +118,62 @@ public class Robot extends TimedRobot
     {
       hatch.articulateHatch(HATCH_DEPLOY_SPEED);
     }
+
+    //Stop deploy once the deploy limit switch is pressed
     if (!rightJoyStick.getRawButton(HATCH_MECHANISM_STOW_BTN_ID)  && hatch.getHatchMechanismDeploeyedSwitchState() )
     {
       hatch.articulateHatch(0);
     }
-      //stow hatch mechanism
+
+
+
+    //Stow hatch mechanism
     if (rightJoyStick.getRawButton(HATCH_MECHANISM_STOW_BTN_ID) && !hatch.getHatchMechanismStowedSwitchState())
     {
       hatch.articulateHatch(HATCH_STOW_SPEED);
     }
+
+    //Stop stow once the stow limit switch is pressed
     if (!rightJoyStick.getRawButton(HATCH_MECHANISM_DEPLOY_BTN_ID) && hatch.getHatchMechanismStowedSwitchState())
     {
       hatch.articulateHatch(0);
     }
-      //if hatch is on the mechanism don't move anything
+
+    //If hatch is on the mechanism don't move anything
     if(hatch.getHatchIntakedSwitchState())
     {
       hatch.articulateHatch(0);
     }
 
+
+
     //Hatch intake and delivery
-      //intake hatch
+    //Intake hatch
     if(rightJoyStick.getRawButton(HATCH_INTAKE_BTN_ID) && !hatch.getHatchIntakedSwitchState())
     {
       hatch.grabHatch(HATCH_INTAKE_SPEED);
     }
-      //stop once hatch is on
+
+    //Stop once hatch is on and limit switch is pressed
     if((!rightJoyStick.getRawButton(HATCH_DELIVER_BTN_ID) && hatch.getHatchIntakedSwitchState()) || !rightJoyStick.getRawButton(HATCH_INTAKE_BTN_ID))
     {
       hatch.grabHatch(0);
     }
-      //deliver hatch
+
+
+
+    //Deliver hatch
     if(rightJoyStick.getRawButton(HATCH_DELIVER_BTN_ID))
     {
       hatch.grabHatch(HATCH_DELIVER_SPEED);
     }
-    
+
+    //Stop delivering once no button is being pressed
     if(!rightJoyStick.getRawButton(HATCH_DELIVER_BTN_ID) && !rightJoyStick.getRawButton(HATCH_INTAKE_BTN_ID) && !hatch.getHatchIntakedSwitchState())
     {
       hatch.grabHatch(0);
     }
+
 
 
     /************************/
@@ -162,37 +182,51 @@ public class Robot extends TimedRobot
     /************************/
     /************************/
 
+
+
     //Cargo controls
-      //deploy cargo intake mechanism
+    //Deploy cargo intake mechanism
     if(leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID) && !cargo.getCargoIntakeMechanismDployedSwitchState())
     {
       cargo.deployCargoIntake(CARGO_MECHANISM_DEPLOY_SPEED);
     }
+
+    //Stop deploy once the deploy limit switch is pressed
     if(leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID) && cargo.getCargoIntakeMechanismDployedSwitchState())
     {
       cargo.articulateCargoIntake(0);
     }
-      //stow cargo intake mechanism 
+
+
+
+    //Stow cargo intake mechanism 
     if(leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState())
     {
       cargo.stowCargoIntake(CARGO_MEHCANISM_STOW_SPEED);
     }
+
+    //Stop stow once hte stow limit switch is hit
     if(!leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID) && cargo.getCargoIntakeMechanismStowedSwitchState())
     {
       cargo.articulateCargoIntake(0);
     }
-      //if no button is being pressed
+
+
+
+    //Stop while no button is being pressed
     if(!leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID) && !leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID))
     {
       cargo.articulateCargoIntake(0);
     }
 
-    //intake cargo
+    //Intake cargo: deploy the intake, then spin the wheels
     if(leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID))
     {
       cargo.deployCargoIntake(CARGO_MECHANISM_DEPLOY_SPEED);
       cargo.intakeCargo(CARGO_INTAKE_SPEED);
     }
+
+    //Stop intake wheels, 
     if(!leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState())
     {
       cargo.stowCargoIntake(CARGO_MEHCANISM_STOW_SPEED);

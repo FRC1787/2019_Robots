@@ -60,10 +60,12 @@ public class Hatch
     {
         return hatchMechanismDeployedSwitch.get();
     }
+
     public boolean getHatchMechanismStowedSwitchState()
     {
         return hatchMechanismStowedSwitch.get();
     }
+    
     public boolean getHatchIntakedSwitchState()
     {
         return hatchIntakedSiwtch.get();
