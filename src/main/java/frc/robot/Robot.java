@@ -112,8 +112,8 @@ public class Robot extends TimedRobot
 
 
 
-    //hatch mechanism controls
-      //deploy hatch mechanism
+    //Hatch mechanism controls
+      //Deploy hatch mechanism
     if (rightJoyStick.getRawButton(HATCH_MECHANISM_DEPLOY_BTN_ID) && !hatch.getHatchMechanismDeploeyedSwitchState())
     {
       hatch.articulateHatch(HATCH_DEPLOY_SPEED);
