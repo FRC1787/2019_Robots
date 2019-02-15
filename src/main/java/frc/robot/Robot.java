@@ -66,7 +66,7 @@ public class Robot extends TimedRobot
   private final double HATCH_DELIVER_SPEED = 1;
     //Cargo speeds
   private final double CARGO_MECHANISM_DEPLOY_SPEED = 0.25;
-  private final double CARGO_MEHCANISM_STOW_SPEED = -0.25;
+  private final double CARGO_MECHANISM_STOW_SPEED = -0.25;
   private final double CARGO_INTAKE_SPEED = 1;
   private final double CARGO_SHOOT_SPEED = 0.5;
     //Climb speed
@@ -77,9 +77,17 @@ public class Robot extends TimedRobot
   private int hatchDecelerationCounter = 0;
   
 
-  public boolean inDeadZone() 
+  public void updateDashboard() 
   {
-    //check 
+    SmartDashboard.putNumber("Hatch Deploy Speed", HATCH_DEPLOY_SPEED);
+    SmartDashboard.putNumber("Hatch Stow Speed", HATCH_STOW_SPEED);
+    SmartDashboard.putNumber("Hatch Intake Speed", HATCH_INTAKE_SPEED);
+    SmartDashboard.putNumber("Hatch Deliver Speed", HATCH_DELIVER_SPEED);
+
+    SmartDashboard.putNumber("Cargo Deploy Speed", CARGO_MECHANISM_DEPLOY_SPEED);
+    SmartDashboard.putNumber("Cargo Stow Speed", CARGO_MECHANISM_STOW_SPEED);
+    SmartDashboard.putNumber("Cargo Intake Speed", CARGO_INTAKE_SPEED);
+    SmartDashboard.putNumber("Cargo Shoot Speed", CARGO_SHOOT_SPEED);
   }
 
   public void robotInit() 
@@ -118,7 +126,8 @@ public class Robot extends TimedRobot
     {
       driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
     }
-    else{
+    else
+    {
       driveTrain.arcadeDrive(0, 0);
     }
     
@@ -225,7 +234,7 @@ public class Robot extends TimedRobot
     //Stow cargo intake mechanism 
     if(leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState())
     {
-      cargo.stowCargoIntake(CARGO_MEHCANISM_STOW_SPEED);
+      cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
     }
 
     //Stop stow once hte stow limit switch is hit
@@ -252,7 +261,7 @@ public class Robot extends TimedRobot
     //Stop intake wheels, 
     if(!leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState())
     {
-      cargo.stowCargoIntake(CARGO_MEHCANISM_STOW_SPEED);
+      cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
       cargo.intakeCargo(0);
     }
 
@@ -263,7 +272,7 @@ public class Robot extends TimedRobot
     }
   }
 
-
+  updateDashboard();
 
 
   //test code without limit switches///////////////////////////////////////////////
@@ -304,7 +313,7 @@ public class Robot extends TimedRobot
     }
     if(leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID))
     {
-      cargo.articulateCargoIntake(CARGO_MEHCANISM_STOW_SPEED);
+      cargo.articulateCargoIntake(CARGO_MECHANISM_STOW_SPEED);
     }
     if(leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID))
     {
