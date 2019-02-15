@@ -20,14 +20,12 @@ public class Cargo
     private final WPI_TalonSRX shooter = new WPI_TalonSRX(SHOOTER_MOTOR_ID);
 
     //Cargo limit switch variables
-    private final int CARGO_INTAKE_MECHANISM_DEPLOYED_LIMIT_SWITCH_CHANNEL = 3;
-    private final int CARGO_INTAKE_MEHCANISM_STOWED_LIMIT_SWITCH_CHANNEL = 4;
-    private final int CARGO_INTAKED_LIMIT_SWITCH_CHANNEL = 5;
+    private final int CARGO_INTAKE_MECHANISM_DEPLOYED_LIMIT_SWITCH_CHANNEL = 4;
+    private final int CARGO_INTAKE_MEHCANISM_STOWED_LIMIT_SWITCH_CHANNEL = 3;
 
     //Construct cargo limit switch objects
     private final DigitalInput cargoIntakeMehcanismDeployedSwitch = new DigitalInput(CARGO_INTAKE_MECHANISM_DEPLOYED_LIMIT_SWITCH_CHANNEL);
     private final DigitalInput cargoIntakeMechanismStowedSwitch = new DigitalInput(CARGO_INTAKE_MEHCANISM_STOWED_LIMIT_SWITCH_CHANNEL);
-    private final DigitalInput cargoIntaked = new DigitalInput(CARGO_INTAKED_LIMIT_SWITCH_CHANNEL);
 
     //Singelton instance
     private static final Cargo instance = new Cargo();

@@ -33,7 +33,7 @@ public class Robot extends TimedRobot
   private final Climb climb = Climb.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Hatch hatch = Hatch.getInstance();
-  private final Vision vision = Vision.getInstance();
+  //private final Vision vision = Vision.getInstance();
 
   //Joystick 
     //Joystick IDs
@@ -121,6 +121,10 @@ public class Robot extends TimedRobot
 
     //Check for dead zones on right and left joystick
     //If right joyStick is in the dead zone, drive with left stick
+
+    driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
+
+    /*
     if (driveTrain.joyStickInDeadZone(rightJoyStick) && !driveTrain.joyStickInDeadZone(leftJoyStick))
     {
       driveTrain.arcadeDrive(leftJoyStick.getX(), leftJoyStick.getY());
@@ -138,6 +142,7 @@ public class Robot extends TimedRobot
     {
       driveTrain.arcadeDrive(0, 0);
     }
+    */
     
 
     //Listen to limit switches
@@ -296,7 +301,7 @@ public class Robot extends TimedRobot
       }
     }
 
-    if(!leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID) && !leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID))
+    if(!leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID))
     {
       cargo.shootCargo(0);
       cargo.intakeCargo(0);
