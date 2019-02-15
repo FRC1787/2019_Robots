@@ -82,7 +82,7 @@ public class Cargo
         //Fold cargo intake in until limit switch is pressed
         if(!cargoIntakeMechanismStowedSwitch.get())
         {
-            articulateCargoIntake(-stowSpeed);
+            articulateCargoIntake(stowSpeed);
         }
 
         //Stop the motor once the limit switch is pressed
@@ -93,7 +93,7 @@ public class Cargo
     }
 
     //Accessor methods for limit sitch states
-    public boolean getCargoIntakeMechanismDployedSwitchState()
+    public boolean getCargoIntakeMechanismDeployedSwitchState()
     {
         return cargoIntakeMehcanismDeployedSwitch.get();
     }
@@ -101,10 +101,5 @@ public class Cargo
     public boolean getCargoIntakeMechanismStowedSwitchState()
     {
         return cargoIntakeMechanismStowedSwitch.get();
-    }
-
-    public boolean getIntakedSwitchState()
-    {
-        return cargoIntaked.get();
     }
 }
