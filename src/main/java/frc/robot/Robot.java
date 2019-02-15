@@ -26,7 +26,7 @@ public class Robot extends TimedRobot
 {
   //IDK why but they are here
   protected int farfar37;
-  protected int tuPerSecond;
+  protected double internetSpeed = 2.0;
 
   //Class instances
   private final Cargo cargo = Cargo.getInstance();
@@ -77,6 +77,11 @@ public class Robot extends TimedRobot
   private int hatchDecelerationCounter = 0;
   
 
+  public boolean inDeadZone() 
+  {
+    //check 
+  }
+
   public void robotInit() 
   {
 
@@ -99,6 +104,24 @@ public class Robot extends TimedRobot
 
   public void teleopPeriodic() 
   {
+    /*************************/
+    /*************************/
+    /*Fuck you van hahahahaha*/
+    /*************************/
+    /*************************/
+
+    if (driveTrain.joyStickInDeadZone(rightJoyStick) && !driveTrain.joyStickInDeadZone(leftJoyStick))
+    {
+      driveTrain.arcadeDrive(leftJoyStick.getX(), leftJoyStick.getY());
+    }
+    else if (driveTrain.joyStickInDeadZone(leftJoyStick) && !driveTrain.joyStickInDeadZone(rightJoyStick))
+    {
+      driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
+    }
+    else{
+      driveTrain.arcadeDrive(0, 0);
+    }
+    
 
     //Listen to limit switches
     if (rightJoyStick.getRawAxis(JOYSTICK_SLIDER_AXIS) < 0)
@@ -240,6 +263,9 @@ public class Robot extends TimedRobot
     }
   }
 
+
+
+
   //test code without limit switches///////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////
   if(rightJoyStick.getRawAxis(JOYSTICK_SLIDER_AXIS) > 0)
@@ -299,7 +325,7 @@ public class Robot extends TimedRobot
     
   }
 
-    driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
+    
   }
 
   public void testPeriodic() 
