@@ -26,7 +26,7 @@ public class Robot extends TimedRobot
 {
   //IDK why but they are here
   protected int farfar37;
-  protected int tuPerSecond;
+  protected double internetSpeed = 2.0;
 
   //Class instances
   private final Cargo cargo = Cargo.getInstance();
