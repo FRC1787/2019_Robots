@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain
@@ -23,6 +24,9 @@ public class DriveTrain
     public final boolean LEFT_FOLLOWER_INVERTED = false;
     public final boolean RIGHT_MASTER_INVERTED = false;
     public final boolean RIGHT_FOLLOWER_INVERTED = false;
+
+    //Drivetrain variables
+     private final double DEAD_ZONE_VALUE = 0.08;
 
     private static final DriveTrain instance = new DriveTrain();
     
@@ -72,6 +76,18 @@ public class DriveTrain
             return num;
         }
     } 
+
+    
+    public boolean joyStickInDeadZone(Joystick joystick)
+    {
+        if((joystick.getX() <= DEAD_ZONE_VALUE && joystick.getX() >= -DEAD_ZONE_VALUE) || (joystick.getY() <= DEAD_ZONE_VALUE && joystick.getY() >= -DEAD_ZONE_VALUE))
+        {
+            return true;
+        }
+
+        return false;
+
+    }
 
     public void arcadeDrive(double xAxis, double yAxis)
     {
