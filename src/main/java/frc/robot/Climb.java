@@ -42,10 +42,12 @@ public class Climb
         {
             climbPin.set(position);
         }
+
         else if(position < 0.2)
         {
             climbPin.set(0.2);
         }
+
         else if(position > 1.0)
         {
             climbPin.set(1);
