@@ -24,12 +24,10 @@ public class DriveTrain
     public final boolean RIGHT_MASTER_INVERTED = false;
     public final boolean RIGHT_FOLLOWER_INVERTED = false;
 
-    
-
     private static final DriveTrain instance = new DriveTrain();
     
-    private volatile double leftDriveTrainMotorsVoltage;
-    private volatile double rightDriveTrainMotorsVoltage;
+    private  double leftDriveTrainMotorsVoltage;
+    private  double rightDriveTrainMotorsVoltage;
     
     private DriveTrain() 
     {

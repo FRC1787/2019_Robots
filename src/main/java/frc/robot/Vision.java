@@ -6,10 +6,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
-// import org.usfirst.frc.team1787.subsystems.Autonomous;
-// import org.usfirst.frc.team1787.subsystems.DriveTrain;
-
+import org.opencv.*;
+import frc.robot.DriveTrain;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;

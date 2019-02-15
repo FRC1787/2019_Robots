@@ -15,7 +15,7 @@ public class Cargo
     private static final int SHOOTER_MOTOR_ID = 6;
 
     //Construct cargo motor controller objects
-    private final WPI_TalonSRX cargoGrabberMotor = new WPI_TalonSRX(CARGO_GRABBING_MOTOR_ID);
+    private final WPI_VictorSPX cargoGrabberMotor = new WPI_VictorSPX(CARGO_GRABBING_MOTOR_ID);
     private final WPI_VictorSPX intakeArticulator = new WPI_VictorSPX(INTAKE_ARTICULATING_MOTOR_ID);
     private final WPI_TalonSRX shooter = new WPI_TalonSRX(SHOOTER_MOTOR_ID);
 
@@ -38,6 +38,7 @@ public class Cargo
         intakeArticulator.setNeutralMode(NeutralMode.Brake);
     }
 
+    //Return method for the singelton instance
     public static Cargo getInstance()
     {
         return instance;
@@ -69,6 +70,7 @@ public class Cargo
         {
             articulateCargoIntake(deploySpeed);
         }
+
         //Stop the motor once the limit switch is pressed
         else
         {
@@ -84,6 +86,7 @@ public class Cargo
         {
             articulateCargoIntake(-stowSpeed);
         }
+
         //Stop the motor once the limit switch is pressed
         else
         {
@@ -96,10 +99,12 @@ public class Cargo
     {
         return cargoIntakeMehcanismDeployedSwitch.get();
     }
+
     public boolean getCargoIntakeMechanismStowedSwitchState()
     {
         return cargoIntakeMechanismStowedSwitch.get();
     }
+
     public boolean getIntakedSwitchState()
     {
         return cargoIntaked.get();

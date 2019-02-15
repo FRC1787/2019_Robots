@@ -10,8 +10,10 @@ public class Climb
     //Climb motor id
     private static final int CLIMBING_MOTOR_ID = 10;
     private final int CLIMB_PIN_CHANNEL = 0;
+
     //Create climb motorcontroller object
     private final WPI_TalonSRX climbMotor = new WPI_TalonSRX(CLIMBING_MOTOR_ID);
+    
     //Create climb servo object
     private final Servo climbPin = new Servo(CLIMB_PIN_CHANNEL);
 
@@ -50,9 +52,10 @@ public class Climb
         }
     }
 
-    //Elivate the robot using climb motor
+    //Moves the robot using climb motor
     public void moveClimber(double speed)
     {
         climbMotor.set(speed);
     }
+
 }
