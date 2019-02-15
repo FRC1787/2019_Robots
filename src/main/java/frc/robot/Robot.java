@@ -75,12 +75,6 @@ public class Robot extends TimedRobot
   //Other varibales
   private boolean deployCargoIntakeState = false;
   private int hatchDecelerationCounter = 0;
-  
-
-  public boolean inDeadZone() 
-  {
-    //check 
-  }
 
   public void robotInit() 
   {
@@ -110,15 +104,22 @@ public class Robot extends TimedRobot
     /*************************/
     /*************************/
 
+    //Check for dead zones on right and left joystick
+    //If right joyStick is in the dead zone, drive with left stick
     if (driveTrain.joyStickInDeadZone(rightJoyStick) && !driveTrain.joyStickInDeadZone(leftJoyStick))
     {
       driveTrain.arcadeDrive(leftJoyStick.getX(), leftJoyStick.getY());
     }
-    else if (driveTrain.joyStickInDeadZone(leftJoyStick) && !driveTrain.joyStickInDeadZone(rightJoyStick))
+
+    //If left joyStick is in dead zone, drive with right, but invert Y-axis
+    else if (!driveTrain.joyStickInDeadZone(rightJoyStick) && driveTrain.joyStickInDeadZone(leftJoyStick))
     {
-      driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
+      driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
     }
-    else{
+
+    //If both are in dead zone, stop motors
+    else
+    {
       driveTrain.arcadeDrive(0, 0);
     }
     
@@ -256,10 +257,33 @@ public class Robot extends TimedRobot
       cargo.intakeCargo(0);
     }
 
-    //shoot cargo
+    //Shoot cargo
+    //Spin intake wheels as long as button is pressed
     if(leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID))
     {
-      cargo.shootCargo(CARGO_SHOOT_SPEED);
+      cargo.intakeCargo(CARGO_INTAKE_SPEED);
+    }
+
+    //Engage shooting belt, once the button is released
+    if(leftJoyStick.getRawButtonReleased(CARGO_SHOOT_BTN_ID))
+    {
+      cargo.intakeCargo(0);
+      int i = 0;
+      if( i <= 100)
+      {
+        cargo.shootCargo(CARGO_SHOOT_SPEED);
+        i++;
+      }
+      else
+      {
+        cargo.shootCargo(0);
+      }
+    }
+
+    if(!leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID) && !leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID))
+    {
+      cargo.shootCargo(0);
+      cargo.intakeCargo(0);
     }
   }
 
