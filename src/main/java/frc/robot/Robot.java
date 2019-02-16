@@ -75,7 +75,7 @@ public class Robot extends TimedRobot
     //Cargo speeds
   private final double F_CARGO_MECHANISM_DEPLOY_SPEED = 0.25;
   private final double F_CARGO_MECHANISM_STOW_SPEED = -0.20;
-  private final double F_CARGO_INTAKE_SPEED = 0.75;
+  private final double F_CARGO_INTAKE_SPEED = 1;
   private final double F_CARGO_SHOOT_SPEED = 0.5;
 
 
@@ -87,7 +87,7 @@ public class Robot extends TimedRobot
     //Cargo speeds
   private double CARGO_MECHANISM_DEPLOY_SPEED = 0.25;
   private double CARGO_MECHANISM_STOW_SPEED = -0.20;
-  private double CARGO_INTAKE_SPEED;
+  private double CARGO_INTAKE_SPEED = 1;
   private double CARGO_SHOOT_SPEED = 0.75;
     //Climb speed
   private final double CLIMB_SPEED = 1;
@@ -99,6 +99,9 @@ public class Robot extends TimedRobot
   private int shooterTimer = 0;
   private final int F_SHOOTER_TIMER_MAX = 100;
   private int shooterTimerMaxValue;
+  private final double F_JOYSTICK_SWITCH_THRESHOLD = 0.25;
+  private double joyStickSwitchThreshold;
+  private boolean joyStickSwap = true;
 
   public void setDashboard()
   {
@@ -170,12 +173,14 @@ public class Robot extends TimedRobot
 
     if(driveTrain.joyStickInDeadZone(leftJoyStick))
     {
-      driveTrain.arcadeDrive(leftJoyStick.getX(), leftJoyStick.getY());
+      //driveTrain.arcadeDrive(leftJoyStick.getX(), -leftJoyStick.getY());
+      driveTrain.linearDrive(leftJoyStick.getX(), -leftJoyStick.getY());
     }
 
     if(driveTrain.joyStickInDeadZone(rightJoyStick))
     {
-      driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
+      //driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
+      driveTrain.linearDrive(rightJoyStick.getX(), rightJoyStick.getY());
     }
     
     

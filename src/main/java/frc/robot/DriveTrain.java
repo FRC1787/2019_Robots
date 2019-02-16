@@ -80,7 +80,7 @@ public class DriveTrain
     
     public boolean joyStickInDeadZone(Joystick joystick)
     {
-        if((joystick.getX() > DEAD_ZONE_VALUE && joystick.getX() < -DEAD_ZONE_VALUE) || (joystick.getY() > DEAD_ZONE_VALUE && joystick.getY() < -DEAD_ZONE_VALUE))
+        if((joystick.getX() > DEAD_ZONE_VALUE || joystick.getX() < -DEAD_ZONE_VALUE) || (joystick.getY() > DEAD_ZONE_VALUE || joystick.getY() < -DEAD_ZONE_VALUE))
         {
             return true;
         }
@@ -94,6 +94,21 @@ public class DriveTrain
         yAxis = yAxis * Math.abs(yAxis);
         xAxis = xAxis * Math.abs(xAxis);
 
+        //checks the range to see if the value is greater than 1 or less than -1 and if so corrects the value to be in that range
+        yAxis = rangeCorrection(yAxis);
+        xAxis = rangeCorrection(xAxis);
+
+        leftDriveTrainMotorsVoltage = xAxis + yAxis;
+        rightDriveTrainMotorsVoltage = xAxis - yAxis;
+
+        leftMaster.set(leftDriveTrainMotorsVoltage);
+        rightMaster.set(rightDriveTrainMotorsVoltage);
+        leftFollower.set(leftDriveTrainMotorsVoltage);
+        rightFollower.set(rightDriveTrainMotorsVoltage);
+    }
+
+    public void linearDrive(double xAxis, double yAxis)
+    {
         //checks the range to see if the value is greater than 1 or less than -1 and if so corrects the value to be in that range
         yAxis = rangeCorrection(yAxis);
         xAxis = rangeCorrection(xAxis);
