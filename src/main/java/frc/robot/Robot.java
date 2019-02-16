@@ -77,7 +77,10 @@ public class Robot extends TimedRobot
   private int hatchDecelerationCounter = 0;
   private boolean engageShooterBelt = false;
 
-  
+  public Robot()
+  {
+    super(0.02);
+  }
 
   public void updateDashboard() 
   {
