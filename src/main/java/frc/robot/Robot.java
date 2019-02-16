@@ -165,8 +165,19 @@ public class Robot extends TimedRobot
     //Check for dead zones on right and left joystick
     //If right joyStick is in the dead zone, drive with left stick
 
-    driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
-    driveTrain.arcadeDrive(leftJoyStick.getX(), leftJoyStick.getY());
+
+    //driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
+
+    if(driveTrain.joyStickInDeadZone(rightJoyStick) && !driveTrain.joyStickInDeadZone(leftJoyStick))
+    {
+      driveTrain.arcadeDrive(leftJoyStick.getX(), leftJoyStick.getY());
+    }
+
+    if(!driveTrain.joyStickInDeadZone(rightJoyStick) && driveTrain.joyStickInDeadZone(leftJoyStick))
+    {
+      driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
+    }
+    
     
 
     //Listen to limit switches
