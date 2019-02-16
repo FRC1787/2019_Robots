@@ -63,7 +63,11 @@ public class DriveTrain
 
     public double rangeCorrection(double num)
     {
-        if(num > 1)
+        if(num > -DEAD_ZONE_VALUE && num < DEAD_ZONE_VALUE)
+        {
+            return 0;
+        }
+        else if(num > 1)
         {
             return 1;
         }
@@ -77,6 +81,15 @@ public class DriveTrain
         }
     } 
 
+    public double sqrtSignPreserved(double axis)
+    {
+        if(axis < 0)
+        {
+            return -Math.sqrt(-axis);
+        }
+        return Math.sqrt(axis);
+    }
+
     
     public boolean joyStickInDeadZone(Joystick joystick)
     {
@@ -87,6 +100,15 @@ public class DriveTrain
 
         return false;
 
+    }
+
+    public void squareRootDrive(double xAxis, double yAxis)
+    {
+        xAxis = rangeCorrection(sqrtSignPreserved(xAxis));
+        yAxis = rangeCorrection(sqrtSignPreserved(yAxis));
+
+        leftDriveTrainMotorsVoltage = xAxis + xAxis;
+        rightDriveTrainMotorsVoltage = xAxis - yAxis;
     }
 
     public void arcadeDrive(double xAxis, double yAxis)
