@@ -168,12 +168,12 @@ public class Robot extends TimedRobot
 
     //driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
 
-    if(driveTrain.joyStickInDeadZone(rightJoyStick) && !driveTrain.joyStickInDeadZone(leftJoyStick))
+    if(driveTrain.joyStickInDeadZone(leftJoyStick))
     {
       driveTrain.arcadeDrive(leftJoyStick.getX(), leftJoyStick.getY());
     }
 
-    if(!driveTrain.joyStickInDeadZone(rightJoyStick) && driveTrain.joyStickInDeadZone(leftJoyStick))
+    if(driveTrain.joyStickInDeadZone(rightJoyStick))
     {
       driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
     }

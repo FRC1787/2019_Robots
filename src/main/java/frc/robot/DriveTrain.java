@@ -26,7 +26,7 @@ public class DriveTrain
     public final boolean RIGHT_FOLLOWER_INVERTED = false;
 
     //Drivetrain variables
-     private final double DEAD_ZONE_VALUE = 0.08;
+     private final double DEAD_ZONE_VALUE = 0.02;
 
     private static final DriveTrain instance = new DriveTrain();
     
