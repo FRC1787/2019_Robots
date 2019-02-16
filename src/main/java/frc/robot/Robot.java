@@ -88,7 +88,7 @@ public class Robot extends TimedRobot
   private double CARGO_MECHANISM_DEPLOY_SPEED = 0.25;
   private double CARGO_MECHANISM_STOW_SPEED = -0.20;
   private double CARGO_INTAKE_SPEED;
-  private double CARGO_SHOOT_SPEED = 0.5;
+  private double CARGO_SHOOT_SPEED = 0.75;
     //Climb speed
   private final double CLIMB_SPEED = 1;
 
@@ -166,26 +166,7 @@ public class Robot extends TimedRobot
     //If right joyStick is in the dead zone, drive with left stick
 
     driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
-
-    /*
-    if (driveTrain.joyStickInDeadZone(rightJoyStick) && !driveTrain.joyStickInDeadZone(leftJoyStick))
-    {
-      driveTrain.arcadeDrive(leftJoyStick.getX(), leftJoyStick.getY());
-    }
-
-    //If left joyStick is in dead zone, drive with right, but invert Y-axis
-    else if (!driveTrain.joyStickInDeadZone(rightJoyStick) && driveTrain.joyStickInDeadZone(leftJoyStick))
-    {
-      driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
-    }
-
-    //If both are in dead zone, stop motors
-
-    else
-    {
-      driveTrain.arcadeDrive(0, 0);
-    }
-    */
+    driveTrain.arcadeDrive(leftJoyStick.getX(), leftJoyStick.getY());
     
 
     //Listen to limit switches
