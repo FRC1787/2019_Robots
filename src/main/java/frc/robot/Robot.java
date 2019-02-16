@@ -18,9 +18,14 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Preferences;
 
 public class Robot extends TimedRobot 
 {
@@ -34,6 +39,7 @@ public class Robot extends TimedRobot
   private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Hatch hatch = Hatch.getInstance();
   //private final Vision vision = Vision.getInstance();
+  Preferences preferences;
 
   //Joystick 
     //Joystick IDs
@@ -81,7 +87,7 @@ public class Robot extends TimedRobot
     //Cargo speeds
   private double CARGO_MECHANISM_DEPLOY_SPEED = 0.25;
   private double CARGO_MECHANISM_STOW_SPEED = -0.20;
-  private double CARGO_INTAKE_SPEED = 0.75;
+  private double CARGO_INTAKE_SPEED;
   private double CARGO_SHOOT_SPEED = 0.5;
     //Climb speed
   private final double CLIMB_SPEED = 1;
@@ -91,31 +97,47 @@ public class Robot extends TimedRobot
   private int hatchDecelerationCounter = 0;
   private boolean engageShooterBelt = false;
   private int shooterTimer = 0;
+  private final int F_SHOOTER_TIMER_MAX = 100;
+  private int shooterTimerMaxValue;
 
-  
-
-  public void updateDashboard() 
+  public void setDashboard()
   {
-    
-    SmartDashboard.putNumber("Hatch Deploy Speed", HATCH_DEPLOY_SPEED);
-    SmartDashboard.putNumber("Hatch Stow Speed", HATCH_STOW_SPEED);
-    SmartDashboard.putNumber("Hatch Intake Speed", HATCH_INTAKE_SPEED);
-    SmartDashboard.putNumber("Hatch Deliver Speed", HATCH_DELIVER_SPEED);
+    SmartDashboard.putNumber("Hatch Deploy Speed", F_HATCH_DEPLOY_SPEED);
+    SmartDashboard.putNumber("Hatch Stow Speed", F_HATCH_STOW_SPEED);
+    SmartDashboard.putNumber("Hatch Intake Speed", F_HATCH_INTAKE_SPEED);
+    SmartDashboard.putNumber("Hatch Deliver Speed", F_HATCH_DELIVER_SPEED);
 
-    SmartDashboard.putNumber("Cargo Deploy Speed", CARGO_MECHANISM_DEPLOY_SPEED);
-    SmartDashboard.putNumber("Cargo Stow Speed", CARGO_MECHANISM_STOW_SPEED);
-    SmartDashboard.putNumber("Cargo Intake Speed", CARGO_INTAKE_SPEED);
-    SmartDashboard.putNumber("Cargo Shoot Speed", CARGO_SHOOT_SPEED);
+    SmartDashboard.putNumber("Cargo Deploy Speed", F_CARGO_MECHANISM_DEPLOY_SPEED);
+    SmartDashboard.putNumber("Cargo Stow Speed", F_CARGO_MECHANISM_STOW_SPEED);
+    SmartDashboard.putNumber("Cargo Intake Speed", F_CARGO_INTAKE_SPEED);
+    SmartDashboard.putNumber("Cargo Shoot Speed", F_CARGO_SHOOT_SPEED);
+
+    SmartDashboard.putNumber("Shooter Belt Timer Max", F_SHOOTER_TIMER_MAX);
+  }
+
+  public void updateDashboard()
+  {
+    HATCH_DEPLOY_SPEED = SmartDashboard.getNumber("Hatch Deploy Speed", F_HATCH_DEPLOY_SPEED);
+    HATCH_STOW_SPEED = SmartDashboard.getNumber("Hatch Stow Speed", F_HATCH_STOW_SPEED);
+    HATCH_INTAKE_SPEED = SmartDashboard.getNumber("Hatch Intake Speed", F_HATCH_INTAKE_SPEED);
+    HATCH_DELIVER_SPEED = SmartDashboard.getNumber("Hatch Deliver Speed", F_HATCH_DELIVER_SPEED);
+
+    CARGO_MECHANISM_DEPLOY_SPEED = SmartDashboard.getNumber("Cargo Deploy Speed", F_CARGO_MECHANISM_DEPLOY_SPEED);
+    CARGO_MECHANISM_STOW_SPEED = SmartDashboard.getNumber("Cargo Stow Speed", F_CARGO_MECHANISM_STOW_SPEED);
+    CARGO_INTAKE_SPEED = SmartDashboard.getNumber("Cargo Intake Speed", F_CARGO_INTAKE_SPEED);
+    CARGO_SHOOT_SPEED = SmartDashboard.getNumber("Cargo Shoot Speed", F_CARGO_SHOOT_SPEED);
+
+    shooterTimerMaxValue = (int) SmartDashboard.getNumber("Shooter Belt Timer Max", F_SHOOTER_TIMER_MAX);
   }
 
   public void robotInit() 
   {
-
+    this.setDashboard();
   }
 
   public void robotPeriodic() 
   {
-
+    this.updateDashboard();
   }
 
   public void autonomousInit() 
@@ -128,11 +150,13 @@ public class Robot extends TimedRobot
 
   }
 
+  public void teleopInit()
+  {
+    
+  }
+
   public void teleopPeriodic() 
   {
-
-    updateDashboard();
-
     /*************************/
     /*************************/
     /*************************/
@@ -301,7 +325,7 @@ public class Robot extends TimedRobot
     //Spin intake wheels as long as button is pressed
     if(leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID))
     {
-      cargo.intakeCargo(CARGO_INTAKE_SPEED);
+      cargo.intakeCargo(CARGO_SHOOT_SPEED);
     }
 
     
@@ -400,6 +424,6 @@ public class Robot extends TimedRobot
 
   public void testPeriodic() 
   {
-    
+    this.teleopPeriodic(); 
   }
 }
