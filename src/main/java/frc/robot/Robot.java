@@ -77,10 +77,7 @@ public class Robot extends TimedRobot
   private int hatchDecelerationCounter = 0;
   private boolean engageShooterBelt = false;
 
-  public Robot()
-  {
-    super(0.02);
-  }
+  
 
   public void updateDashboard() 
   {
@@ -208,7 +205,7 @@ public class Robot extends TimedRobot
     }
 
     //Stop once hatch is on and limit switch is pressed
-    if((!rightJoyStick.getRawButton(HATCH_DELIVER_BTN_ID) && hatch.getHatchIntakedSwitchState()) || !rightJoyStick.getRawButton(HATCH_INTAKE_BTN_ID))
+    if(!rightJoyStick.getRawButton(HATCH_DELIVER_BTN_ID) && hatch.getHatchIntakedSwitchState())
     {
       hatch.grabHatch(0);
     }
@@ -292,6 +289,8 @@ public class Robot extends TimedRobot
     {
       cargo.intakeCargo(CARGO_INTAKE_SPEED);
     }
+
+    
     if(leftJoyStick.getRawButtonReleased(CARGO_SHOOT_BTN_ID))
     {
       engageShooterBelt = true;
@@ -387,26 +386,6 @@ public class Robot extends TimedRobot
 
   public void testPeriodic() 
   {
-    if (rightJoyStick.getRawButton(HATCH_MECHANISM_DEPLOY_BTN_ID) && !hatch.getHatchMechanismDeploeyedSwitchState())
-    {
-      hatchDecelerationCounter ++;
-      hatch.articulateHatch(HATCH_DEPLOY_SPEED);
-    }
-    if (!rightJoyStick.getRawButton(HATCH_MECHANISM_STOW_BTN_ID)  && hatch.getHatchMechanismDeploeyedSwitchState())
-    {
-      System.out.println(hatchDecelerationCounter);
-      hatch.articulateHatch(0);
-    }
-      //stow hatch mechanism
-    if (rightJoyStick.getRawButton(HATCH_MECHANISM_STOW_BTN_ID) && !hatch.getHatchMechanismStowedSwitchState())
-    {
-      hatchDecelerationCounter++;
-      hatch.articulateHatch(HATCH_STOW_SPEED);
-    }
-    if (!rightJoyStick.getRawButton(HATCH_MECHANISM_DEPLOY_BTN_ID) && hatch.getHatchMechanismStowedSwitchState())
-    {
-      System.out.println(hatchDecelerationCounter);
-      hatch.articulateHatch(0);
-    }
+    
   }
 }
