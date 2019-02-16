@@ -76,6 +76,7 @@ public class Robot extends TimedRobot
   private boolean deployCargoIntakeState = false;
   private int hatchDecelerationCounter = 0;
   private boolean engageShooterBelt = false;
+  private int shooterTimer = 0;
 
   
 
@@ -300,20 +301,20 @@ public class Robot extends TimedRobot
     if(engageShooterBelt)
     {
       cargo.intakeCargo(0);
-      int i = 0;
-      if( i <= 100)
+      if(shooterTimer <= 100)
       {
         cargo.shootCargo(CARGO_SHOOT_SPEED);
-        i++;
       }
       else
       {
         cargo.shootCargo(0);
         engageShooterBelt = false;
+        shooterTimer = 0;
       }
+      shooterTimer++;
     }
 
-    if(!leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID))
+    if(!leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID) && !engageShooterBelt)
     {
       cargo.shootCargo(0);
     }
