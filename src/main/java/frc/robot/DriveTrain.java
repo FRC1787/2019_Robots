@@ -80,7 +80,7 @@ public class DriveTrain
     
     public boolean joyStickInDeadZone(Joystick joystick)
     {
-        if((joystick.getX() <= DEAD_ZONE_VALUE && joystick.getX() >= -DEAD_ZONE_VALUE) || (joystick.getY() <= DEAD_ZONE_VALUE && joystick.getY() >= -DEAD_ZONE_VALUE))
+        if((joystick.getX() > DEAD_ZONE_VALUE && joystick.getX() < -DEAD_ZONE_VALUE) || (joystick.getY() > DEAD_ZONE_VALUE && joystick.getY() < -DEAD_ZONE_VALUE))
         {
             return true;
         }
