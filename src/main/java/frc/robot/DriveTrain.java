@@ -143,4 +143,12 @@ public class DriveTrain
         leftFollower.set(leftDriveTrainMotorsVoltage);
         rightFollower.set(rightDriveTrainMotorsVoltage);
     }
+
+    public void tankDrive(double leftSide, double rightSide)
+    {
+        leftMaster.set(leftSide);
+        rightMaster.set(rightSide);
+        leftFollower.set(leftSide);
+        rightFollower.set(rightSide);
+    }
 }

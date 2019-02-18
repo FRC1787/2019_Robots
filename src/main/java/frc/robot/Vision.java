@@ -27,20 +27,22 @@ public class Vision
 	private CvSink bottomFrameGrabber;
 	private static final int STANDARD_IMG_WIDTH = 160;
 	private static final int STANDARD_IMG_HEIGHT = 120;
-	private Mat originalFrame = new Mat();
+	private Mat originalFrameTop = new Mat();
 	private Mat processedFrame = new Mat();
 
 	private Targeting targeting = Targeting.getInstance();
 	private Processing processing = Processing.getInstance();
 	private DriveTrain driveTrain = DriveTrain.getInstance();
 	private CameraServer server = CameraServer.getInstance();
+	//private CameraServer server2 = CameraServer.getInstance();
 
 	 private void configureCamera(UsbCamera inputCam, int exposureValue)
 	{
 		inputCam.setResolution(STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
 		inputCam.setFPS(20);
+		//inputCam.setExposureManual(exposureValue);
 		inputCam.setExposureAuto();
-		inputCam.setBrightness(100);
+		inputCam.setBrightness(50);
 		inputCam.setWhiteBalanceManual(WhiteBalance.kFixedIndoor);
 	}
 
@@ -56,7 +58,11 @@ public class Vision
 		configureCamera(topCam, 5);
 		configureCamera(bottomCam, 0);
 		
-		outputStream = server.putVideo("Processed Video Stream", STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
+		//outputStream = server.putVideo("Top Camera Stream", STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
+		//outputStream = server.putVideo("Top Camera Stream", STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
+
+		//topFrameGrabber.grabFrame(originalFrameTop);
+		//outputStream.putFrame(originalFrameTop);
 
 		
 	}

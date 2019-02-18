@@ -38,9 +38,10 @@ public class Robot extends TimedRobot
   private final Climb climb = Climb.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Hatch hatch = Hatch.getInstance();
-  //private final Vision vision = Vision.getInstance();
-  Preferences preferences;
+  private final Vision vision = Vision.getInstance();
 
+
+  
   //Joystick 
     //Joystick IDs
   private static final int RIGHT_JOYSTICK_ID = 0;
@@ -173,14 +174,16 @@ public class Robot extends TimedRobot
 
     if(driveTrain.joyStickInDeadZone(leftJoyStick))
     {
-      //driveTrain.arcadeDrive(leftJoyStick.getX(), -leftJoyStick.getY());
-      driveTrain.linearDrive(leftJoyStick.getX(), -leftJoyStick.getY());
+      driveTrain.arcadeDrive(leftJoyStick.getX(), -leftJoyStick.getY());
+      //driveTrain.linearDrive(leftJoyStick.getX(), -leftJoyStick.getY());
+      //driveTrain.squareRootDrive(leftJoyStick.getX(), -leftJoyStick.getY());
     }
 
     if(driveTrain.joyStickInDeadZone(rightJoyStick))
     {
-      //driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
-      driveTrain.linearDrive(rightJoyStick.getX(), rightJoyStick.getY());
+      driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
+      //driveTrain.linearDrive(rightJoyStick.getX(), rightJoyStick.getY());
+      //driveTrain.squareRootDrive(rightJoyStick.getX(), rightJoyStick.getY());
     }
     
     
@@ -334,6 +337,7 @@ public class Robot extends TimedRobot
     //Engage shooting belt, once the button is released
     if(engageShooterBelt)
     {
+      cargo.stowCargoIntake(-0.5);
       cargo.intakeCargo(0);
       if(shooterTimer <= 100)
       {
@@ -350,6 +354,7 @@ public class Robot extends TimedRobot
 
     if(!leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID) && !engageShooterBelt)
     {
+      //cargo.stowCargoIntake(0);
       cargo.shootCargo(0);
     }
   }
@@ -421,6 +426,16 @@ public class Robot extends TimedRobot
 
   public void testPeriodic() 
   {
-    this.teleopPeriodic(); 
+    
+    //this.teleopPeriodic(); 
+    if(leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID))
+    {
+      cargo.intakeCargo(-.75);
+    }
+
+    else
+    {
+      cargo.intakeCargo(0);
+    }
   }
 }
