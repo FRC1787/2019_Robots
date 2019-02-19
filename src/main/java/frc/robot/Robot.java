@@ -63,6 +63,8 @@ public class Robot extends TimedRobot
   private final int CARGO_INTAKE_MECHANISM_STOW_BTN_ID = 3;
   private final int CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID = 4;
   private final int CARGO_AUTO_INTAKE_BTN_ID = 14;
+  private final int CLIMB_INITIATION_BTN = 5;
+  private final int STOP_CLIMB_BTN = 10;
 
   //Motor Voltages
 
@@ -106,6 +108,7 @@ public class Robot extends TimedRobot
   private final int CARGO_AUTO_COUNT_MAX = 10;
   private final double CARGO_AUTO_SPEED = -0.375;
   private boolean readyForIntake = false;
+  private boolean climbInitiated = false;
 
   public void setDashboard()
   {
@@ -290,6 +293,7 @@ public class Robot extends TimedRobot
 
 
 
+
     //Stow cargo intake mechanism 
     if(leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState())
     {
@@ -323,9 +327,6 @@ public class Robot extends TimedRobot
       cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
       cargo.intakeCargo(0);
     }
-
-
-/////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!?????????????????????????
     /*
     * CARGO INTAKE VISION STUFF
     */
@@ -369,8 +370,6 @@ public class Robot extends TimedRobot
       cargoAutoCount = 0;
     }
 
-
-
     //Shoot cargo
     //Spin intake wheels as long as button is pressed
     if(leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID))
@@ -410,6 +409,21 @@ public class Robot extends TimedRobot
     }
   
 
+
+    //Climb controls just for a commit
+    if(leftJoyStick.getRawButton(CLIMB_INITIATION_BTN))
+    {
+      climbInitiated = true;
+    }
+    if(climbInitiated)
+    {
+      climb.moveClimber(climb.sliderCorrection(leftJoyStick));
+    }
+    if(leftJoyStick.getRawButton(STOP_CLIMB_BTN))
+    {
+      climbInitiated = false;
+    }
+  }
 
 
 
@@ -474,21 +488,8 @@ public class Robot extends TimedRobot
   }
 }
 
-    
-  }
-
   public void testPeriodic() 
   {
-
-    //this.teleopPeriodic(); 
-    if(leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID))
-    {
-      cargo.intakeCargo(-.75);
-    }
-
-    else
-    {
-      cargo.intakeCargo(0);
-    }
+    this.teleopPeriodic(); 
   }
 }
