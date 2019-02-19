@@ -338,10 +338,10 @@ public class Robot extends TimedRobot
       {
         driveTrain.tankDrive(CARGO_AUTO_SPEED, -CARGO_AUTO_SPEED);
       }
-      else if(vision.bigBallsInFrame())
-      {
-        readyForIntake = true;
-      }
+      // else if(vision.bigBallsInFrame())
+      // {
+      //   readyForIntake = true;
+      // }
 
       if(readyForIntake)
       {

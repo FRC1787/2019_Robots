@@ -33,13 +33,16 @@ public class Vision
 	private CvSink cargoFrameGrabber, hatchFrameGrabber;
 	private static final int STANDARD_IMG_WIDTH = 160;
 	private static final int STANDARD_IMG_HEIGHT = 120;
-	private Mat originalFrame = new Mat();
 
+	private Mat originalFrame = new Mat();
 	private Mat processedFrame = new Mat();
+	private Mat contours = new Mat();
+
 	private final Scalar HSV_THRESHOLD_LOWER = new Scalar(0.0, 162.8, 240.7);
 	private final Scalar HSV_THRESHOLD_UPPER = new Scalar(29.5, 224.5, 255.0);
 
-	private DriveTrain driveTrain;
+	
+
 	private CameraServer server = CameraServer.getInstance();
 	//private CameraServer server2 = CameraServer.getInstance();
 
@@ -67,88 +70,13 @@ public class Vision
 		configureCamera(hatchCam, 5);	
 	}
 
-
-
-	private void filterContours(ArrayList<MatOfPoint> inputContours, double minArea, double minPerimeter, double minWidth, double maxWidth, double minHeight, double maxHeight, double[] solidity, double maxVertexCount, double minVertexCount, double minRatio, double maxRatio, ArrayList<MatOfPoint> output) 
+	public void processing()
 	{
-
-	final MatOfInt hull = new MatOfInt();
-	output.clear();
-
-	for (int i = 0; i < inputContours.size(); i++) 
-	{
-		final MatOfPoint contour = inputContours.get(i);
-		final Rect bb = Imgproc.boundingRect(contour);
-		if (bb.width < minWidth || bb.width > maxWidth) 
-		continue;
-		if (bb.height < minHeight || bb.height > maxHeight) 
-		continue;
-		final double area = Imgproc.contourArea(contour);
-		if (area < minArea) 
-		continue;
-		if (Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true) < minPerimeter) 
-		continue;
-		Imgproc.convexHull(contour, hull);
-		MatOfPoint mopHull = new MatOfPoint();
-		mopHull.create((int) hull.size().height, 1, CvType.CV_32SC2);
-		for (int j = 0; j < hull.size().height; j++) 
-		{
-			int index = (int)hull.get(j, 0)[0];
-			double[] point = new double[] { contour.get(index, 0)[0], contour.get(index, 0)[1]};
-			mopHull.put(j, 0, point);
-		}
-		final double solid = 100 * area / Imgproc.contourArea(mopHull);
-		if (solid < solidity[0] || solid > solidity[1]) 
-		continue;
-		if (contour.rows() < minVertexCount || contour.rows() > maxVertexCount)	
-		continue;
-		final double ratio = bb.width / (double)bb.height;
-		if (ratio < minRatio || ratio > maxRatio) 
-		continue;
-		output.add(contour);
-	}
-}
-
-
-	public int giveUp(Mat inputFrame) 
-	{
-		int totalPassedPixels = 0;
-		double[] goodPixel = {1, 1, 1};
-
-		for(int i = 0; i < inputFrame.rows(); i++)
-		{
-			for(int j = 0; j < inputFrame.cols(); j++)
-			{
-				if(inputFrame.get(i, j).equals(goodPixel))
-				{
-					totalPassedPixels++;
-				}
-			}
-		}
-
-		return totalPassedPixels;
-	}
-
-
-
-	public boolean bigBallsInFrame()
-	{
-		Mat inputFrame = new Mat();
-
-		cargoFrameGrabber.grabFrame(inputFrame);
-
-		Core.inRange(inputFrame, HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER, processedFrame);
-
 		
-		//outputStream.putFrame(processedFrame);
-
-		if (this.giveUp(processedFrame) < 10000)
-		{
-			return false;
-		}
-			return true;
-		
-	}
+		Core.inRange(originalFrame, HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER, processedFrame);
+		outputStream.putFrame(processedFrame);
+		Imgproc.findContours(processedFrame, new ArrayList<MatOfPoint>(), new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
+	} 
 
 	public static Vision getInstance()
 	{
