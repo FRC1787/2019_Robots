@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.SerialPort.StopBits;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -38,10 +39,9 @@ public class Robot extends TimedRobot
   private final Climb climb = Climb.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Hatch hatch = Hatch.getInstance();
-  private final Vision vision = Vision.getInstance();
+  //private final Vision vision = Vision.getInstance();
+  Preferences preferences;
 
-
-  
   //Joystick 
     //Joystick IDs
   private static final int RIGHT_JOYSTICK_ID = 0;
@@ -64,6 +64,8 @@ public class Robot extends TimedRobot
   private final int CARGO_SHOOT_BTN_ID = 2;
   private final int CARGO_INTAKE_MECHANISM_STOW_BTN_ID = 3;
   private final int CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID = 4;
+  private final int CLIMB_INITIATION_BTN = 5;
+  private final int STOP_CLIMB_BTN = 10;
 
   //Motor Voltages
 
@@ -103,6 +105,7 @@ public class Robot extends TimedRobot
   private final double F_JOYSTICK_SWITCH_THRESHOLD = 0.25;
   private double joyStickSwitchThreshold;
   private boolean joyStickSwap = true;
+  private boolean climbInitiated = false;
 
   public void setDashboard()
   {
@@ -174,16 +177,14 @@ public class Robot extends TimedRobot
 
     if(driveTrain.joyStickInDeadZone(leftJoyStick))
     {
-      driveTrain.arcadeDrive(leftJoyStick.getX(), -leftJoyStick.getY());
-      //driveTrain.linearDrive(leftJoyStick.getX(), -leftJoyStick.getY());
-      //driveTrain.squareRootDrive(leftJoyStick.getX(), -leftJoyStick.getY());
+      //driveTrain.arcadeDrive(leftJoyStick.getX(), -leftJoyStick.getY());
+      driveTrain.linearDrive(leftJoyStick.getX(), -leftJoyStick.getY());
     }
 
     if(driveTrain.joyStickInDeadZone(rightJoyStick))
     {
-      driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
-      //driveTrain.linearDrive(rightJoyStick.getX(), rightJoyStick.getY());
-      //driveTrain.squareRootDrive(rightJoyStick.getX(), rightJoyStick.getY());
+      //driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
+      driveTrain.linearDrive(rightJoyStick.getX(), rightJoyStick.getY());
     }
     
     
@@ -337,7 +338,6 @@ public class Robot extends TimedRobot
     //Engage shooting belt, once the button is released
     if(engageShooterBelt)
     {
-      cargo.stowCargoIntake(-0.5);
       cargo.intakeCargo(0);
       if(shooterTimer <= 100)
       {
@@ -354,8 +354,23 @@ public class Robot extends TimedRobot
 
     if(!leftJoyStick.getRawButton(CARGO_SHOOT_BTN_ID) && !engageShooterBelt)
     {
-      //cargo.stowCargoIntake(0);
       cargo.shootCargo(0);
+    }
+
+
+
+    //Climb controls
+    if(leftJoyStick.getRawButton(CLIMB_INITIATION_BTN))
+    {
+      climbInitiated = true;
+    }
+    if(climbInitiated)
+    {
+      climb.moveClimber(climb.sliderCorrection(leftJoyStick));
+    }
+    if(leftJoyStick.getRawButton(STOP_CLIMB_BTN))
+    {
+      climbInitiated = false;
     }
   }
 
@@ -420,22 +435,10 @@ public class Robot extends TimedRobot
     }
     
   }
-
-    
   }
 
   public void testPeriodic() 
   {
-    
-    //this.teleopPeriodic(); 
-    if(leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID))
-    {
-      cargo.intakeCargo(-.75);
-    }
-
-    else
-    {
-      cargo.intakeCargo(0);
-    }
+    this.teleopPeriodic(); 
   }
 }
