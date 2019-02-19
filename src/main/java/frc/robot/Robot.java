@@ -64,6 +64,7 @@ public class Robot extends TimedRobot
   private final int CARGO_SHOOT_BTN_ID = 2;
   private final int CARGO_INTAKE_MECHANISM_STOW_BTN_ID = 3;
   private final int CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID = 4;
+  private final int CARGO_AUTO_INTAKE_BTN_ID = 14;
 
   //Motor Voltages
 
@@ -103,6 +104,10 @@ public class Robot extends TimedRobot
   private final double F_JOYSTICK_SWITCH_THRESHOLD = 0.25;
   private double joyStickSwitchThreshold;
   private boolean joyStickSwap = true;
+  private int cargoAutoCount = 0;
+  private final int CARGO_AUTO_COUNT_MAX = 10;
+  private final double CARGO_AUTO_SPEED = -0.375;
+  private boolean readyForIntake = false;
 
   public void setDashboard()
   {
@@ -280,7 +285,7 @@ public class Robot extends TimedRobot
     }
 
     //Stop deploy once the deploy limit switch is pressed
-    if(!leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID) && cargo.getCargoIntakeMechanismDeployedSwitchState())
+    if(!leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID) && cargo.getCargoIntakeMechanismDeployedSwitchState() && !readyForIntake)
     {
       cargo.articulateCargoIntake(0);
     }
@@ -294,7 +299,7 @@ public class Robot extends TimedRobot
     }
 
     //Stop stow once hte stow limit switch is hit
-    if(!leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID) && cargo.getCargoIntakeMechanismStowedSwitchState())
+    if(!leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID) && cargo.getCargoIntakeMechanismStowedSwitchState() && !readyForIntake)
     {
       cargo.articulateCargoIntake(0);
     }
@@ -302,7 +307,7 @@ public class Robot extends TimedRobot
 
 
     //Stop while no button is being pressed
-    if(!leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID) && !leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID))
+    if(!leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID) && !leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_STOW_BTN_ID) && !readyForIntake)
     {
       cargo.articulateCargoIntake(0);
     }
@@ -315,11 +320,58 @@ public class Robot extends TimedRobot
     }
 
     //Stop intake wheels, 
-    if(!leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID) && !leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState())
+    if(!leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID) && !leftJoyStick.getRawButton(CARGO_INTAKE_MECHANISM_DEPLOY_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState() && !readyForIntake)
     {
       cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
       cargo.intakeCargo(0);
     }
+
+
+/////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!?????????????????????????
+    /*
+    * CARGO INTAKE VISION STUFF
+    */
+    if(leftJoyStick.getRawButton(CARGO_AUTO_INTAKE_BTN_ID))
+    {
+      cargoAutoCount++;
+      System.out.println(cargoAutoCount);
+      if(cargoAutoCount <= CARGO_AUTO_COUNT_MAX) 
+      {
+        driveTrain.tankDrive(CARGO_AUTO_SPEED, -CARGO_AUTO_SPEED);
+      }
+      else if(vision.bigBallsInFrame())
+      {
+        readyForIntake = true;
+      }
+
+      if(readyForIntake)
+      {
+        cargo.intakeCargo(CARGO_INTAKE_SPEED);
+        cargo.deployCargoIntake(CARGO_MECHANISM_DEPLOY_SPEED);
+      }
+
+      if(!(cargoAutoCount <= CARGO_AUTO_COUNT_MAX))
+      {
+        driveTrain.tankDrive(0, 0);
+      }
+    }
+    
+    else if(leftJoyStick.getRawButtonReleased(CARGO_AUTO_INTAKE_BTN_ID))
+    {
+      cargoAutoCount = 0;
+      readyForIntake = false;
+      driveTrain.tankDrive(0, 0);
+      cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
+      cargo.intakeCargo(0);
+    }
+
+    if(leftJoyStick.getRawButton(13))
+    {
+      driveTrain.tankDrive(0, 0);
+      cargoAutoCount = 0;
+    }
+
+
 
     //Shoot cargo
     //Spin intake wheels as long as button is pressed
@@ -343,6 +395,7 @@ public class Robot extends TimedRobot
       {
         cargo.shootCargo(CARGO_SHOOT_SPEED);
       }
+
       else
       {
         cargo.shootCargo(0);
@@ -357,11 +410,12 @@ public class Robot extends TimedRobot
       //cargo.stowCargoIntake(0);
       cargo.shootCargo(0);
     }
-  }
-
   
 
 
+
+
+  
   //test code without limit switches///////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////
   if(rightJoyStick.getRawAxis(JOYSTICK_SLIDER_AXIS) > 0)
@@ -420,13 +474,14 @@ public class Robot extends TimedRobot
     }
     
   }
+}
 
     
   }
 
   public void testPeriodic() 
   {
-    
+
     //this.teleopPeriodic(); 
     if(leftJoyStick.getRawButton(CARGO_INTAKE_BTN_ID))
     {
