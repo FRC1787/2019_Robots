@@ -26,7 +26,7 @@ public class Climb
     public Climb()
     {
         //Put the climb motor into brake mode
-        climbMotor.setNeutralMode(NeutralMode.Brake);
+        climbMotor.setNeutralMode(NeutralMode.Coast);
     }
     
     //Return method for the singolten instance
