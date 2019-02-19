@@ -48,6 +48,17 @@ public class Vision
 	//Final HSV thresholds for cargo(orange ball)
 	private final Scalar HSV_THRESHOLD_LOWER = new Scalar(0.0, 162.8, 240.7);
 	private final Scalar HSV_THRESHOLD_UPPER = new Scalar(29.5, 224.5, 255.0);
+	// Colors used to draw contours..........new Scalar(B, G, R);
+	public static final Scalar COLOR_BLACK = new Scalar(0, 0, 0);
+	public static final Scalar COLOR_WHITE = new Scalar(255, 255, 255);
+	public static final Scalar COLOR_BLUE = new Scalar(255, 0, 0);
+	public static final Scalar COLOR_GREEN = new Scalar(0, 255, 0);
+	public static final Scalar COLOR_RED = new Scalar(0, 0, 255);
+	public static final Scalar COLOR_YELLOW = new Scalar(0, 255, 255);
+	public static final Scalar COLOR_PURPLE = new Scalar(255, 0, 255);
+	public static final Scalar COLOR_CYAN = new Scalar(255, 255, 0);
+	private final Scalar[] COLORS = {COLOR_RED, COLOR_YELLOW, COLOR_CYAN, 
+                                   COLOR_GREEN, COLOR_PURPLE, COLOR_BLUE};
 
 	//Singelton instance
 	private static final Vision instance = new Vision();
@@ -73,10 +84,10 @@ public class Vision
 	}
 
 	/*Apply an HSV filter, filters the image based on hue, saturation and value(brightness sort of)
-	*@param: lowerHSVBounds, the minimum values for the filtration
-	*@param: upperHSVBounds, the maximum values for the filtration
+	* @param: lowerHSVBounds, the minimum values for the filtration
+	* @param: upperHSVBounds, the maximum values for the filtration
 	*
-	*@return: processedFrame, binary image
+	* @return: processedFrame, binary image
 	*/
 	public Mat  getHSVFitlteredImage(Scalar lowerHSVBounds, Scalar upperHSVBounds)
 	{
@@ -114,6 +125,11 @@ public class Vision
 		return contoursList;
 	}
 
+	/**Finds the centroid (center point) of an array list of contours
+	 * 
+	 * @param foundContours, 
+	 * @return centerPoint, 
+	 */
 	public Point findContourCenter(MatOfPoint foundContours)
 	{
 		//Decalre the center point
@@ -134,7 +150,7 @@ public class Vision
 		return centerPoint;
 	}
 
-	/**
+	/**Sets camera settings for either driving or vision processing
 	 * 
 	 * @param camera, camera object that will be configured
 	 * @param targetingCamera, boolean indicating wether the camera is going to be used for image processing
@@ -155,5 +171,32 @@ public class Vision
 		camera.setBrightness(50);
 		camera.setWhiteBalanceManual(WhiteBalance.kFixedIndoor);
 
+	}
+
+	/**Draws the contours on the original frame
+	 * 
+	 * @param contourList, an array list of mat point with the contours stored inside
+	 * @return originalFrame
+	 */
+	public Mat drawContoursOnFrame(ArrayList<MatOfPoint> contourList)
+	{
+		for(int contourIndex = contourList.size() -1; contourIndex >= 0; contourIndex--)
+		{
+			Imgproc.drawContours(originalFrame, contourList, contourIndex, COLORS[contourIndex % COLORS.length]);
+		}
+
+		return originalFrame;
+
+	}
+
+	public void processing()
+	{
+		outputSteam.putFrame(drawContoursOnFrame(findExternalContours(getHSVFitlteredImage(HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER))));
+	}
+
+	//Return method for the singelton instance
+	public static Vision getInstance()
+	{
+		return instance;
 	}
 }
