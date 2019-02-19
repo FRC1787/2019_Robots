@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.SerialPort.StopBits;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -39,9 +40,6 @@ public class Robot extends TimedRobot
   private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Hatch hatch = Hatch.getInstance();
   private final Vision vision = Vision.getInstance();
-
-
-  
   //Joystick 
     //Joystick IDs
   private static final int RIGHT_JOYSTICK_ID = 0;

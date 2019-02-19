@@ -139,17 +139,15 @@ public class Vision
 
 		Core.inRange(inputFrame, HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER, processedFrame);
 
-		System.out.println(processedFrame.get(20, 20));
+		
 		//outputStream.putFrame(processedFrame);
 
 		if (this.giveUp(processedFrame) < 10000)
 		{
 			return false;
 		}
-		else
-		{
 			return true;
-		}
+		
 	}
 
 	public static Vision getInstance()
