@@ -12,7 +12,7 @@ public class Cargo
     //Cargo motor controller variabales
     private static final int CARGO_GRABBING_MOTOR_ID = 3;
     private static final int INTAKE_ARTICULATING_MOTOR_ID = 11;
-    private static final int SHOOTER_MOTOR_ID = 6;
+    private static final int SHOOTER_MOTOR_ID = 8;
 
     //Construct cargo motor controller objects
     private final WPI_VictorSPX cargoGrabberMotor = new WPI_VictorSPX(CARGO_GRABBING_MOTOR_ID);
