@@ -105,8 +105,8 @@ public class Robot extends TimedRobot
   private double joyStickSwitchThreshold;
   private boolean joyStickSwap = true;
   private int cargoAutoCount = 0;
-  private final int CARGO_AUTO_COUNT_MAX = 10;
-  private final double CARGO_AUTO_SPEED = -0.375;
+  private final int CARGO_AUTO_COUNT_MAX = 5;
+  private final double CARGO_AUTO_SPEED = -0.25;
   private boolean readyForIntake = false;
   private boolean climbInitiated = false;
 
@@ -338,11 +338,12 @@ public class Robot extends TimedRobot
       {
         driveTrain.tankDrive(CARGO_AUTO_SPEED, -CARGO_AUTO_SPEED);
       }
-      else if(vision.bigBallsInFrame())
+      
+      else if(vision.ballInFrame())
       {
         readyForIntake = true;
       }
-
+        
       if(readyForIntake)
       {
         cargo.intakeCargo(CARGO_INTAKE_SPEED);

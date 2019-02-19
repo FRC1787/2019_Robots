@@ -26,6 +26,7 @@ import org.opencv.objdetect.*;
 public class Vision
 {
 	private static final Vision instance = new Vision();
+	private final GRIP grip = GRIP.getInstance();
 
 	private UsbCamera cargoCam, hatchCam;
 	
@@ -33,17 +34,17 @@ public class Vision
 	private CvSink cargoFrameGrabber, hatchFrameGrabber;
 	private static final int STANDARD_IMG_WIDTH = 160;
 	private static final int STANDARD_IMG_HEIGHT = 120;
-	private Mat originalFrame = new Mat();
 
+	private Mat originalFrame = new Mat();
 	private Mat processedFrame = new Mat();
+
 	private final Scalar HSV_THRESHOLD_LOWER = new Scalar(0.0, 162.8, 240.7);
 	private final Scalar HSV_THRESHOLD_UPPER = new Scalar(29.5, 224.5, 255.0);
 
-	private DriveTrain driveTrain;
 	private CameraServer server = CameraServer.getInstance();
 	//private CameraServer server2 = CameraServer.getInstance();
 
-	 private void configureCamera(UsbCamera inputCam, int exposureValue)
+	private void configureCamera(UsbCamera inputCam, int exposureValue)
 	{
 		inputCam.setResolution(STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
 		inputCam.setFPS(20);
@@ -64,89 +65,27 @@ public class Vision
 
 		//Exposure value for vision is 0, for regular sight it was 5 but idk what the best value is
 		configureCamera(cargoCam, 5);
-		configureCamera(hatchCam, 5);	
-	}
-
-
-
-	private void filterContours(ArrayList<MatOfPoint> inputContours, double minArea, double minPerimeter, double minWidth, double maxWidth, double minHeight, double maxHeight, double[] solidity, double maxVertexCount, double minVertexCount, double minRatio, double maxRatio, ArrayList<MatOfPoint> output) 
-	{
-
-	final MatOfInt hull = new MatOfInt();
-	output.clear();
-
-	for (int i = 0; i < inputContours.size(); i++) 
-	{
-		final MatOfPoint contour = inputContours.get(i);
-		final Rect bb = Imgproc.boundingRect(contour);
-		if (bb.width < minWidth || bb.width > maxWidth) 
-		continue;
-		if (bb.height < minHeight || bb.height > maxHeight) 
-		continue;
-		final double area = Imgproc.contourArea(contour);
-		if (area < minArea) 
-		continue;
-		if (Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true) < minPerimeter) 
-		continue;
-		Imgproc.convexHull(contour, hull);
-		MatOfPoint mopHull = new MatOfPoint();
-		mopHull.create((int) hull.size().height, 1, CvType.CV_32SC2);
-		for (int j = 0; j < hull.size().height; j++) 
-		{
-			int index = (int)hull.get(j, 0)[0];
-			double[] point = new double[] { contour.get(index, 0)[0], contour.get(index, 0)[1]};
-			mopHull.put(j, 0, point);
-		}
-		final double solid = 100 * area / Imgproc.contourArea(mopHull);
-		if (solid < solidity[0] || solid > solidity[1]) 
-		continue;
-		if (contour.rows() < minVertexCount || contour.rows() > maxVertexCount)	
-		continue;
-		final double ratio = bb.width / (double)bb.height;
-		if (ratio < minRatio || ratio > maxRatio) 
-		continue;
-		output.add(contour);
-	}
-}
-
-
-	public int giveUp(Mat inputFrame) 
-	{
-		int totalPassedPixels = 0;
-		double[] goodPixel = {1, 1, 1};
-
-		for(int i = 0; i < inputFrame.rows(); i++)
-		{
-			for(int j = 0; j < inputFrame.cols(); j++)
-			{
-				if(inputFrame.get(i, j).equals(goodPixel))
-				{
-					totalPassedPixels++;
-				}
-			}
-		}
-
-		return totalPassedPixels;
-	}
-
-
-
-	public boolean bigBallsInFrame()
-	{
-		Mat inputFrame = new Mat();
-
-		cargoFrameGrabber.grabFrame(inputFrame);
-
-		Core.inRange(inputFrame, HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER, processedFrame);
-
+		configureCamera(hatchCam, 5);
 		
-		//outputStream.putFrame(processedFrame);
+		outputStream = server.putVideo("Processed Video Stream", STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
+	}
 
-		if (this.giveUp(processedFrame) < 10000)
+
+	public boolean ballInFrame() {
+
+		//Grab the original frame and run it through the predefined GRIP process
+		cargoFrameGrabber.grabFrame(originalFrame);
+		grip.process(originalFrame);
+
+		if(!grip.filterContoursOutput().isEmpty())
+		{
+			return true;
+		}
+		else
 		{
 			return false;
 		}
-			return true;
+
 		
 	}
 
