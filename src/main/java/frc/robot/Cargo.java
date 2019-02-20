@@ -17,7 +17,7 @@ public class Cargo
     //Construct cargo motor controller objects
     private final WPI_VictorSPX cargoGrabberMotor = new WPI_VictorSPX(CARGO_GRABBING_MOTOR_ID);
     private final WPI_VictorSPX intakeArticulator = new WPI_VictorSPX(INTAKE_ARTICULATING_MOTOR_ID);
-    private final WPI_TalonSRX shooter = new WPI_TalonSRX(SHOOTER_MOTOR_ID);
+    private final WPI_VictorSPX shooter = new WPI_VictorSPX(SHOOTER_MOTOR_ID);
 
     //Cargo limit switch variables
     private final int CARGO_INTAKE_MECHANISM_DEPLOYED_LIMIT_SWITCH_CHANNEL = 4;
