@@ -174,6 +174,8 @@ public class Robot extends TimedRobot
   public void teleopPeriodic() 
   {
 
+    vision.processing();
+
     /*
      * **************************************
      * **************************************
@@ -212,7 +214,7 @@ public class Robot extends TimedRobot
      */
     if (joyStickHatchMode && !joyStickCargoMode)
     {
-      //Drive algorithim
+      //Switches the orientation of the drive so that the front of the robot is the hatch
       driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
 
 
@@ -307,7 +309,13 @@ public class Robot extends TimedRobot
       //Swithces the orientation of the drive so that the front of the robot is the cargo
       driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
 
-      //Cargo controls
+      
+
+      /*
+       * ***************
+       * Cargo controls*
+       * ***************
+       */
       //Deploy cargo intake mechanism
       if(rightJoyStick.getRawButton(DEPLOY_BTN_ID) && !cargo.getCargoIntakeMechanismDeployedSwitchState())
       {
@@ -356,8 +364,13 @@ public class Robot extends TimedRobot
         cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
         cargo.intakeCargo(0);
       }
+
+
+
       /*
-      * CARGO INTAKE VISION STUFF
+      * **************************
+      * CARGO INTAKE VISION STUFF*
+      * **************************
       */
       if(rightJoyStick.getRawButton(INTAKE_BTN_ID))
       {
@@ -400,7 +413,13 @@ public class Robot extends TimedRobot
         cargoAutoCount = 0;
       }
 
-      //Shoot cargo
+      
+
+      /*
+       * ************
+       * Shoot cargo* 
+       * ************
+       */
       //Spin intake wheels as long as button is pressed
       if(rightJoyStick.getRawButton(DELIVER_BTN_ID))
       {
