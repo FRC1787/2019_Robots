@@ -113,7 +113,7 @@ public class Robot extends TimedRobot
   private boolean readyForIntake = false;
   private boolean climbInitiated = false;
   private boolean joyStickHatchMode = false;
-  private boolean joyStickCargoMode = false;
+  private boolean joyStickCargoMode = true;
 
 
   public void setDashboard()
@@ -129,6 +129,9 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Cargo Shoot Speed", F_CARGO_SHOOT_SPEED);
 
     SmartDashboard.putNumber("Shooter Belt Timer Max", F_SHOOTER_TIMER_MAX);
+
+    SmartDashboard.putBoolean("Cargo Mode", joyStickCargoMode);
+    SmartDashboard.putBoolean("Hatch Mode", joyStickHatchMode);
   }
 
   public void updateDashboard()
@@ -154,6 +157,7 @@ public class Robot extends TimedRobot
   public void robotPeriodic() 
   {
     this.updateDashboard();
+    vision.outputFrame(vision.getCurrentFrame());
   }
 
   public void autonomousInit() 
@@ -174,7 +178,7 @@ public class Robot extends TimedRobot
   public void teleopPeriodic() 
   {
 
-    vision.processing();
+    //vision.processing();
 
     /*
      * **************************************
@@ -381,10 +385,10 @@ public class Robot extends TimedRobot
           driveTrain.tankDrive(CARGO_AUTO_SPEED, -CARGO_AUTO_SPEED);
         }
       
-        // else if(vision.ballInFrame())
-        // {
-        //   readyForIntake = true;
-        // }
+        else if(vision.ballInFrame())
+        {
+          readyForIntake = true;
+        }
         
         if(readyForIntake)
         {
@@ -693,7 +697,7 @@ public class Robot extends TimedRobot
     {
       climb.moveClimber(climb.sliderCorrection(leftJoyStick));
     }
-    if(!joyStickHatchMode && leftJoyStick.getRawButton(STOP_CLIMB_BTN))
+    if(!joyStickHatchMode && rightJoyStick.getRawButton(STOP_CLIMB_BTN))
     {
       climbInitiated = false;
     }

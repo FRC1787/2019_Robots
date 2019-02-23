@@ -43,8 +43,8 @@ public class GRIP {
 	/**
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
-	public void process(Mat source0) 
-{
+	public boolean process(Mat source0) 
+	{
 		// Step HSV_Threshold0:
 
 		Mat hsvThresholdInput = source0;
@@ -80,6 +80,15 @@ public class GRIP {
 		if(!filterContoursContours.isEmpty())
 		{
 			filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
+		}
+
+		if(filterContoursOutput.isEmpty())
+		{
+			return false;
+		}
+		else
+		{
+			return true;
 		}
 	}
 
