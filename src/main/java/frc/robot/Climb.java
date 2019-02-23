@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class Climb 
 {
     //Climb motor id
-    private static final int CLIMBING_MOTOR_ID = 10;
+    private static final int CLIMBING_MOTOR_ID = 6;
     private final int CLIMB_PIN_CHANNEL = 0;
 
     //Create climb motorcontroller object
@@ -26,7 +26,7 @@ public class Climb
     public Climb()
     {
         //Put the climb motor into brake mode
-        climbMotor.setNeutralMode(NeutralMode.Brake);
+        climbMotor.setNeutralMode(NeutralMode.Coast);
     }
     
     //Return method for the singolten instance
