@@ -93,7 +93,7 @@ public class Vision
 	public Mat  getHSVFitlteredImage(Scalar lowerHSVBounds, Scalar upperHSVBounds)
 	{
 		//Grab frames from cargo camera to be processed
-		cargoFrameGrabber.grabFrame(originalFrame);
+		cargoFrameGrabber.grabFrame(originalFrame, 2);
 
 		//Covert the BGR image to a HSV image
 		Imgproc.cvtColor(originalFrame, processedFrame, Imgproc.COLOR_BGR2HSV);

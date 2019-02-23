@@ -64,7 +64,7 @@ public class Robot extends TimedRobot
     //Left Stick Button IDs
   private final int JOYSTICK_CARGO_MODE_BTN_ID = 3;
   private final int JOYSTICK_HATCH_MODE_BTN_ID = 4;
-  // private final int CARGO_AUTO_INTAKE_BTN_ID = 14;
+  private final int CARGO_AUTO_INTAKE_BTN_ID = 14;
   private final int CLIMB_INITIATION_BTN = 5;
   private final int STOP_CLIMB_BTN = 10;
   private final int Toggle = 11;
@@ -372,7 +372,7 @@ public class Robot extends TimedRobot
       * CARGO INTAKE VISION STUFF*
       * **************************
       */
-      if(rightJoyStick.getRawButton(INTAKE_BTN_ID))
+      if(rightJoyStick.getRawButton(CARGO_AUTO_INTAKE_BTN_ID))
       {
         cargoAutoCount++;
         System.out.println(cargoAutoCount);
