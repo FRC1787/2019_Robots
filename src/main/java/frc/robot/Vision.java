@@ -37,19 +37,11 @@ public class Vision
 
 	private Mat originalFrame = new Mat();
 	private Mat processedFrame = new Mat();
-<<<<<<< HEAD
 	private Mat contours = new Mat();
-=======
->>>>>>> 049ace2d06d1f301eb2e250164aab02007a1f3c9
 
 	private final Scalar HSV_THRESHOLD_LOWER = new Scalar(0.0, 162.8, 240.7);
 	private final Scalar HSV_THRESHOLD_UPPER = new Scalar(29.5, 224.5, 255.0);
 
-<<<<<<< HEAD
-	
-
-=======
->>>>>>> 049ace2d06d1f301eb2e250164aab02007a1f3c9
 	private CameraServer server = CameraServer.getInstance();
 	//private CameraServer server2 = CameraServer.getInstance();
 
@@ -79,7 +71,6 @@ public class Vision
 		outputStream = server.putVideo("Processed Video Stream", STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
 	}
 
-<<<<<<< HEAD
 	public void processing()
 	{
 		
@@ -87,26 +78,6 @@ public class Vision
 		outputStream.putFrame(processedFrame);
 		Imgproc.findContours(processedFrame, new ArrayList<MatOfPoint>(), new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
 	} 
-=======
-
-	public boolean ballInFrame() {
-
-		//Grab the original frame and run it through the predefined GRIP process
-		cargoFrameGrabber.grabFrame(originalFrame);
-		grip.process(originalFrame);
-
-		if(!grip.filterContoursOutput().isEmpty())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-
-		
-	}
->>>>>>> 049ace2d06d1f301eb2e250164aab02007a1f3c9
 
 	public static Vision getInstance()
 	{

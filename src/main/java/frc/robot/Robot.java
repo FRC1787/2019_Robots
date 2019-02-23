@@ -84,8 +84,8 @@ public class Robot extends TimedRobot
     //Hatch speeds
   private double HATCH_DEPLOY_SPEED = -0.9;
   private double HATCH_STOW_SPEED = 0.9;
-  private double HATCH_INTAKE_SPEED = -1;
-  private double HATCH_DELIVER_SPEED = 1;
+  private double HATCH_INTAKE_SPEED = 1;
+  private double HATCH_DELIVER_SPEED = -1;
     //Cargo speeds
   private double CARGO_MECHANISM_DEPLOY_SPEED = 0.25;
   private double CARGO_MECHANISM_STOW_SPEED = -0.20;
@@ -167,6 +167,7 @@ public class Robot extends TimedRobot
 
   public void teleopPeriodic() 
   {
+    vision.processing();
     /*************************/
     /*************************/
     /*************************/
