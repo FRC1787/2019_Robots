@@ -17,33 +17,26 @@ import org.opencv.core.Point;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSource;
 import edu.wpi.cscore.VideoCamera.WhiteBalance;
 import edu.wpi.first.wpilibj.CameraServer;
 
-//Default contructor
+
 public class Vision
 {
+	private final GRIP grip = GRIP.getInstance();
+
 	//Decalre cameras
 	private UsbCamera cargoCamera;
 	private UsbCamera hatchCamera;
-
-	//Construct CameraServer object
-	private CameraServer cameraServer = CameraServer.getInstance();
 	
-	//Decalre CvSinks
+	private CvSource outputStream;
 	private CvSink cargoFrameGrabber;
 	private CvSink hatchFrameGrabber;
-
-	//Decalre CvSource
-	private CvSource outputSteam;
-
-	//Declare frames
-	private Mat originalFrame;
-	private Mat processedFrame;
-
-	//Final values for image resolution 
 	private static final int STANDARD_IMG_WIDTH = 160;
 	private static final int STANDARD_IMG_HEIGHT = 120;
+	private Mat originalFrame = new Mat();
+	private Mat processedFrame = new Mat();
 
 	//Final HSV thresholds for cargo(orange ball)
 	private final Scalar HSV_THRESHOLD_LOWER = new Scalar(0.0, 162.8, 240.7);
@@ -68,9 +61,11 @@ public class Vision
 	//Default constructor for the vision class
 	public Vision()
 	{
+		CameraServer cameraServer = CameraServer.getInstance();
+
 		//Initialize each camera with a channel and name, pushes non-processed images
-		cargoCamera = cameraServer.startAutomaticCapture("Cargo Camera",0);
-		hatchCamera = cameraServer.startAutomaticCapture("Hatch Camera",1);
+		cargoCamera = cameraServer.startAutomaticCapture("Cargo Camera", 0);
+		hatchCamera = cameraServer.startAutomaticCapture("Hatch Camera", 1);
 
 		//Configure resoltuion, FPS, exposure, brightness and white-balance
 		configureCamera(cargoCamera, false);
@@ -81,8 +76,102 @@ public class Vision
 		hatchFrameGrabber = cameraServer.getVideo(hatchCamera);
 
 		//Push processed or unprocessed frames
-		outputSteam = cameraServer.putVideo("Processed Video", STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
+		outputStream = cameraServer.putVideo("Processed Video", STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
+				
+}
+
+
+
+	public boolean ballInFrame()
+	{
+		cargoFrameGrabber.grabFrame(originalFrame, 1.0);
+
+		Imgproc.cvtColor(originalFrame, processedFrame, Imgproc.COLOR_BGR2HSV);
+
+		if(grip.process(processedFrame))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
 	}
+
+
+
+	public void outputFrame(Mat currentFrame)
+	{
+		if (!currentFrame.empty()) {
+			outputStream.putFrame(currentFrame);
+		}
+	}
+
+	public Mat getCurrentFrame()
+	{
+		cargoFrameGrabber.grabFrame(originalFrame, 1.0);
+		return originalFrame;
+	}
+
+
+
+	/**Sets camera settings for either driving or vision processing
+	 * 
+	 * @param camera, camera object that will be configured
+	 * @param targetingCamera, boolean indicating wether the camera is going to be used for image processing
+	 */
+	public void configureCamera(UsbCamera camera, boolean targetingCamera)
+	{
+		camera.setResolution(STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
+		camera.setFPS(15);
+		if(targetingCamera)
+		{
+			camera.setExposureManual(5);
+		}
+		else
+		{
+			camera.setExposureAuto();
+		}
+
+		camera.setBrightness(50);
+		camera.setWhiteBalanceManual(WhiteBalance.kFixedIndoor);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/*Apply an HSV filter, filters the image based on hue, saturation and value(brightness sort of)
 	* @param: lowerHSVBounds, the minimum values for the filtration
@@ -151,29 +240,7 @@ public class Vision
 		return centerPoint;
 	}
 
-	/**Sets camera settings for either driving or vision processing
-	 * 
-	 * @param camera, camera object that will be configured
-	 * @param targetingCamera, boolean indicating wether the camera is going to be used for image processing
-	 */
-	public void configureCamera(UsbCamera camera, boolean targetingCamera)
-	{
-		camera.setResolution(STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
-		camera.setFPS(15);
-		if(targetingCamera)
-		{
-			camera.setExposureManual(5);
-		}
-		else
-		{
-			camera.setExposureAuto();
-		}
-
-		camera.setBrightness(50);
-		camera.setWhiteBalanceManual(WhiteBalance.kFixedIndoor);
-		
-
-	}
+	
 
 	/**Draws the contours on the original frame
 	 * 
@@ -193,7 +260,7 @@ public class Vision
 
 	public void processing()
 	{
-		outputSteam.putFrame(drawContoursOnFrame(findExternalContours(getHSVFitlteredImage(HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER))));
+		outputStream.putFrame(drawContoursOnFrame(findExternalContours(getHSVFitlteredImage(HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER))));
 	}
 
 	//Return method for the singelton instance

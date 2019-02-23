@@ -64,7 +64,7 @@ public class Robot extends TimedRobot
     //Left Stick Button IDs
   private final int JOYSTICK_CARGO_MODE_BTN_ID = 3;
   private final int JOYSTICK_HATCH_MODE_BTN_ID = 4;
-  // private final int CARGO_AUTO_INTAKE_BTN_ID = 14;
+  private final int CARGO_AUTO_INTAKE_BTN_ID = 14;
   private final int CLIMB_INITIATION_BTN = 5;
   private final int STOP_CLIMB_BTN = 10;
   private final int Toggle = 11;
@@ -113,7 +113,7 @@ public class Robot extends TimedRobot
   private boolean readyForIntake = false;
   private boolean climbInitiated = false;
   private boolean joyStickHatchMode = false;
-  private boolean joyStickCargoMode = false;
+  private boolean joyStickCargoMode = true;
 
 
   public void setDashboard()
@@ -129,6 +129,9 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Cargo Shoot Speed", F_CARGO_SHOOT_SPEED);
 
     SmartDashboard.putNumber("Shooter Belt Timer Max", F_SHOOTER_TIMER_MAX);
+
+    SmartDashboard.putBoolean("Cargo Mode", joyStickCargoMode);
+    SmartDashboard.putBoolean("Hatch Mode", joyStickHatchMode);
   }
 
   public void updateDashboard()
@@ -154,6 +157,7 @@ public class Robot extends TimedRobot
   public void robotPeriodic() 
   {
     this.updateDashboard();
+    vision.outputFrame(vision.getCurrentFrame());
   }
 
   public void autonomousInit() 
@@ -174,7 +178,7 @@ public class Robot extends TimedRobot
   public void teleopPeriodic() 
   {
 
-    vision.processing();
+    //vision.processing();
 
     /*
      * **************************************
@@ -372,7 +376,7 @@ public class Robot extends TimedRobot
       * CARGO INTAKE VISION STUFF*
       * **************************
       */
-      if(rightJoyStick.getRawButton(INTAKE_BTN_ID))
+      if(rightJoyStick.getRawButton(CARGO_AUTO_INTAKE_BTN_ID))
       {
         cargoAutoCount++;
         System.out.println(cargoAutoCount);
@@ -381,10 +385,10 @@ public class Robot extends TimedRobot
           driveTrain.tankDrive(CARGO_AUTO_SPEED, -CARGO_AUTO_SPEED);
         }
       
-        // else if(vision.ballInFrame())
-        // {
-        //   readyForIntake = true;
-        // }
+        else if(vision.ballInFrame())
+        {
+          readyForIntake = true;
+        }
         
         if(readyForIntake)
         {
@@ -693,7 +697,7 @@ public class Robot extends TimedRobot
     {
       climb.moveClimber(climb.sliderCorrection(leftJoyStick));
     }
-    if(!joyStickHatchMode && leftJoyStick.getRawButton(STOP_CLIMB_BTN))
+    if(!joyStickHatchMode && rightJoyStick.getRawButton(STOP_CLIMB_BTN))
     {
       climbInitiated = false;
     }
