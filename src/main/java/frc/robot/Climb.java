@@ -58,7 +58,7 @@ public class Climb
 
     public double sliderCorrection(Joystick joystick)
     {
-        return (joystick.getRawAxis(3) + 1) /2;
+        return -(joystick.getRawAxis(3) - 1) /2;
     }
 
     //Moves the robot using climb motor
