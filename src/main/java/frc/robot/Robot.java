@@ -62,6 +62,8 @@ public class Robot extends TimedRobot
   private final int DEPLOY_BTN_ID = 4;
 
     //Left Stick Button IDs
+  private final int CLIMB_DIRECTION_EXTEND_BTN_ID = 1;
+  private final int CLIMB_DIRECTION_RETRACT_BTN_ID = 2;
   private final int JOYSTICK_CARGO_MODE_BTN_ID = 3;
   private final int JOYSTICK_HATCH_MODE_BTN_ID = 4;
   private final int CARGO_AUTO_INTAKE_BTN_ID = 14;
@@ -114,6 +116,7 @@ public class Robot extends TimedRobot
   private boolean climbInitiated = false;
   private boolean joyStickHatchMode = false;
   private boolean joyStickCargoMode = true;
+  private boolean climbDirectionExtend = true;
 
 
   public void setDashboard()
@@ -132,6 +135,15 @@ public class Robot extends TimedRobot
 
     SmartDashboard.putBoolean("Cargo Mode", joyStickCargoMode);
     SmartDashboard.putBoolean("Hatch Mode", joyStickHatchMode);
+
+
+    SmartDashboard.putNumber("H Upper", vision.HSV_THRESHOLD_UPPER.val[0]);
+    SmartDashboard.putNumber("S Upper", vision.HSV_THRESHOLD_UPPER.val[1]);
+    SmartDashboard.putNumber("V Upper", vision.HSV_THRESHOLD_UPPER.val[2]);
+    SmartDashboard.putNumber("H Lower", vision.HSV_THRESHOLD_LOWER.val[0]);
+    SmartDashboard.putNumber("S Lower", vision.HSV_THRESHOLD_LOWER.val[1]);
+    SmartDashboard.putNumber("V Lower", vision.HSV_THRESHOLD_LOWER.val[2]);
+    
   }
 
   public void updateDashboard()
@@ -147,6 +159,13 @@ public class Robot extends TimedRobot
     CARGO_SHOOT_SPEED = SmartDashboard.getNumber("Cargo Shoot Speed", F_CARGO_SHOOT_SPEED);
 
     shooterTimerMaxValue = (int) SmartDashboard.getNumber("Shooter Belt Timer Max", F_SHOOTER_TIMER_MAX);
+
+    vision.setColor(true, 1, SmartDashboard.getNumber("H Upper", 360));
+    vision.setColor(true, 2, SmartDashboard.getNumber("S Upper", 255));
+    vision.setColor(true, 3, SmartDashboard.getNumber("V Upper", 255));
+    vision.setColor(false, 1, SmartDashboard.getNumber("H Lower", 0));
+    vision.setColor(false, 2, SmartDashboard.getNumber("S Lower", 0));
+    vision.setColor(false, 3, SmartDashboard.getNumber("V Lower", 0));
   }
 
   public void robotInit() 
@@ -157,7 +176,9 @@ public class Robot extends TimedRobot
   public void robotPeriodic() 
   {
     this.updateDashboard();
-    vision.outputFrame(vision.getCurrentFrame());
+    //vision.outputFrame(vision.getCurrentFrame());
+    //vision.processing();
+    //vision.ballInFrame();
   }
 
   public void autonomousInit() 
@@ -177,7 +198,6 @@ public class Robot extends TimedRobot
 
   public void teleopPeriodic() 
   {
-
     //vision.processing();
 
     /*
@@ -689,14 +709,45 @@ public class Robot extends TimedRobot
 
 
     //Climb controls just for a commit
+
+
+
+    //Climb direction switch
+    //Trigger
+    if(leftJoyStick.getRawButtonPressed(CLIMB_DIRECTION_EXTEND_BTN_ID))
+    {
+      climbDirectionExtend = true;
+    }
+    //Back button
+    else if(leftJoyStick.getRawButtonPressed(CLIMB_DIRECTION_RETRACT_BTN_ID))
+    {
+      climbDirectionExtend = false;
+    }
+
+
+
+    //Climb action controls
     if(!joyStickHatchMode && rightJoyStick.getRawButton(CLIMB_INITIATION_BTN))
     {
       climbInitiated = true;
     }
+
     if(climbInitiated)
     {
-      climb.moveClimber(climb.sliderCorrection(leftJoyStick));
+      //If statement determining the direction of the climb
+      if(climbDirectionExtend)
+      {
+        climb.moveClimber(climb.sliderCorrection(leftJoyStick));
+      }
+
+      else
+      {
+        climb.moveClimber(-climb.sliderCorrection(leftJoyStick));
+      }
     }
+
+
+
     if(!joyStickHatchMode && rightJoyStick.getRawButton(STOP_CLIMB_BTN))
     {
       climbInitiated = false;

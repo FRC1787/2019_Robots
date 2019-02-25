@@ -21,6 +21,24 @@ import edu.wpi.cscore.VideoSource;
 import edu.wpi.cscore.VideoCamera.WhiteBalance;
 import edu.wpi.first.wpilibj.CameraServer;
 
+//GRIP IMPORTS
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.HashMap;
+
+import org.opencv.core.*;
+import org.opencv.core.Core.*;
+import org.opencv.features2d.FeatureDetector;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.*;
+import org.opencv.objdetect.*;
+
 
 public class Vision
 {
@@ -31,16 +49,34 @@ public class Vision
 	private UsbCamera hatchCamera;
 	
 	private CvSource outputStream;
+
 	private CvSink cargoFrameGrabber;
 	private CvSink hatchFrameGrabber;
+
 	private static final int STANDARD_IMG_WIDTH = 160;
 	private static final int STANDARD_IMG_HEIGHT = 120;
+
 	private Mat originalFrame = new Mat();
 	private Mat processedFrame = new Mat();
+	private Mat finalFrame = new Mat();
 
 	//Final HSV thresholds for cargo(orange ball)
-	private final Scalar HSV_THRESHOLD_LOWER = new Scalar(0.0, 162.8, 240.7);
-	private final Scalar HSV_THRESHOLD_UPPER = new Scalar(29.5, 224.5, 255.0);
+	public Scalar HSV_THRESHOLD_LOWER = new Scalar(100, 200, 238);   //(0.0, 76.8, 240.7);
+	public Scalar HSV_THRESHOLD_UPPER = new Scalar(200, 255, 255);   //(29.5, 192.5, 255.0);
+
+	double filterContoursMinArea = 10000.0;
+	double filterContoursMinPerimeter = 0;
+	double filterContoursMinWidth = 0;
+	double filterContoursMaxWidth = 1000;
+	double filterContoursMinHeight = 0;
+	double filterContoursMaxHeight = 1000;
+	double[] filterContoursSolidity = {0, 100};
+	double filterContoursMaxVertices = 1000000;
+	double filterContoursMinVertices = 0;
+	double filterContoursMinRatio = 0;
+	double filterContoursMaxRatio = 1000;
+
+	List<MatOfPoint> filteredContours;
 
 	// Colors used to draw contours..........new Scalar(B, G, R);
 	public static final Scalar COLOR_BLACK = new Scalar(0, 0, 0);
@@ -52,7 +88,9 @@ public class Vision
 	public static final Scalar COLOR_PURPLE = new Scalar(255, 0, 255);
 	public static final Scalar COLOR_CYAN = new Scalar(255, 255, 0);
 	private final Scalar[] COLORS = {COLOR_RED, COLOR_YELLOW, COLOR_CYAN, 
-                                   COLOR_GREEN, COLOR_PURPLE, COLOR_BLUE};
+								   COLOR_GREEN, COLOR_PURPLE, COLOR_BLUE};
+								   
+	
 
 	//Singelton instance
 	private static final Vision instance = new Vision();
@@ -64,8 +102,8 @@ public class Vision
 		CameraServer cameraServer = CameraServer.getInstance();
 
 		//Initialize each camera with a channel and name, pushes non-processed images
-		cargoCamera = cameraServer.startAutomaticCapture("Cargo Camera", 0);
-		hatchCamera = cameraServer.startAutomaticCapture("Hatch Camera", 1);
+		cargoCamera = cameraServer.startAutomaticCapture("Cargo Camera", 1);
+		hatchCamera = cameraServer.startAutomaticCapture("Hatch Camera", 0);
 
 		//Configure resoltuion, FPS, exposure, brightness and white-balance
 		configureCamera(cargoCamera, false);
@@ -78,22 +116,76 @@ public class Vision
 		//Push processed or unprocessed frames
 		outputStream = cameraServer.putVideo("Processed Video", STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
 				
-}
+	}
 
 
+//5, 50, 50
+//15, 255, 255
+
+
+	public void setColor(boolean isUpperBounds, int pos, double newValue)
+	{
+
+		if(isUpperBounds)
+		{
+			Scalar bounds = HSV_THRESHOLD_UPPER;
+			if(pos==1)
+			{
+				HSV_THRESHOLD_UPPER = new Scalar(newValue, bounds.val[1], bounds.val[2]);
+			}
+			else if(pos==2)
+			{
+				HSV_THRESHOLD_UPPER = new Scalar(bounds.val[0], newValue, bounds.val[2]);
+			}
+			else if(pos==3)
+			{
+				HSV_THRESHOLD_UPPER = new Scalar(bounds.val[0], bounds.val[1], newValue);
+			}
+		}
+
+		else
+		{
+			Scalar bounds = HSV_THRESHOLD_LOWER;
+			if(pos==1)
+			{
+				HSV_THRESHOLD_LOWER = new Scalar(newValue, bounds.val[1], bounds.val[2]);
+			}
+			else if(pos==2)
+			{
+				HSV_THRESHOLD_LOWER = new Scalar(bounds.val[0], newValue, bounds.val[2]);
+			}
+			else if(pos==3)
+			{
+				HSV_THRESHOLD_LOWER = new Scalar(bounds.val[0], bounds.val[1], newValue);
+			}
+
+		}
+
+
+		
+		
+	}
 
 	public boolean ballInFrame()
 	{
+
+		
 		cargoFrameGrabber.grabFrame(originalFrame, 1.0);
 
 		Imgproc.cvtColor(originalFrame, processedFrame, Imgproc.COLOR_BGR2HSV);
 
-		if(grip.process(processedFrame))
+		finalFrame = processing();
+
+		if(!finalFrame.empty())
 		{
+			outputStream.putFrame(finalFrame);
+			System.out.println("YES");
 			return true;
 		}
 		else
 		{
+			outputStream.putFrame(originalFrame);
+			System.out.println("NO");
 			return false;
 		}
 
@@ -245,22 +337,88 @@ public class Vision
 	/**Draws the contours on the original frame
 	 * 
 	 * @param contourList, an array list of mat point with the contours stored inside
-	 * @return originalFrame
+	 * @return processedFrame
 	 */
-	public Mat drawContoursOnFrame(ArrayList<MatOfPoint> contourList)
+	public Mat drawContoursOnFrame(List<MatOfPoint> contourList)
 	{
 		for(int contourIndex = contourList.size() -1; contourIndex >= 0; contourIndex--)
 		{
-			Imgproc.drawContours(originalFrame, contourList, contourIndex, COLORS[contourIndex % COLORS.length]);
+			Imgproc.drawContours(processedFrame, contourList, contourIndex, COLOR_BLUE);
 		}
 
-		return originalFrame;
+		return processedFrame;
 
 	}
 
-	public void processing()
-	{
+	/**
+	 * Filters out contours that do not meet certain criteria.
+	 * @param inputContours is the input list of contours
+	 * @param output is the the output list of contours
+	 * @param minArea is the minimum area of a contour that will be kept
+	 * @param minPerimeter is the minimum perimeter of a contour that will be kept
+	 * @param minWidth minimum width of a contour
+	 * @param maxWidth maximum width
+	 * @param minHeight minimum height
+	 * @param maxHeight maximimum height
+	 * @param Solidity the minimum and maximum solidity of a contour
+	 * @param minVertexCount minimum vertex Count of the contours
+	 * @param maxVertexCount maximum vertex Count
+	 * @param minRatio minimum ratio of width to height
+	 * @param maxRatio maximum ratio of width to height
+	 */
+	private void filterContours(List<MatOfPoint> inputContours, double minArea,
+		double minPerimeter, double minWidth, double maxWidth, double minHeight, double
+		maxHeight, double[] solidity, double maxVertexCount, double minVertexCount, double
+		minRatio, double maxRatio, List<MatOfPoint> output) {
+		final MatOfInt hull = new MatOfInt();
+		output.clear();
+		//operation
+		for (int i = 0; i < inputContours.size(); i++) {
+			final MatOfPoint contour = inputContours.get(i);
+			final Rect bb = Imgproc.boundingRect(contour);
+			if (bb.width < minWidth || bb.width > maxWidth) continue;
+			if (bb.height < minHeight || bb.height > maxHeight) continue;
+			final double area = Imgproc.contourArea(contour);
+			if (area < minArea) continue;
+			if (Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true) < minPerimeter) continue;
+			Imgproc.convexHull(contour, hull);
+			MatOfPoint mopHull = new MatOfPoint();
+			mopHull.create((int) hull.size().height, 1, CvType.CV_32SC2);
+			for (int j = 0; j < hull.size().height; j++) {
+				int index = (int)hull.get(j, 0)[0];
+				double[] point = new double[] { contour.get(index, 0)[0], contour.get(index, 0)[1]};
+				mopHull.put(j, 0, point);
+			}
+			final double solid = 100 * area / Imgproc.contourArea(mopHull);
+			if (solid < solidity[0] || solid > solidity[1]) continue;
+			if (contour.rows() < minVertexCount || contour.rows() > maxVertexCount)	continue;
+			final double ratio = bb.width / (double)bb.height;
+			if (ratio < minRatio || ratio > maxRatio) continue;
+			output.add(contour);
+		}
+    }
+
+	public void pushProcessing()
+	{	
 		outputStream.putFrame(drawContoursOnFrame(findExternalContours(getHSVFitlteredImage(HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER))));
+	}
+
+	public Mat processing()
+	{	
+		
+
+		if(!findExternalContours(getHSVFitlteredImage(HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER)).isEmpty())
+		{
+			filterContours(findExternalContours(getHSVFitlteredImage(HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER)), filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filteredContours);
+			return drawContoursOnFrame(filteredContours);
+		}
+
+		else
+		{
+			return originalFrame;
+		}
+				
+		
 	}
 
 	//Return method for the singelton instance
