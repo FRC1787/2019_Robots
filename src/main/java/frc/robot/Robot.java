@@ -179,6 +179,7 @@ public class Robot extends TimedRobot
     //vision.outputFrame(vision.getCurrentFrame());
     //vision.processing();
     //vision.ballInFrame();
+
   }
 
   public void autonomousInit() 
@@ -199,6 +200,7 @@ public class Robot extends TimedRobot
   public void teleopPeriodic() 
   {
     //vision.processing();
+    
 
     /*
      * **************************************

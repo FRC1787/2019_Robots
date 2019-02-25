@@ -89,8 +89,8 @@ public class Vision
 	public static final Scalar COLOR_CYAN = new Scalar(255, 255, 0);
 	private final Scalar[] COLORS = {COLOR_RED, COLOR_YELLOW, COLOR_CYAN, 
 								   COLOR_GREEN, COLOR_PURPLE, COLOR_BLUE};
-								   
-	
+
+	private ArrayList<MatOfPoint> processOutput = new ArrayList<MatOfPoint>();
 
 	//Singelton instance
 	private static final Vision instance = new Vision();
@@ -115,8 +115,11 @@ public class Vision
 
 		//Push processed or unprocessed frames
 		outputStream = cameraServer.putVideo("Processed Video", STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
+
+		
 				
 	}
+
 
 
 //5, 50, 50
@@ -166,6 +169,16 @@ public class Vision
 		
 	}
 
+
+
+	public void outputFrame(Mat currentFrame)
+	{
+		if (!currentFrame.empty()) {
+			outputStream.putFrame(currentFrame);
+		}
+	}
+
+
 	public boolean ballInFrame()
 	{
 
@@ -180,25 +193,32 @@ public class Vision
 		{
 			outputStream.putFrame(finalFrame);
 			System.out.println("YES");
+      /*
+		processOutput = grip.process(processedFrame);
+
+		if(!processOutput.isEmpty())
+		{
+			this.outputFrame(this.drawContoursOnFrame(processOutput));
+			System.out.println("Full");
+      */
 			return true;
 		}
 		else
 		{
-			outputStream.putFrame(originalFrame);
-			System.out.println("NO");
+
+			this.outputFrame(originalFrame);
+			System.out.println("Empty");
+
 			return false;
 		}
 
+
+
 	}
 
 
 
-	public void outputFrame(Mat currentFrame)
-	{
-		if (!currentFrame.empty()) {
-			outputStream.putFrame(currentFrame);
-		}
-	}
+	
 
 	public Mat getCurrentFrame()
 	{
@@ -216,7 +236,7 @@ public class Vision
 	public void configureCamera(UsbCamera camera, boolean targetingCamera)
 	{
 		camera.setResolution(STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
-		camera.setFPS(15);
+		camera.setFPS(10);
 		if(targetingCamera)
 		{
 			camera.setExposureManual(5);
