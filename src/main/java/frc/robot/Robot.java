@@ -157,7 +157,7 @@ public class Robot extends TimedRobot
   public void robotPeriodic() 
   {
     this.updateDashboard();
-    vision.outputFrame(vision.getCurrentFrame());
+    vision.ballInFrame();
   }
 
   public void autonomousInit() 
@@ -179,6 +179,7 @@ public class Robot extends TimedRobot
   {
 
     //vision.processing();
+    
 
     /*
      * **************************************

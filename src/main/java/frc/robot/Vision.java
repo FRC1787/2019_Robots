@@ -52,7 +52,8 @@ public class Vision
 	public static final Scalar COLOR_PURPLE = new Scalar(255, 0, 255);
 	public static final Scalar COLOR_CYAN = new Scalar(255, 255, 0);
 	private final Scalar[] COLORS = {COLOR_RED, COLOR_YELLOW, COLOR_CYAN, 
-                                   COLOR_GREEN, COLOR_PURPLE, COLOR_BLUE};
+								   COLOR_GREEN, COLOR_PURPLE, COLOR_BLUE};
+	private ArrayList<MatOfPoint> processOutput = new ArrayList<MatOfPoint>();
 
 	//Singelton instance
 	private static final Vision instance = new Vision();
@@ -64,8 +65,8 @@ public class Vision
 		CameraServer cameraServer = CameraServer.getInstance();
 
 		//Initialize each camera with a channel and name, pushes non-processed images
-		cargoCamera = cameraServer.startAutomaticCapture("Cargo Camera", 0);
-		hatchCamera = cameraServer.startAutomaticCapture("Hatch Camera", 1);
+		cargoCamera = cameraServer.startAutomaticCapture("Cargo Camera", 1);
+		hatchCamera = cameraServer.startAutomaticCapture("Hatch Camera", 0);
 
 		//Configure resoltuion, FPS, exposure, brightness and white-balance
 		configureCamera(cargoCamera, false);
@@ -77,28 +78,10 @@ public class Vision
 
 		//Push processed or unprocessed frames
 		outputStream = cameraServer.putVideo("Processed Video", STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
+
+		
 				
-}
-
-
-
-	public boolean ballInFrame()
-	{
-		cargoFrameGrabber.grabFrame(originalFrame, 1.0);
-
-		Imgproc.cvtColor(originalFrame, processedFrame, Imgproc.COLOR_BGR2HSV);
-
-		if(grip.process(processedFrame))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-
 	}
-
 
 
 	public void outputFrame(Mat currentFrame)
@@ -107,6 +90,36 @@ public class Vision
 			outputStream.putFrame(currentFrame);
 		}
 	}
+
+
+	public boolean ballInFrame()
+	{
+		cargoFrameGrabber.grabFrame(originalFrame, 1.0);
+
+		Imgproc.cvtColor(originalFrame, processedFrame, Imgproc.COLOR_BGR2HSV);
+
+		processOutput = grip.process(processedFrame);
+
+		if(!processOutput.isEmpty())
+		{
+			this.outputFrame(this.drawContoursOnFrame(processOutput));
+			System.out.println("Full");
+			return true;
+		}
+		else
+		{
+			this.outputFrame(originalFrame);
+			System.out.println("Empty");
+			return false;
+		}
+
+
+
+	}
+
+
+
+	
 
 	public Mat getCurrentFrame()
 	{
@@ -124,7 +137,7 @@ public class Vision
 	public void configureCamera(UsbCamera camera, boolean targetingCamera)
 	{
 		camera.setResolution(STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
-		camera.setFPS(15);
+		camera.setFPS(10);
 		if(targetingCamera)
 		{
 			camera.setExposureManual(5);

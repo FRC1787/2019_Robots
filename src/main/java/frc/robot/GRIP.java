@@ -43,7 +43,7 @@ public class GRIP {
 	/**
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
-	public boolean process(Mat source0) 
+	public ArrayList<MatOfPoint> process(Mat source0) 
 	{
 		// Step HSV_Threshold0:
 
@@ -51,7 +51,7 @@ public class GRIP {
 
 		double[] hsvThresholdHue = {0.0, 29.48805460750853};
 
-		double[] hsvThresholdSaturation = {162.81474820143885, 224.53924914675767};
+		double[] hsvThresholdSaturation = {78, 190};
 
 		double[] hsvThresholdValue = {240.7823741007194, 255.0};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
@@ -66,7 +66,7 @@ public class GRIP {
 
 		// Step Filter_Contours0:
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
-		double filterContoursMinArea = 10000.0;
+		double filterContoursMinArea = 2000;//10000.0;
 		double filterContoursMinPerimeter = 0;
 		double filterContoursMinWidth = 0;
 		double filterContoursMaxWidth = 1000;
@@ -82,15 +82,12 @@ public class GRIP {
 			filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 		}
 
-		if(filterContoursOutput.isEmpty())
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+		
+		return filterContoursOutput;
+		
 	}
+
+
 
 	/**
 	 * This method is a generated getter for the output of a HSV_Threshold.
