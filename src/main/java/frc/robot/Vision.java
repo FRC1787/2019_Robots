@@ -246,7 +246,7 @@ public class Vision
 			camera.setExposureAuto();
 		}
 
-		camera.setBrightness(50);
+		camera.setBrightness(40);
 		camera.setWhiteBalanceManual(WhiteBalance.kFixedIndoor);
 	}
 
