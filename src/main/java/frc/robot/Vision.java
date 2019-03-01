@@ -1,13 +1,10 @@
 package frc.robot;
 
-//Imports
-	//Java imports
-
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoCamera.WhiteBalance;
-import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.cameraserver.CameraServer;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -225,7 +222,7 @@ public class Vision
 	 * @param: upperHSVBounds, the maximum values for the filtration
 	 * @return: processedFrame, binary image
 	 */
-	public Mat getHSVFitlteredImage(Scalar lowerHSVBounds, Scalar upperHSVBounds)
+	public Mat getHSVFilteredImage(Scalar lowerHSVBounds, Scalar upperHSVBounds)
 	{
 		//Grab frames from cargo camera to be processed
 		cargoFrameGrabber.grabFrame(originalFrame, 2);
@@ -355,16 +352,16 @@ public class Vision
 
 	public void pushProcessing()
 	{	
-		outputStream.putFrame(drawContoursOnFrame(findExternalContours(getHSVFitlteredImage(HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER))));
+		outputStream.putFrame(drawContoursOnFrame(findExternalContours(getHSVFilteredImage(HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER))));
 	}
 
 	public Mat processing()
 	{	
 		
 
-		if(!findExternalContours(getHSVFitlteredImage(HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER)).isEmpty())
+		if(!findExternalContours(getHSVFilteredImage(HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER)).isEmpty())
 		{
-			filterContours(findExternalContours(getHSVFitlteredImage(HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER)), filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filteredContours);
+			filterContours(findExternalContours(getHSVFilteredImage(HSV_THRESHOLD_LOWER, HSV_THRESHOLD_UPPER)), filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filteredContours);
 			return drawContoursOnFrame(filteredContours);
 		}
 

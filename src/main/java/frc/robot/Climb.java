@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class Climb 
 {
@@ -21,7 +20,6 @@ public class Climb
     // Singleton instance
     private static final Climb instance = new Climb();
 
-    // Default constructor
     public Climb()
     {
         // Put the climb motor into brake mode
@@ -53,7 +51,7 @@ public class Climb
         return -(joystick.getRawAxis(3) - 1) /2;
     }
 
-    //Moves the robot using climb motor
+    // Moves the robot using climb motor
     public void moveClimber(double speed)
     {
         climbMotor.set(speed);

@@ -48,8 +48,6 @@ public class Robot extends TimedRobot {
 
     private boolean togglePressed = false;
 
-    //Motor Voltages
-
     /* WORKING VALUES */
 
     /* Hatch Speeds */
@@ -226,8 +224,7 @@ public class Robot extends TimedRobot {
             /* ******************* */
 
             if (rightJoyStick.getRawButton(CARGO_AUTO_INTAKE_BTN_ID)) {
-                cargoAutoCount++;
-                System.out.println(cargoAutoCount);
+                System.out.format("Cargo Auto Count: %d%n", ++cargoAutoCount);
                 if (cargoAutoCount <= CARGO_AUTO_COUNT_MAX) {
                     driveTrain.tankDrive(CARGO_AUTO_SPEED, -CARGO_AUTO_SPEED);
                 } else if (vision.ballInFrame()) {
