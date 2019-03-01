@@ -200,7 +200,7 @@ public class Vision
 	public void configureCamera(UsbCamera camera, boolean targetingCamera)
 	{
 		camera.setResolution(STANDARD_IMG_WIDTH, STANDARD_IMG_HEIGHT);
-		camera.setFPS(10);
+		camera.setFPS(15);
 		if(targetingCamera)
 		{
 			camera.setExposureManual(5);
