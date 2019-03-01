@@ -2,31 +2,36 @@ package frc.robot;
 
 //Imports
 	//Java imports
+
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoCamera.WhiteBalance;
 import edu.wpi.first.wpilibj.CameraServer;
-import org.opencv.core.*;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfInt;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//OpenCV imports
-//WPI imports
-//GRIP IMPORTS
-
 
 public class Vision
 {
 	private final GRIP grip = GRIP.getInstance();
 
-	//Decalre cameras
+	// Declare cameras
 	private UsbCamera cargoCamera;
 	private UsbCamera hatchCamera;
-	
+
 	private CvSource outputStream;
 
 	private CvSink cargoFrameGrabber;
@@ -107,24 +112,28 @@ public class Vision
 
 	public void setColor(boolean isUpperBounds, int pos, double newValue)
 	{
+		Scalar update;
 		Scalar bounds;
 		if (isUpperBounds) bounds = HSV_THRESHOLD_UPPER;
 		else bounds = HSV_THRESHOLD_LOWER;
 
 		switch (pos) {
 			case 1:
-				HSV_THRESHOLD_UPPER = new Scalar(newValue, bounds.val[1], bounds.val[2]);
+				update = new Scalar(newValue, bounds.val[1], bounds.val[2]);
 				break;
 			case 2:
-				HSV_THRESHOLD_UPPER = new Scalar(bounds.val[0], newValue, bounds.val[2]);
+				update = new Scalar(bounds.val[0], newValue, bounds.val[2]);
 				break;
 			case 3:
-				HSV_THRESHOLD_UPPER = new Scalar(bounds.val[0], bounds.val[1], newValue);
+				update = new Scalar(bounds.val[0], bounds.val[1], newValue);
 				break;
 			default:
 				throw new UnsupportedOperationException();
 		}
 
+		// Update threshold
+		if (isUpperBounds) HSV_THRESHOLD_UPPER = update;
+		else HSV_THRESHOLD_LOWER = update;
 	}
 
 
@@ -185,10 +194,10 @@ public class Vision
 	}
 
 
-
-	/**Sets camera settings for either driving or vision processing
-	 * 
-	 * @param camera, camera object that will be configured
+	/**
+	 * Sets camera settings for either driving or vision processing
+	 *
+	 * @param camera,          camera object that will be configured
 	 * @param targetingCamera, boolean indicating whether the camera is going to be used for image processing
 	 */
 	public void configureCamera(UsbCamera camera, boolean targetingCamera)
@@ -209,47 +218,14 @@ public class Vision
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*Apply an HSV filter, filters the image based on hue, saturation and value(brightness sort of)
-	* @param: lowerHSVBounds, the minimum values for the filtration
-	* @param: upperHSVBounds, the maximum values for the filtration
-	*
-	* @return: processedFrame, binary image
-	*/
-	public Mat  getHSVFitlteredImage(Scalar lowerHSVBounds, Scalar upperHSVBounds)
+	/**
+	 * Apply an HSV filter, filters the image based on hue, saturation and value(brightness sort of)
+	 *
+	 * @param: lowerHSVBounds, the minimum values for the filtration
+	 * @param: upperHSVBounds, the maximum values for the filtration
+	 * @return: processedFrame, binary image
+	 */
+	public Mat getHSVFitlteredImage(Scalar lowerHSVBounds, Scalar upperHSVBounds)
 	{
 		//Grab frames from cargo camera to be processed
 		cargoFrameGrabber.grabFrame(originalFrame, 2);
@@ -264,31 +240,33 @@ public class Vision
 		return processedFrame;
 	}
 
-	/**Gets a list of contorus from a binary image, stores them in an array list
-	 * 
+	/**
+	 * Gets a list of contorus from a binary image, stores them in an array list
+	 *
 	 * @param image, binary frame
 	 * @return contoursList
 	 */
-	public ArrayList<MatOfPoint> findExternalContours(Mat image)
+	public List<MatOfPoint> findExternalContours(Mat image)
 	{
-		//Empty arraylist of mat points to store contours in 
+		// Empty arraylist of mat points to store contours in
 		ArrayList <MatOfPoint> contoursList = new ArrayList<MatOfPoint>();
 
-		//Mode and method variables, only find external contours
+		// Mode and method variables, only find external contours
 		int mode = Imgproc.RETR_EXTERNAL;
-		//Again I don't knwo what this means but Simon did so it should work
+		// Again I don't knwo what this means but Simon did so it should work
 		int method = Imgproc.CHAIN_APPROX_SIMPLE;
 
-		//Simon did it for overlapping contours i don't know what is does!!
+		// Simon did it for overlapping contours i don't know what is does!!
 		Mat hierarchy = new Mat();
 
 		return contoursList;
 	}
 
-	/**Finds the centroid (center point) of an array list of contours
-	 * 
-	 * @param foundContours, 
-	 * @return centerPoint, 
+	/**
+	 * Finds the centroid (center point) of an array list of contours
+	 *
+	 * @param foundContours,
+	 * @return centerPoint,
 	 */
 	public Point findContourCenter(MatOfPoint foundContours)
 	{
@@ -310,10 +288,10 @@ public class Vision
 		return centerPoint;
 	}
 
-	
 
-	/**Draws the contours on the original frame
-	 * 
+	/**
+	 * Draws the contours on the original frame
+	 *
 	 * @param contourList, an array list of mat point with the contours stored inside
 	 * @return processedFrame
 	 */
@@ -344,9 +322,9 @@ public class Vision
 	 * @param maxRatio maximum ratio of width to height
 	 */
 	private void filterContours(List<MatOfPoint> inputContours, double minArea,
-		double minPerimeter, double minWidth, double maxWidth, double minHeight, double
-		maxHeight, double[] solidity, double maxVertexCount, double minVertexCount, double
-		minRatio, double maxRatio, List<MatOfPoint> output) {
+								double minPerimeter, double minWidth, double maxWidth, double minHeight, double
+										maxHeight, double[] solidity, double maxVertexCount, double minVertexCount, double
+										minRatio, double maxRatio, List<MatOfPoint> output) {
 		final MatOfInt hull = new MatOfInt();
 		output.clear();
 		//operation
@@ -362,18 +340,18 @@ public class Vision
 			MatOfPoint mopHull = new MatOfPoint();
 			mopHull.create((int) hull.size().height, 1, CvType.CV_32SC2);
 			for (int j = 0; j < hull.size().height; j++) {
-				int index = (int)hull.get(j, 0)[0];
-				double[] point = new double[] { contour.get(index, 0)[0], contour.get(index, 0)[1]};
+				int index = (int) hull.get(j, 0)[0];
+				double[] point = new double[]{contour.get(index, 0)[0], contour.get(index, 0)[1]};
 				mopHull.put(j, 0, point);
 			}
 			final double solid = 100 * area / Imgproc.contourArea(mopHull);
 			if (solid < solidity[0] || solid > solidity[1]) continue;
-			if (contour.rows() < minVertexCount || contour.rows() > maxVertexCount)	continue;
-			final double ratio = bb.width / (double)bb.height;
+			if (contour.rows() < minVertexCount || contour.rows() > maxVertexCount) continue;
+			final double ratio = bb.width / (double) bb.height;
 			if (ratio < minRatio || ratio > maxRatio) continue;
 			output.add(contour);
 		}
-    }
+	}
 
 	public void pushProcessing()
 	{	
@@ -398,7 +376,7 @@ public class Vision
 		
 	}
 
-	//Return method for the singelton instance
+	// Return method for the singleton instance
 	public static Vision getInstance()
 	{
 		return instance;
