@@ -97,6 +97,7 @@ public class Robot extends TimedRobot {
 
     public void primusPeriodic() {
         //vision.processing();
+        vision.process();
 
         /* *********************************** */
         /* TOGGLE RIGHT JOYSTICK CONTROL MODES */
