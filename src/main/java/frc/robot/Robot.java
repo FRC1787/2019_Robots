@@ -286,14 +286,12 @@ public class Robot extends TimedRobot {
         // Climb controls just for a commit
 
 
-
-    // Climb direction switch trigger & back button
-    if(leftJoyStick.getRawButtonPressed(CLIMB_DIRECTION_EXTEND_BTN_ID))
-        climbDirectionExtend = true;
-    //Back button
-    else if(leftJoyStick.getRawButtonPressed(CLIMB_DIRECTION_RETRACT_BTN_ID))
-        climbDirectionExtend = false;
-
+        // Climb direction switch trigger & back button
+        if (leftJoyStick.getRawButtonPressed(CLIMB_DIRECTION_EXTEND_BTN_ID))
+            climbDirectionExtend = true;
+            //Back button
+        else if (leftJoyStick.getRawButtonPressed(CLIMB_DIRECTION_RETRACT_BTN_ID))
+            climbDirectionExtend = false;
 
 
         // Climb action controls

@@ -4,8 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Joystick;
 
-public final class DriveTrain
-{ 
+public final class DriveTrain {
 
     private static final int LEFT_MASTER_TALON_ID = 9;
     private static final int LEFT_FOLLOWER_VICTOR_ID = 10;
@@ -26,16 +25,15 @@ public final class DriveTrain
     private final double DEAD_ZONE_VALUE = 0.02;
 
     private static final DriveTrain instance = new DriveTrain();
-    
+
     private double leftDriveVoltage;
     private double rightDriveVoltage;
-    
-    private DriveTrain() 
-    {
+
+    private DriveTrain() {
         leftMaster.setInverted(LEFT_MASTER_INVERTED);
         leftFollower.setInverted(LEFT_FOLLOWER_INVERTED);
         rightMaster.setInverted(RIGHT_MASTER_INVERTED);
-        rightFollower.setInverted(RIGHT_FOLLOWER_INVERTED); 
+        rightFollower.setInverted(RIGHT_FOLLOWER_INVERTED);
 
         leftMaster.configVoltageCompSaturation(12, 10);
         leftFollower.configVoltageCompSaturation(12, 10);
@@ -53,41 +51,36 @@ public final class DriveTrain
         rightFollower.setNeutralMode(NeutralMode.Brake);
     }
 
-    public static DriveTrain getInstance()
-    {
+    public static DriveTrain getInstance() {
         return instance;
     }
 
-    public double rangeCorrection(double num)
-    {
-        if(num > -DEAD_ZONE_VALUE && num < DEAD_ZONE_VALUE)
+    public double rangeCorrection(double num) {
+        if (num > -DEAD_ZONE_VALUE && num < DEAD_ZONE_VALUE)
             return 0;
-        else if(num > 1)
+        else if (num > 1)
             return 1;
-        else if(num < -1)
+        else if (num < -1)
             return -1;
         else
             return num;
-    } 
+    }
 
-    public double sqrtSignPreserved(double axis)
-    {
-        if(axis < 0)
+    public double sqrtSignPreserved(double axis) {
+        if (axis < 0)
             return -Math.sqrt(-axis);
         else
             return Math.sqrt(axis);
     }
 
-    
-    public boolean joyStickInDeadZone(Joystick joystick)
-    {
+
+    public boolean joyStickInDeadZone(Joystick joystick) {
         return (joystick.getX() > DEAD_ZONE_VALUE || joystick.getX() < -DEAD_ZONE_VALUE)
                 || (joystick.getY() > DEAD_ZONE_VALUE || joystick.getY() < -DEAD_ZONE_VALUE);
 
     }
 
-    public void squareRootDrive(double xAxis, double yAxis)
-    {
+    public void squareRootDrive(double xAxis, double yAxis) {
         xAxis = rangeCorrection(sqrtSignPreserved(xAxis));
         yAxis = rangeCorrection(sqrtSignPreserved(yAxis));
 
@@ -95,8 +88,7 @@ public final class DriveTrain
         rightDriveVoltage = xAxis - yAxis;
     }
 
-    public void arcadeDrive(double xAxis, double yAxis)
-    {
+    public void arcadeDrive(double xAxis, double yAxis) {
         yAxis = yAxis * Math.abs(yAxis);
         xAxis = xAxis * Math.abs(xAxis);
 
@@ -113,8 +105,7 @@ public final class DriveTrain
         rightFollower.set(rightDriveVoltage);
     }
 
-    public void linearDrive(double xAxis, double yAxis)
-    {
+    public void linearDrive(double xAxis, double yAxis) {
         //checks the range to see if the value is greater than 1 or less than -1 and if so corrects the value to be in that range
         yAxis = rangeCorrection(yAxis);
         xAxis = rangeCorrection(xAxis);
@@ -128,8 +119,7 @@ public final class DriveTrain
         rightFollower.set(rightDriveVoltage);
     }
 
-    public void tankDrive(double leftSide, double rightSide)
-    {
+    public void tankDrive(double leftSide, double rightSide) {
         leftMaster.set(leftSide);
         rightMaster.set(rightSide);
         leftFollower.set(leftSide);

@@ -5,8 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 
-public class Cargo 
-{
+public class Cargo {
     // Cargo motor controller variables
     private static final int CARGO_GRABBING_MOTOR_ID = 3;
     private static final int INTAKE_ARTICULATING_MOTOR_ID = 11;
@@ -29,75 +28,60 @@ public class Cargo
     private static final Cargo instance = new Cargo();
 
     // Default constructor
-    public Cargo()
-    {
+    public Cargo() {
         intakeArticulator.setNeutralMode(NeutralMode.Brake);
     }
 
     // Return method for the singleton instance
-    public static Cargo getInstance()
-    {
+    public static Cargo getInstance() {
         return instance;
     }
 
     // Articulates the intake mechanism between deployed and stowed
-    public void articulateCargoIntake(double articulationSpeed)
-    {
+    public void articulateCargoIntake(double articulationSpeed) {
         intakeArticulator.set(articulationSpeed);
     }
-    
+
     // Intake cargo
-    public void intakeCargo(double speed)
-    {
+    public void intakeCargo(double speed) {
         cargoGrabberMotor.set(speed);
     }
 
     // Shoot cargo
-    public void shootCargo(double speed)
-    {
+    public void shootCargo(double speed) {
         shooter.set(speed);
     }
 
     // Deploy cargo intake mechanism
-    public void deployCargoIntake(double deploySpeed)
-    {
+    public void deployCargoIntake(double deploySpeed) {
         // Fold cargo intake out until limit switch is pressed
-        if(!cargoIntakeMechanismDeployedSwitch.get())
-        {
+        if (!cargoIntakeMechanismDeployedSwitch.get()) {
             articulateCargoIntake(deploySpeed);
-        }
-
-
-        else // Stop the motor once the limit switch is pressed
+        } else // Stop the motor once the limit switch is pressed
         {
             articulateCargoIntake(0);
         }
     }
 
     // Stow cargo intake mechanism
-    public void stowCargoIntake(double stowSpeed)
-    {
+    public void stowCargoIntake(double stowSpeed) {
         // Fold cargo intake in until limit switch is pressed
-        if(!cargoIntakeMechanismStowedSwitch.get())
-        {
+        if (!cargoIntakeMechanismStowedSwitch.get()) {
             articulateCargoIntake(stowSpeed);
         }
 
         // Stop the motor once the limit switch is pressed
-        else
-        {
+        else {
             articulateCargoIntake(0);
         }
     }
 
     // Accessor methods for limit switch states
-    public boolean getCargoIntakeMechanismDeployedSwitchState()
-    {
+    public boolean getCargoIntakeMechanismDeployedSwitchState() {
         return cargoIntakeMechanismDeployedSwitch.get();
     }
 
-    public boolean getCargoIntakeMechanismStowedSwitchState()
-    {
+    public boolean getCargoIntakeMechanismStowedSwitchState() {
         return cargoIntakeMechanismStowedSwitch.get();
     }
 }
