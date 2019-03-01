@@ -473,16 +473,14 @@ public class Robot extends TimedRobot
 
     SmartDashboard.putNumber("Shooter Belt Timer Max", F_SHOOTER_TIMER_MAX);
 
-    SmartDashboard.putBoolean("Cargo Mode", joyStickCargoMode);
-    SmartDashboard.putBoolean("Hatch Mode", joyStickHatchMode);
-
-
     SmartDashboard.putNumber("H Upper", vision.HSV_THRESHOLD_UPPER.val[0]);
     SmartDashboard.putNumber("S Upper", vision.HSV_THRESHOLD_UPPER.val[1]);
     SmartDashboard.putNumber("V Upper", vision.HSV_THRESHOLD_UPPER.val[2]);
     SmartDashboard.putNumber("H Lower", vision.HSV_THRESHOLD_LOWER.val[0]);
     SmartDashboard.putNumber("S Lower", vision.HSV_THRESHOLD_LOWER.val[1]);
     SmartDashboard.putNumber("V Lower", vision.HSV_THRESHOLD_LOWER.val[2]);
+
+    SmartDashboard.putBoolean("Drive Mode", joyStickCargoMode);
     
   }
 
@@ -506,6 +504,7 @@ public class Robot extends TimedRobot
     vision.setColor(false, 1, SmartDashboard.getNumber("H Lower", 0));
     vision.setColor(false, 2, SmartDashboard.getNumber("S Lower", 0));
     vision.setColor(false, 3, SmartDashboard.getNumber("V Lower", 0));
+
   }
 
   public void robotInit() 
@@ -516,10 +515,7 @@ public class Robot extends TimedRobot
   public void robotPeriodic() 
   {
     this.updateDashboard();
-    //vision.outputFrame(vision.getCurrentFrame());
-    //vision.processing();
-    //vision.ballInFrame();
-
+    this.setDashboard();
   }
 
   public void autonomousInit() 
