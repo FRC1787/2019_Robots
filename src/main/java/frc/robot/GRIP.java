@@ -1,20 +1,17 @@
 package frc.robot;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfInt;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.HashMap;
-
-import org.opencv.core.*;
-import org.opencv.core.Core.*;
-import org.opencv.features2d.FeatureDetector;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.*;
-import org.opencv.objdetect.*;
 
 /**
 * GripPipeline class.
@@ -121,7 +118,6 @@ public class GRIP {
 	 * @param hue The min and max hue
 	 * @param sat The min and max saturation
 	 * @param val The min and max value
-	 * @param output The image in which to store the output.
 	 */
 	private void hsvThreshold(Mat input, double[] hue, double[] sat, double[] val,
 	    Mat out) {
@@ -133,9 +129,7 @@ public class GRIP {
 	/**
 	 * Sets the values of pixels in a binary image to their distance to the nearest black pixel.
 	 * @param input The image on which to perform the Distance Transform.
-	 * @param type The Transform.
-	 * @param maskSize the size of the mask.
-	 * @param output The image in which to store the output.
+
 	 */
 	private void findContours(Mat input, boolean externalOnly,
 		List<MatOfPoint> contours) {
@@ -163,7 +157,6 @@ public class GRIP {
 	 * @param maxWidth maximum width
 	 * @param minHeight minimum height
 	 * @param maxHeight maximimum height
-	 * @param Solidity the minimum and maximum solidity of a contour
 	 * @param minVertexCount minimum vertex Count of the contours
 	 * @param maxVertexCount maximum vertex Count
 	 * @param minRatio minimum ratio of width to height

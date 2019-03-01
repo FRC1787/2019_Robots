@@ -2,12 +2,9 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DriveTrain
+public final class DriveTrain
 { 
 
     private static final int LEFT_MASTER_TALON_ID = 9;
@@ -25,13 +22,13 @@ public class DriveTrain
     public final boolean RIGHT_MASTER_INVERTED = false;
     public final boolean RIGHT_FOLLOWER_INVERTED = false;
 
-    //Drivetrain variables
-     private final double DEAD_ZONE_VALUE = 0.02;
+    // Drivetrain variables
+    private final double DEAD_ZONE_VALUE = 0.02;
 
     private static final DriveTrain instance = new DriveTrain();
     
-    private  double leftDriveTrainMotorsVoltage;
-    private  double rightDriveTrainMotorsVoltage;
+    private double leftDriveVoltage;
+    private double rightDriveVoltage;
     
     private DriveTrain() 
     {
@@ -64,41 +61,28 @@ public class DriveTrain
     public double rangeCorrection(double num)
     {
         if(num > -DEAD_ZONE_VALUE && num < DEAD_ZONE_VALUE)
-        {
             return 0;
-        }
         else if(num > 1)
-        {
             return 1;
-        }
         else if(num < -1)
-        {
             return -1;
-        }
         else
-        {
             return num;
-        }
     } 
 
     public double sqrtSignPreserved(double axis)
     {
         if(axis < 0)
-        {
             return -Math.sqrt(-axis);
-        }
-        return Math.sqrt(axis);
+        else
+            return Math.sqrt(axis);
     }
 
     
     public boolean joyStickInDeadZone(Joystick joystick)
     {
-        if((joystick.getX() > DEAD_ZONE_VALUE || joystick.getX() < -DEAD_ZONE_VALUE) || (joystick.getY() > DEAD_ZONE_VALUE || joystick.getY() < -DEAD_ZONE_VALUE))
-        {
-            return true;
-        }
-
-        return false;
+        return (joystick.getX() > DEAD_ZONE_VALUE || joystick.getX() < -DEAD_ZONE_VALUE)
+                || (joystick.getY() > DEAD_ZONE_VALUE || joystick.getY() < -DEAD_ZONE_VALUE);
 
     }
 
@@ -107,8 +91,8 @@ public class DriveTrain
         xAxis = rangeCorrection(sqrtSignPreserved(xAxis));
         yAxis = rangeCorrection(sqrtSignPreserved(yAxis));
 
-        leftDriveTrainMotorsVoltage = xAxis + xAxis;
-        rightDriveTrainMotorsVoltage = xAxis - yAxis;
+        leftDriveVoltage = xAxis + xAxis;
+        rightDriveVoltage = xAxis - yAxis;
     }
 
     public void arcadeDrive(double xAxis, double yAxis)
@@ -120,13 +104,13 @@ public class DriveTrain
         yAxis = rangeCorrection(yAxis);
         xAxis = rangeCorrection(xAxis);
 
-        leftDriveTrainMotorsVoltage = xAxis + yAxis;
-        rightDriveTrainMotorsVoltage = xAxis - yAxis;
+        leftDriveVoltage = xAxis + yAxis;
+        rightDriveVoltage = xAxis - yAxis;
 
-        leftMaster.set(leftDriveTrainMotorsVoltage);
-        rightMaster.set(rightDriveTrainMotorsVoltage);
-        leftFollower.set(leftDriveTrainMotorsVoltage);
-        rightFollower.set(rightDriveTrainMotorsVoltage);
+        leftMaster.set(leftDriveVoltage);
+        rightMaster.set(rightDriveVoltage);
+        leftFollower.set(leftDriveVoltage);
+        rightFollower.set(rightDriveVoltage);
     }
 
     public void linearDrive(double xAxis, double yAxis)
@@ -135,13 +119,13 @@ public class DriveTrain
         yAxis = rangeCorrection(yAxis);
         xAxis = rangeCorrection(xAxis);
 
-        leftDriveTrainMotorsVoltage = xAxis + yAxis;
-        rightDriveTrainMotorsVoltage = xAxis - yAxis;
+        leftDriveVoltage = xAxis + yAxis;
+        rightDriveVoltage = xAxis - yAxis;
 
-        leftMaster.set(leftDriveTrainMotorsVoltage);
-        rightMaster.set(rightDriveTrainMotorsVoltage);
-        leftFollower.set(leftDriveTrainMotorsVoltage);
-        rightFollower.set(rightDriveTrainMotorsVoltage);
+        leftMaster.set(leftDriveVoltage);
+        rightMaster.set(rightDriveVoltage);
+        leftFollower.set(leftDriveVoltage);
+        rightFollower.set(rightDriveVoltage);
     }
 
     public void tankDrive(double leftSide, double rightSide)
