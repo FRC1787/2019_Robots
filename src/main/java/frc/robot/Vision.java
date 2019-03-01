@@ -11,6 +11,7 @@ import org.opencv.imgproc.Moments;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Vision {
@@ -67,6 +68,9 @@ public class Vision {
     //Singelton instance
     private static final Vision instance = new Vision();
 
+    private volatile Mat grabbedFrame;
+    private volatile Mat blurredFrame;
+
 
     //Default constructor for the vision class
     public Vision() {
@@ -89,6 +93,13 @@ public class Vision {
 
 
     }
+
+    public final void process() {
+        cargoFrameGrabber.grabFrame(grabbedFrame);
+        Imgproc.medianBlur(grabbedFrame, blurredFrame, 10);
+        outputStream.putFrame(blurredFrame);
+    }
+
 
 
 //5, 50, 50
