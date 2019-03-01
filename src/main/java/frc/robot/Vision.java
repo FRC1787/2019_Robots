@@ -68,8 +68,13 @@ public class Vision {
     //Singelton instance
     private static final Vision instance = new Vision();
 
-    private volatile Mat grabbedFrame;
-    private volatile Mat blurredFrame;
+    private volatile Mat grabbedFrame = new Mat();
+    private volatile Mat colorFrame = new Mat();
+    private volatile Mat maskFrame = new Mat();
+    private volatile Mat erodeFrame = new Mat();
+    private volatile Mat blurFrame = new Mat();
+    private volatile Mat contourFrame = new Mat();
+
 
 
     //Default constructor for the vision class
@@ -95,11 +100,46 @@ public class Vision {
     }
 
     public final void process() {
+        if (cargoFrameGrabber == null) return;
         cargoFrameGrabber.grabFrame(grabbedFrame);
-        Imgproc.medianBlur(grabbedFrame, blurredFrame, 10);
-        outputStream.putFrame(blurredFrame);
+        Imgproc.cvtColor(grabbedFrame,colorFrame, Imgproc.COLOR_BGR2HSV);
+        Core.inRange(colorFrame, new Scalar(168, 186, 87), new Scalar(180, 255, 255), maskFrame);
+        Imgproc.erode(maskFrame, erodeFrame, new Mat(), new Point(-1, -1), 1);
+        Imgproc.GaussianBlur(erodeFrame, blurFrame, new Size(7*6+1, 7*6+1), 7);
+        outputStream.putFrame(erodeFrame);
     }
 
+    private void filtContours(List<MatOfPoint> inputContours, double minArea,
+		double minPerimeter, double minWidth, double maxWidth, double minHeight, double
+		maxHeight, double[] solidity, double maxVertexCount, double minVertexCount, double
+		minRatio, double maxRatio, List<MatOfPoint> output) {
+		final MatOfInt hull = new MatOfInt();
+		output.clear();
+		//operation
+		for (int i = 0; i < inputContours.size(); i++) {
+			final MatOfPoint contour = inputContours.get(i);
+			final Rect bb = Imgproc.boundingRect(contour);
+			if (bb.width < minWidth || bb.width > maxWidth) continue;
+			if (bb.height < minHeight || bb.height > maxHeight) continue;
+			final double area = Imgproc.contourArea(contour);
+			if (area < minArea) continue;
+			if (Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true) < minPerimeter) continue;
+			Imgproc.convexHull(contour, hull);
+			MatOfPoint mopHull = new MatOfPoint();
+			mopHull.create((int) hull.size().height, 1, CvType.CV_32SC2);
+			for (int j = 0; j < hull.size().height; j++) {
+				int index = (int)hull.get(j, 0)[0];
+				double[] point = new double[] { contour.get(index, 0)[0], contour.get(index, 0)[1]};
+				mopHull.put(j, 0, point);
+			}
+			final double solid = 100 * area / Imgproc.contourArea(mopHull);
+			if (solid < solidity[0] || solid > solidity[1]) continue;
+			if (contour.rows() < minVertexCount || contour.rows() > maxVertexCount)	continue;
+			final double ratio = bb.width / (double)bb.height;
+			if (ratio < minRatio || ratio > maxRatio) continue;
+			output.add(contour);
+		}
+	}
 
 
 //5, 50, 50
