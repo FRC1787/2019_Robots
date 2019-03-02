@@ -280,22 +280,34 @@ public class Robot extends TimedRobot {
 
             // Spin intake wheels as long as button is pressed
             if (rightJoyStick.getRawButton(DELIVER_BTN_ID))
+            {
                 cargo.intakeCargo(CARGO_SHOOT_SPEED);
-
-            engageShooterBelt = rightJoyStick.getRawButtonReleased(DELIVER_BTN_ID);
+            }
+            
+            if (rightJoyStick.getRawButtonReleased(DELIVER_BTN_ID))
+            {
+              engageShooterBelt = true;
+            }
 
             // Engage shooting belt, once the button is released
-            if (engageShooterBelt) {
+            if (engageShooterBelt) 
+            {
                 cargo.stowCargoIntake(-0.5);
                 cargo.intakeCargo(0);
-                if (shooterTimer <= 100) {
-                    cargo.shootCargo(CARGO_SHOOT_SPEED);
-                } else {
-                    cargo.shootCargo(0);
-                    engageShooterBelt = false;
-                    shooterTimer = 0;
+
+                if (shooterTimer <= 50) 
+                {
+                  cargo.shootCargo(CARGO_SHOOT_SPEED);
+                  shooterTimer++;
                 }
-                shooterTimer++;
+
+                else 
+                {
+                  cargo.shootCargo(0);
+                  engageShooterBelt = false;
+                  shooterTimer = 0;
+                }
+
             }
 
             if (!rightJoyStick.getRawButton(DELIVER_BTN_ID) && !engageShooterBelt) {
