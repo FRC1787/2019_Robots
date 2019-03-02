@@ -10,6 +10,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -74,6 +75,10 @@ public class Vision {
     private volatile Mat erodeFrame = new Mat();
     private volatile Mat blurFrame = new Mat();
     private volatile Mat contourFrame = new Mat();
+    private volatile List<MatOfPoint> contours = new LinkedList<>();
+    private volatile List<Point> centroids = new ArrayList<>();
+
+    private final Mat blankMat = new Mat();
 
     private static final int blurConstant = 5;
 
@@ -120,8 +125,31 @@ public class Vision {
         Imgproc.GaussianBlur(erodeFrame, blurFrame, new Size(blurConstant * 6 + 1, blurConstant * 6 + 1), blurConstant);
 
         // Find contours
+        Imgproc.findContours(blurFrame, contours, blankMat, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+
+        // Get the centroids
+        calculateCentroids(contours, centroids);
+
+        for (Point centroid : centroids) {
+            System.out.println(centroid.toString());
+        }
 
         outputStream.putFrame(erodeFrame);
+    }
+
+    private synchronized void calculateCentroids(List<MatOfPoint> contours, List<Point> centroids) {
+        for (MatOfPoint m : contours) {
+            // Get the moments from the contour
+            Moments moments = Imgproc.moments(m);
+
+            // Calculate the centroid
+            // Helpful link: http://aishack.in/tutorials/image-moments/
+            double cx = moments.get_m10() / moments.get_m00();
+            double cy = moments.get_m01() / moments.get_m00();
+
+            // Add point
+            centroids.add(new Point(cx, cy));
+        }
     }
 
     private void filtContours(List<MatOfPoint> inputContours, double minArea,
