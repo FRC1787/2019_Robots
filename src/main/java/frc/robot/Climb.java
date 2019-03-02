@@ -52,4 +52,8 @@ public class Climb {
         climbMotor.set(speed);
     }
 
+    public double getClimbSpeed() {
+        return climbMotor.get();
+    }
+
 }
