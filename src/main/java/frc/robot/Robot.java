@@ -1,5 +1,7 @@
 package frc.robot;
 
+import javax.lang.model.util.ElementScanner6;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -75,29 +77,65 @@ public class Robot extends TimedRobot {
     private double CARGO_INTAKE_SPEED = 1;
     private double CARGO_SHOOT_SPEED = 0.75;
 
+    /* Hatch Auto Variables */
+    private int autoHatchCounter = 0;
+    private int AUTO_HATCH_MAX = 50;
+
+    /* Joystick Swap */
+    private boolean joyStickHatchMode = true;
+    private boolean joyStickCargoMode = false;
+
     /* Other Variables */
-    private boolean deployCargoIntakeState = false;
-    private int hatchDecelerationCounter = 0;
+    private boolean climbInitiated = false;
     private boolean engageShooterBelt = false;
     private int shooterTimer = 0;
-    private final int F_SHOOTER_TIMER_MAX = 100;
-    private int shooterTimerMaxValue;
-    private final double F_JOYSTICK_SWITCH_THRESHOLD = 0.25;
-    private double joyStickSwitchThreshold;
-    private boolean joyStickSwap = true;
-    private int cargoAutoCount = 0;
-    private final int CARGO_AUTO_COUNT_MAX = 5;
-    private final double CARGO_AUTO_SPEED = -0.25;
-    private boolean readyForIntake = false;
-    private boolean climbInitiated = false;
-    private boolean joyStickHatchMode = false;
-    private boolean joyStickCargoMode = true;
     private boolean climbDirectionExtend = true;
+
+
+
+    public void robotInit() {
+        this.setDashboard();
+    }
+
+    public void robotPeriodic() {
+        this.updateDashboard();
+        //vision.outputFrame(vision.getCurrentFrame());
+        //vision.processing();
+        //vision.ballInFrame();
+    }
+
+    public void autonomousInit() {
+
+    }
+
+    public void autonomousPeriodic() {
+        if (autoHatchCounter < AUTO_HATCH_MAX)
+            hatch.grabHatch(HATCH_INTAKE_SPEED);
+        else if (autoHatchCounter == AUTO_HATCH_MAX)
+            hatch.articulateHatch(HATCH_DEPLOY_SPEED);
+        else
+            this.primusPeriodic();
+    }
+
+    public void teleopInit() {
+
+    }
+
+    public void teleopPeriodic() {
+        this.primusPeriodic();
+    }
+
+    public void testPeriodic() {
+        this.primusPeriodic();
+    }
+
 
 
     public void primusPeriodic() {
         //vision.processing();
         vision.process();
+
+
 
         /* *********************************** */
         /* TOGGLE RIGHT JOYSTICK CONTROL MODES */
@@ -116,6 +154,7 @@ public class Robot extends TimedRobot {
         }
 
 
+
         /* ************************************* */
         /* HATCH JOYSTICK & HATCH ORIENTED DRIVE */
         /* ************************************* */
@@ -123,6 +162,7 @@ public class Robot extends TimedRobot {
         if (joyStickHatchMode && !joyStickCargoMode) {
             // Switches the orientation of the drive so that the front of the robot is the hatch
             driveTrain.arcadeDrive(rightJoyStick.getX(), rightJoyStick.getY());
+
 
 
             /* ************************ */
@@ -151,6 +191,7 @@ public class Robot extends TimedRobot {
                 hatch.articulateHatch(0);
 
 
+
             /* ************************* */
             /* HATCH INTAKE AND DELIVERY */
             /* ************************* */
@@ -172,7 +213,23 @@ public class Robot extends TimedRobot {
             if (!rightJoyStick.getRawButton(DELIVER_BTN_ID) && !rightJoyStick.getRawButton(INTAKE_BTN_ID) && !hatch.getHatchIntakedSwitchState())
                 hatch.grabHatch(0);
 
+
+            
+            /* **************** */
+            /* CARGO INTAKE FIX */
+            /* **************** */
+
+            // Stow cargo intake mechanism
+            if (!cargo.getCargoIntakeMechanismStowedSwitchState())
+                cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
+
+            // Stop stow once the stow limit switch is hit
+            if (cargo.getCargoIntakeMechanismStowedSwitchState())
+                cargo.articulateCargoIntake(0);
+
+
         }
+
 
 
         /* ************************************* */
@@ -183,6 +240,8 @@ public class Robot extends TimedRobot {
             // Switches the orientation of the drive so that the front of the robot is the cargo
             driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
 
+
+
             /* ************** */
             /* CARGO CONTROLS */
             /* ************** */
@@ -192,20 +251,19 @@ public class Robot extends TimedRobot {
                 cargo.deployCargoIntake(CARGO_MECHANISM_DEPLOY_SPEED);
 
             // Stop deploy once the deploy limit switch is pressed
-            if (!rightJoyStick.getRawButton(STOW_BTN_ID) && cargo.getCargoIntakeMechanismDeployedSwitchState() && !readyForIntake)
+            if (!rightJoyStick.getRawButton(STOW_BTN_ID) && cargo.getCargoIntakeMechanismDeployedSwitchState())
                 cargo.articulateCargoIntake(0);
 
             // Stow cargo intake mechanism
             if (rightJoyStick.getRawButton(STOW_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState())
                 cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
 
-            // Stop stow once hte stow limit switch is hit
-            if (!rightJoyStick.getRawButton(DEPLOY_BTN_ID) && cargo.getCargoIntakeMechanismStowedSwitchState() && !readyForIntake)
+            // Stop stow once the stow limit switch is hit
+            if (!rightJoyStick.getRawButton(DEPLOY_BTN_ID) && cargo.getCargoIntakeMechanismStowedSwitchState())
                 cargo.articulateCargoIntake(0);
 
-
             // Stop while no button is being pressed
-            if (!rightJoyStick.getRawButton(DEPLOY_BTN_ID) && !leftJoyStick.getRawButton(STOW_BTN_ID) && !readyForIntake)
+            if (!rightJoyStick.getRawButton(DEPLOY_BTN_ID) && !leftJoyStick.getRawButton(STOW_BTN_ID))
                 cargo.articulateCargoIntake(0);
 
             // Intake cargo: deploy the intake, then spin the wheels
@@ -215,43 +273,11 @@ public class Robot extends TimedRobot {
             }
 
             //Stop intake wheels,
-            if (!rightJoyStick.getRawButton(INTAKE_BTN_ID) && !leftJoyStick.getRawButton(DEPLOY_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState() && !readyForIntake) {
+            if (!rightJoyStick.getRawButton(INTAKE_BTN_ID) && !leftJoyStick.getRawButton(DEPLOY_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState()) {
                 cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
                 cargo.intakeCargo(0);
             }
 
-            /* ******************* */
-            /* CARGO INTAKE VISION */
-            /* ******************* */
-
-            if (rightJoyStick.getRawButton(CARGO_AUTO_INTAKE_BTN_ID)) {
-                System.out.format("Cargo Auto Count: %d%n", ++cargoAutoCount);
-                if (cargoAutoCount <= CARGO_AUTO_COUNT_MAX) {
-                    driveTrain.tankDrive(CARGO_AUTO_SPEED, -CARGO_AUTO_SPEED);
-                } else if (vision.ballInFrame()) {
-                    readyForIntake = true;
-                }
-
-                if (readyForIntake) {
-                    cargo.intakeCargo(CARGO_INTAKE_SPEED);
-                    cargo.deployCargoIntake(CARGO_MECHANISM_DEPLOY_SPEED);
-                }
-
-                if (!(cargoAutoCount <= CARGO_AUTO_COUNT_MAX)) {
-                    driveTrain.tankDrive(0, 0);
-                }
-            } else if (rightJoyStick.getRawButtonReleased(INTAKE_BTN_ID)) {
-                cargoAutoCount = 0;
-                readyForIntake = false;
-                driveTrain.tankDrive(0, 0);
-                cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
-                cargo.intakeCargo(0);
-            }
-
-            if (rightJoyStick.getRawButton(13)) {
-                driveTrain.tankDrive(0, 0);
-                cargoAutoCount = 0;
-            }
 
 
             /* *********** */
@@ -284,8 +310,11 @@ public class Robot extends TimedRobot {
             }
         }
 
-        // Climb controls just for a commit
 
+
+        /* ************** */
+        /* CLIMB CONTROLS */
+        /* ************** */
 
         // Climb direction switch trigger & back button
         if (leftJoyStick.getRawButtonPressed(CLIMB_DIRECTION_EXTEND_BTN_ID))
@@ -324,8 +353,6 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Cargo Intake Speed", F_CARGO_INTAKE_SPEED);
         SmartDashboard.putNumber("Cargo Shoot Speed", F_CARGO_SHOOT_SPEED);
 
-        SmartDashboard.putNumber("Shooter Belt Timer Max", F_SHOOTER_TIMER_MAX);
-
         SmartDashboard.putBoolean("Cargo Mode", joyStickCargoMode);
         SmartDashboard.putBoolean("Hatch Mode", joyStickHatchMode);
 
@@ -350,8 +377,6 @@ public class Robot extends TimedRobot {
         CARGO_INTAKE_SPEED = SmartDashboard.getNumber("Cargo Intake Speed", F_CARGO_INTAKE_SPEED);
         CARGO_SHOOT_SPEED = SmartDashboard.getNumber("Cargo Shoot Speed", F_CARGO_SHOOT_SPEED);
 
-        shooterTimerMaxValue = (int) SmartDashboard.getNumber("Shooter Belt Timer Max", F_SHOOTER_TIMER_MAX);
-
         vision.setColor(true, 1, SmartDashboard.getNumber("H Upper", 360));
         vision.setColor(true, 2, SmartDashboard.getNumber("S Upper", 255));
         vision.setColor(true, 3, SmartDashboard.getNumber("V Upper", 255));
@@ -359,37 +384,4 @@ public class Robot extends TimedRobot {
         vision.setColor(false, 2, SmartDashboard.getNumber("S Lower", 0));
         vision.setColor(false, 3, SmartDashboard.getNumber("V Lower", 0));
     }
-
-    public void robotInit() {
-        this.setDashboard();
-    }
-
-    public void robotPeriodic() {
-        this.updateDashboard();
-        //vision.outputFrame(vision.getCurrentFrame());
-        //vision.processing();
-        //vision.ballInFrame();
-
-    }
-
-    public void autonomousInit() {
-
-    }
-
-    public void autonomousPeriodic() {
-        this.primusPeriodic();
-    }
-
-    public void teleopInit() {
-
-    }
-
-    public void teleopPeriodic() {
-        this.primusPeriodic();
-    }
-
-    public void testPeriodic() {
-        this.teleopPeriodic();
-    }
-
 }
