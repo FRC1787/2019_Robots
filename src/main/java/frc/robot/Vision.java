@@ -76,7 +76,7 @@ public class Vision {
     private volatile Mat blurFrame = new Mat();
     private volatile Mat contourFrame = new Mat();
     private volatile List<MatOfPoint> contours = new LinkedList<>();
-    private volatile List<Point> centroids = new ArrayList<>();
+    private volatile List<double[]> centroids = new ArrayList<>();
 
     private final Mat blankMat = new Mat();
 
@@ -110,7 +110,10 @@ public class Vision {
         if (cargoFrameGrabber == null) return;
 
         // Grab frame from cargo camera
-        cargoFrameGrabber.grabFrame(grabbedFrame);
+		cargoFrameGrabber.grabFrame(grabbedFrame);
+		
+		// If the frame is empty, return
+		if (grabbedFrame.empty()) return;
 
         // Convert color from BGR to HSV color space
         Imgproc.cvtColor(grabbedFrame,colorFrame, Imgproc.COLOR_BGR2HSV);
@@ -128,16 +131,18 @@ public class Vision {
         Imgproc.findContours(blurFrame, contours, blankMat, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 
         // Get the centroids
-        calculateCentroids(contours, centroids);
+		calculateCentroids(contours, centroids);
+		
+        for (double[] centroid : centroids) {
 
-        for (Point centroid : centroids) {
-            System.out.println(centroid.toString());
+			
         }
 
         outputStream.putFrame(erodeFrame);
     }
 
-    private synchronized void calculateCentroids(List<MatOfPoint> contours, List<Point> centroids) {
+    private synchronized void calculateCentroids(List<MatOfPoint> contours, List<double[]> centroids) {
+		centroids.clear();
         for (MatOfPoint m : contours) {
             // Get the moments from the contour
             Moments moments = Imgproc.moments(m);
@@ -148,7 +153,7 @@ public class Vision {
             double cy = moments.get_m01() / moments.get_m00();
 
             // Add point
-            centroids.add(new Point(cx, cy));
+            centroids.add(new double[]{cx, cy});
         }
     }
 
