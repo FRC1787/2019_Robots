@@ -75,6 +75,8 @@ public class Vision {
     private volatile Mat blurFrame = new Mat();
     private volatile Mat contourFrame = new Mat();
 
+    private static final int blurConstant = 5;
+
 
 
     //Default constructor for the vision class
@@ -101,11 +103,24 @@ public class Vision {
 
     public final void process() {
         if (cargoFrameGrabber == null) return;
+
+        // Grab frame from cargo camera
         cargoFrameGrabber.grabFrame(grabbedFrame);
+
+        // Convert color from BGR to HSV color space
         Imgproc.cvtColor(grabbedFrame,colorFrame, Imgproc.COLOR_BGR2HSV);
+
+        // Apply an HSV mask to find pixels within desired color range
         Core.inRange(colorFrame, new Scalar(168, 186, 87), new Scalar(180, 255, 255), maskFrame);
+
+        // Erode (why?)
         Imgproc.erode(maskFrame, erodeFrame, new Mat(), new Point(-1, -1), 1);
-        Imgproc.GaussianBlur(erodeFrame, blurFrame, new Size(7*6+1, 7*6+1), 7);
+
+        // Apply a blur to make contours a little smoother
+        Imgproc.GaussianBlur(erodeFrame, blurFrame, new Size(blurConstant * 6 + 1, blurConstant * 6 + 1), blurConstant);
+
+        // Find contours
+
         outputStream.putFrame(erodeFrame);
     }
 
