@@ -4,7 +4,12 @@ import javax.lang.model.util.ElementScanner6;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Ultrasonic;
+
+import edu.wpi.first.wpilibj.Servo;
 
 
 public class Robot extends TimedRobot {
@@ -59,10 +64,10 @@ public class Robot extends TimedRobot {
     private final double F_HATCH_DELIVER_SPEED = 1;
 
     /* Cargo Speeds */
-    private final double F_CARGO_MECHANISM_DEPLOY_SPEED = 0.25;
+    private final double F_CARGO_MECHANISM_DEPLOY_SPEED = 0.4;
     private final double F_CARGO_MECHANISM_STOW_SPEED = -0.20;
-    private final double F_CARGO_INTAKE_SPEED = -1;
-    private final double F_CARGO_SHOOT_SPEED = -0.5;
+    private final double F_CARGO_INTAKE_SPEED = -.9;
+    private final double F_CARGO_SHOOT_BELT_SPEED = -0.5;
 
 
     /* Hatch Speeds */
@@ -72,14 +77,16 @@ public class Robot extends TimedRobot {
     private double HATCH_DELIVER_SPEED = -1;
 
     /* Cargo Speeds */
-    private double CARGO_MECHANISM_DEPLOY_SPEED = 0.25;
+    private double CARGO_MECHANISM_DEPLOY_SPEED = 0.4;
     private double CARGO_MECHANISM_STOW_SPEED = -0.20;
-    private double CARGO_INTAKE_SPEED = 1;
-    private double CARGO_SHOOT_SPEED = 0.75;
+    private double CARGO_INTAKE_SPEED = .9;
+    private double CARGO_SHOOT_BELT_SPEED = 0.6;
+    private double CARGO_SHOOT_DRUM_SPEED = 0.4;
 
     /* Hatch Auto Variables */
     private int autoHatchCounter = 0;
     private int AUTO_HATCH_MAX = 50;
+    private final int HATCH_INTAKE_TIMER_MAX = 50;
 
     /* Joystick Swap */
     private boolean joyStickHatchMode = true;
@@ -89,51 +96,51 @@ public class Robot extends TimedRobot {
     private boolean engageShooterBelt = false;
     private int shooterTimer = 0;
     private double climbSliderValue = 0;
+    private int cargoIntakeTimer = 0;
+    private int hatchIntakeTimer = 0;
+    private int Poopy_Pin_Value = 1;
+
+    /* Jordan's Garbage */
+    private final Servo biccboy = new Servo(Poopy_Pin_Value);
+    private final Ultrasonic nogg = new Ultrasonic(9,9);
 
 
-
-    public void robotInit() {
+    public void robotInit() 
+    {
         this.setDashboard();
     }
 
-    public void robotPeriodic() {
+    public void robotPeriodic() 
+    {
         this.updateDashboard();
         this.setDashboard();
-        //vision.processing();
-        //vision.ballInFrame();
     }
 
-    public void autonomousInit() {
+    public void autonomousInit() {}
 
-    }
-
-    public void autonomousPeriodic() {
-        if (autoHatchCounter < AUTO_HATCH_MAX)
-            hatch.grabHatch(HATCH_INTAKE_SPEED);
-        else if (autoHatchCounter == AUTO_HATCH_MAX)
-            hatch.articulateHatch(HATCH_DEPLOY_SPEED);
-        else
-            this.primusPeriodic();
-    }
-
-    public void teleopInit() {
-
-    }
-
-    public void teleopPeriodic() {
+    public void autonomousPeriodic() 
+    {
         this.primusPeriodic();
     }
 
-    public void testPeriodic() {
+    public void teleopInit() {}
+
+    public void teleopPeriodic() 
+    {
+        this.primusPeriodic();
+    }
+
+    public void testPeriodic() 
+    {
         this.primusPeriodic();
     }
 
 
 
-    public void primusPeriodic() {
-        //vision.processing();
-        //vision.process();
-
+    public void primusPeriodic() 
+    {
+       
+            
 
 
         /* *********************************** */
@@ -191,12 +198,27 @@ public class Robot extends TimedRobot {
             /* ************************* */
 
             // Intake hatch
-            if (rightJoyStick.getRawButton(INTAKE_BTN_ID) && !hatch.getHatchIntakedSwitchState())
+            if (rightJoyStick.getRawButton(INTAKE_BTN_ID) && !hatch.isHatchOn())
+            {
                 hatch.grabHatch(HATCH_INTAKE_SPEED);
+            }
 
             // Stop once hatch is on and limit switch is pressed
-            if (!rightJoyStick.getRawButton(DELIVER_BTN_ID) && hatch.getHatchIntakedSwitchState())
+            if (!rightJoyStick.getRawButton(DELIVER_BTN_ID) && hatch.isHatchOn())
+            {
+                hatch.grabHatch(-.09);
+            }
+
+            if(!rightJoyStick.getRawButton(DELIVER_BTN_ID) && !rightJoyStick.getRawButton(INTAKE_BTN_ID) && (hatch.getHatchIntakedSwitchOneState() || hatch.getHatchIntakedSwitchTwoState()))
+            {
+                    hatch.grabHatch(-.09);
+            }
+
+            //Stop inakting
+            if(!rightJoyStick.getRawButton(DELIVER_BTN_ID) && !rightJoyStick.getRawButton(INTAKE_BTN_ID) && !hatch.getHatchIntakedSwitchOneState() && !hatch.getHatchIntakedSwitchTwoState())
+            {
                 hatch.grabHatch(0);
+            }
 
 
             // Deliver hatch
@@ -204,18 +226,20 @@ public class Robot extends TimedRobot {
                 hatch.grabHatch(HATCH_DELIVER_SPEED);
 
             // Stop delivering once no button is being pressed
-            if (!rightJoyStick.getRawButton(DELIVER_BTN_ID) && !rightJoyStick.getRawButton(INTAKE_BTN_ID) && !hatch.getHatchIntakedSwitchState())
-                hatch.grabHatch(0);
+            // if (!rightJoyStick.getRawButton(DELIVER_BTN_ID) && !rightJoyStick.getRawButton(INTAKE_BTN_ID) && !hatch.isHatchOn())
+            //     hatch.grabHatch(0);
 
 
             
             /* **************** */
-            /* CARGO INTAKE FIX */
+            /*   CARGO INTAKE   */
             /* **************** */
 
             // Stow cargo intake mechanism
             if (!cargo.getCargoIntakeMechanismStowedSwitchState())
+            {
                 cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
+            }
 
             // Stop stow once the stow limit switch is hit
             if (cargo.getCargoIntakeMechanismStowedSwitchState())
@@ -261,13 +285,24 @@ public class Robot extends TimedRobot {
                 cargo.articulateCargoIntake(0);
 
             // Intake cargo: deploy the intake, then spin the wheels
-            if (rightJoyStick.getRawButton(INTAKE_BTN_ID)) {
+            if (rightJoyStick.getRawButton(INTAKE_BTN_ID)) 
+            {
+                // if(cargoIntakeTimer % 25 >= 4)
+                // {
                 cargo.intakeCargo(CARGO_INTAKE_SPEED);
+                // }
+                // else
+                // {
+                //     cargo.intakeCargo(.1);
+                // }
+                // cargoIntakeTimer ++;
                 cargo.deployCargoIntake(CARGO_MECHANISM_DEPLOY_SPEED);
             }
 
             //Stop intake wheels,
-            if (!rightJoyStick.getRawButton(INTAKE_BTN_ID) && !leftJoyStick.getRawButton(DEPLOY_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState()) {
+            if (!rightJoyStick.getRawButton(INTAKE_BTN_ID) && !leftJoyStick.getRawButton(DEPLOY_BTN_ID) && !cargo.getCargoIntakeMechanismStowedSwitchState()) 
+            {
+                cargoIntakeTimer = 0;
                 cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
                 cargo.intakeCargo(0);
             }
@@ -281,7 +316,7 @@ public class Robot extends TimedRobot {
             // Spin intake wheels as long as button is pressed
             if (rightJoyStick.getRawButton(DELIVER_BTN_ID))
             {
-                cargo.intakeCargo(CARGO_SHOOT_SPEED);
+                cargo.intakeCargo(-CARGO_SHOOT_DRUM_SPEED);
             }
             
             if (rightJoyStick.getRawButtonReleased(DELIVER_BTN_ID))
@@ -297,7 +332,7 @@ public class Robot extends TimedRobot {
 
                 if (shooterTimer <= 50) 
                 {
-                  cargo.shootCargo(CARGO_SHOOT_SPEED);
+                  cargo.shootCargo(-CARGO_SHOOT_BELT_SPEED);
                   shooterTimer++;
                 }
 
@@ -355,7 +390,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Cargo Deploy Speed", F_CARGO_MECHANISM_DEPLOY_SPEED);
         SmartDashboard.putNumber("Cargo Stow Speed", F_CARGO_MECHANISM_STOW_SPEED);
         SmartDashboard.putNumber("Cargo Intake Speed", F_CARGO_INTAKE_SPEED);
-        SmartDashboard.putNumber("Cargo Shoot Speed", F_CARGO_SHOOT_SPEED);
+        SmartDashboard.putNumber("Cargo Shoot Speed", F_CARGO_SHOOT_BELT_SPEED);
 
         SmartDashboard.putBoolean("Drive Mode", joyStickCargoMode);
 
@@ -379,7 +414,7 @@ public class Robot extends TimedRobot {
         CARGO_MECHANISM_DEPLOY_SPEED = SmartDashboard.getNumber("Cargo Deploy Speed", F_CARGO_MECHANISM_DEPLOY_SPEED);
         CARGO_MECHANISM_STOW_SPEED = SmartDashboard.getNumber("Cargo Stow Speed", F_CARGO_MECHANISM_STOW_SPEED);
         CARGO_INTAKE_SPEED = SmartDashboard.getNumber("Cargo Intake Speed", F_CARGO_INTAKE_SPEED);
-        CARGO_SHOOT_SPEED = SmartDashboard.getNumber("Cargo Shoot Speed", F_CARGO_SHOOT_SPEED);
+        CARGO_SHOOT_BELT_SPEED = SmartDashboard.getNumber("Cargo Shoot Speed", F_CARGO_SHOOT_BELT_SPEED);
 
         vision.setColor(true, 1, SmartDashboard.getNumber("H Upper", 360));
         vision.setColor(true, 2, SmartDashboard.getNumber("S Upper", 255));
