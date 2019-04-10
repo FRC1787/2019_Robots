@@ -86,10 +86,9 @@ public class Robot extends TimedRobot {
     private boolean joyStickCargoMode = false;
 
     /* Other Variables */
-    private boolean climbInitiated = false;
     private boolean engageShooterBelt = false;
     private int shooterTimer = 0;
-    private boolean climbDirectionExtend = true;
+    private double climbSliderValue = 0;
 
 
 
@@ -99,7 +98,7 @@ public class Robot extends TimedRobot {
 
     public void robotPeriodic() {
         this.updateDashboard();
-        //vision.outputFrame(vision.getCurrentFrame());
+        this.setDashboard();
         //vision.processing();
         //vision.ballInFrame();
     }
@@ -133,7 +132,7 @@ public class Robot extends TimedRobot {
 
     public void primusPeriodic() {
         //vision.processing();
-        vision.process();
+        //vision.process();
 
 
 
@@ -185,11 +184,6 @@ public class Robot extends TimedRobot {
             // Stop stow once the stow limit switch is pressed
             if (!rightJoyStick.getRawButton(DEPLOY_BTN_ID) && hatch.getHatchMechanismStowedSwitchState())
                 hatch.articulateHatch(0);
-
-            // If hatch is on the mechanism don't move anything
-            if (hatch.getHatchIntakedSwitchState())
-                hatch.articulateHatch(0);
-
 
 
             /* ************************* */
@@ -286,22 +280,34 @@ public class Robot extends TimedRobot {
 
             // Spin intake wheels as long as button is pressed
             if (rightJoyStick.getRawButton(DELIVER_BTN_ID))
+            {
                 cargo.intakeCargo(CARGO_SHOOT_SPEED);
-
-            engageShooterBelt = rightJoyStick.getRawButtonReleased(DELIVER_BTN_ID);
+            }
+            
+            if (rightJoyStick.getRawButtonReleased(DELIVER_BTN_ID))
+            {
+              engageShooterBelt = true;
+            }
 
             // Engage shooting belt, once the button is released
-            if (engageShooterBelt) {
+            if (engageShooterBelt) 
+            {
                 cargo.stowCargoIntake(-0.5);
                 cargo.intakeCargo(0);
-                if (shooterTimer <= 100) {
-                    cargo.shootCargo(CARGO_SHOOT_SPEED);
-                } else {
-                    cargo.shootCargo(0);
-                    engageShooterBelt = false;
-                    shooterTimer = 0;
+
+                if (shooterTimer <= 50) 
+                {
+                  cargo.shootCargo(CARGO_SHOOT_SPEED);
+                  shooterTimer++;
                 }
-                shooterTimer++;
+
+                else 
+                {
+                  cargo.shootCargo(0);
+                  engageShooterBelt = false;
+                  shooterTimer = 0;
+                }
+
             }
 
             if (!rightJoyStick.getRawButton(DELIVER_BTN_ID) && !engageShooterBelt) {
@@ -316,6 +322,7 @@ public class Robot extends TimedRobot {
         /* CLIMB CONTROLS */
         /* ************** */
 
+        /*
         // Climb direction switch trigger & back button
         if (leftJoyStick.getRawButtonPressed(CLIMB_DIRECTION_EXTEND_BTN_ID))
             climbDirectionExtend = true;
@@ -325,21 +332,18 @@ public class Robot extends TimedRobot {
 
 
         // Climb action controls
-        climbInitiated = !joyStickHatchMode && rightJoyStick.getRawButton(CLIMB_INITIATION_BTN);
+        climbInitiated = rightJoyStick.getRawButton(CLIMB_INITIATION_BTN);
+        */
 
 
-        if (climbInitiated) {
-            // If statement determining the direction of the climb
-            if (climbDirectionExtend)
-                climb.moveClimber(climb.sliderCorrection(leftJoyStick));
-            else
-                climb.moveClimber(-climb.sliderCorrection(leftJoyStick));
-        }
+        climbSliderValue = climb.sliderCorrection(leftJoyStick);
 
-        if (!joyStickHatchMode && rightJoyStick.getRawButton(STOP_CLIMB_BTN))
-            climbInitiated = false;
-
-        if (!climbInitiated) climb.moveClimber(0);
+        if (leftJoyStick.getRawButton(CLIMB_DIRECTION_EXTEND_BTN_ID))
+            climb.moveClimber(-climbSliderValue);
+        else if (leftJoyStick.getRawButton(CLIMB_DIRECTION_RETRACT_BTN_ID))
+            climb.moveClimber(climbSliderValue);
+        else
+            climb.moveClimber(0);
     }
 
     public void setDashboard() {
@@ -353,9 +357,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Cargo Intake Speed", F_CARGO_INTAKE_SPEED);
         SmartDashboard.putNumber("Cargo Shoot Speed", F_CARGO_SHOOT_SPEED);
 
-        SmartDashboard.putBoolean("Cargo Mode", joyStickCargoMode);
-        SmartDashboard.putBoolean("Hatch Mode", joyStickHatchMode);
-
+        SmartDashboard.putBoolean("Drive Mode", joyStickCargoMode);
 
         SmartDashboard.putNumber("H Upper", vision.HSV_THRESHOLD_UPPER.val[0]);
         SmartDashboard.putNumber("S Upper", vision.HSV_THRESHOLD_UPPER.val[1]);
@@ -363,6 +365,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("H Lower", vision.HSV_THRESHOLD_LOWER.val[0]);
         SmartDashboard.putNumber("S Lower", vision.HSV_THRESHOLD_LOWER.val[1]);
         SmartDashboard.putNumber("V Lower", vision.HSV_THRESHOLD_LOWER.val[2]);
+
+        SmartDashboard.putNumber("Climb Motor Speed", climbSliderValue);
 
     }
 
