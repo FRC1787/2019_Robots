@@ -9,6 +9,11 @@ public final class Hatch
     // Hatch motor controller variables
     private static final int HATCH_GRABBING_MOTOR_ID = 7;
     private static final int HATCH_ARTICULATING_MOTOR_ID = 12;
+
+
+    /////////////////////////////////
+    private final int HATCH_TEST_MOTOR_ID = 4;
+    private final WPI_VictorSPX hatchTestMotor = new WPI_VictorSPX(HATCH_TEST_MOTOR_ID);
     
     // Construct motor controller objects
     private final WPI_VictorSPX hatchGrabber = new WPI_VictorSPX(HATCH_GRABBING_MOTOR_ID);
@@ -17,12 +22,18 @@ public final class Hatch
     // Hatch limit switch variables
     private static final int HATCH_MECHANISM_DEPLOYED_LIMITSWITCH_CHANNEL = 0;
     private static final int HATCH_MECHANISM_STOWED_LIMITSWITCH_CHANNEL = 1;
-    private static final int HATCH_INTAKE_LIMITSWITCH_CHANNEL = 2;
+    private static final int HATCH_INTAKE_LIMITSWITCH_ONE_CHANNEL = 2;
+    private static final int HATCH_INAKE_LIMITSWITCH_TWO_CHANNRL = 5;
     
     // Construct hatch limit switch objects
     private final DigitalInput hatchMechanismDeployedSwitch = new DigitalInput(HATCH_MECHANISM_DEPLOYED_LIMITSWITCH_CHANNEL);
     private final DigitalInput hatchMechanismStowedSwitch = new DigitalInput(HATCH_MECHANISM_STOWED_LIMITSWITCH_CHANNEL);
-    private final DigitalInput hatchIntakedSwitch = new DigitalInput(HATCH_INTAKE_LIMITSWITCH_CHANNEL);
+        //When your looking at front of the hatch one is right, two is left
+    private final DigitalInput hatchIntakedSwitchOne = new DigitalInput(HATCH_INTAKE_LIMITSWITCH_ONE_CHANNEL);
+    private final DigitalInput hatchItnakedSwitchTwo = new DigitalInput(HATCH_INAKE_LIMITSWITCH_TWO_CHANNRL);
+
+    private boolean hatchIntaked = false;
+    private boolean hatchLost = false;
 
     // Singleton instance
     private static final Hatch instance = new Hatch();
@@ -63,9 +74,52 @@ public final class Hatch
         return hatchMechanismStowedSwitch.get();
     }
     
-    public boolean getHatchIntakedSwitchState()
+    public boolean getHatchIntakedSwitchOneState()
     {
-        return hatchIntakedSwitch.get();
+        return hatchIntakedSwitchOne.get();
+    }
+
+    public boolean getHatchIntakedSwitchTwoState()
+    {
+        return hatchItnakedSwitchTwo.get();
+    }
+
+    public boolean isHatchOn()
+    {
+        if(hatchIntakedSwitchOne.get() && hatchItnakedSwitchTwo.get())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isHatchReleased()
+    { 
+        if(isHatchOn())
+        {
+            hatchIntaked = true;
+        }
+        if(hatchIntaked)
+        {
+            if((getHatchIntakedSwitchOneState() && !getHatchIntakedSwitchTwoState()) || (!getHatchIntakedSwitchOneState() && getHatchIntakedSwitchTwoState()))
+            {
+                hatchLost = true;
+            }
+        }
+        
+        if(hatchIntaked && hatchLost)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void testMotor(double speed)
+    {
+        hatchTestMotor.set(speed);
     }
 
 }
+
+
+//111010100001010101011110101110101101010010011011101010100100010010101111010101010111010001010100010100111011110101001001010100101110101000010111011011011101011110101101101101011
