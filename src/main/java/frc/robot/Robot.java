@@ -1,8 +1,7 @@
 package frc.robot;
 
-import javax.lang.model.util.ElementScanner6;
-
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -24,6 +23,7 @@ public class Robot extends TimedRobot {
     private final DriveTrain driveTrain = DriveTrain.getInstance();
     private final Hatch hatch = Hatch.getInstance();
     private final Vision vision = Vision.getInstance();
+    private final Sensor sensor = Sensor.getInstance();
 
     /* Joystick IDs */
     private static final int RIGHT_JOYSTICK_ID = 0;
@@ -54,39 +54,50 @@ public class Robot extends TimedRobot {
     private final int Toggle = 11;
 
     private boolean togglePressed = false;
+    
 
     /* WORKING VALUES */
 
     /* Hatch Speeds */
     private final double F_HATCH_DEPLOY_SPEED = -0.9;
     private final double F_HATCH_STOW_SPEED = 0.9;
-    private final double F_HATCH_INTAKE_SPEED = -1;
+    private final double F_HATCH_INTAKE_SPEED = -.4;
     private final double F_HATCH_DELIVER_SPEED = 1;
 
     /* Cargo Speeds */
     private final double F_CARGO_MECHANISM_DEPLOY_SPEED = 0.4;
-    private final double F_CARGO_MECHANISM_STOW_SPEED = -0.20;
-    private final double F_CARGO_INTAKE_SPEED = -.9;
+    private final double F_CARGO_MECHANISM_STOW_SPEED = -0.40;
+    private final double F_CARGO_INTAKE_SPEED = -.9 ;
     private final double F_CARGO_SHOOT_BELT_SPEED = -0.5;
 
 
     /* Hatch Speeds */
     private double HATCH_DEPLOY_SPEED = -0.9;
     private double HATCH_STOW_SPEED = 0.9;
-    private double HATCH_INTAKE_SPEED = 1;
-    private double HATCH_DELIVER_SPEED = -1;
+    private double HATCH_INTAKE_SPEED = 0.375;
+    private double HATCH_DELIVER_SPEED = -1.0;
+    private double HATCH_BACK_DRIVE_SPEED = 0.1;
 
     /* Cargo Speeds */
     private double CARGO_MECHANISM_DEPLOY_SPEED = 0.4;
-    private double CARGO_MECHANISM_STOW_SPEED = -0.20;
+    private double CARGO_MECHANISM_STOW_SPEED = -0.4;
     private double CARGO_INTAKE_SPEED = .9;
-    private double CARGO_SHOOT_BELT_SPEED = 0.6;
-    private double CARGO_SHOOT_DRUM_SPEED = 0.4;
+    private double CARGO_SHOOT_BELT_SPEED = 1;
+    private double CARGO_SHOOT_DRUM_SPEED = 0.6;
 
     /* Hatch Auto Variables */
     private int autoHatchCounter = 0;
     private int AUTO_HATCH_MAX = 50;
     private final int HATCH_INTAKE_TIMER_MAX = 50;
+
+    /* Hatch Amp Limit Variables */
+    private final double F_HATCH_AMP_LIMIT = 5.5;
+    private final double F_HATCH_TIMEOUT = 20.0;
+
+    private double hatchAmpLimit = 5.5;
+    private double hatchTimeout = 20.0;
+    private final int HATCH_POWER_PORT = 3;
+    private final double CLIMB_MOTOR_AMP_LIMIT = 10;
 
     /* Joystick Swap */
     private boolean joyStickHatchMode = true;
@@ -99,10 +110,12 @@ public class Robot extends TimedRobot {
     private int cargoIntakeTimer = 0;
     private int hatchIntakeTimer = 0;
     private int Poopy_Pin_Value = 1;
-
-    /* Jordan's Garbage */
-    private final Servo biccboy = new Servo(Poopy_Pin_Value);
-    private final Ultrasonic nogg = new Ultrasonic(9,9);
+    private int climbRetractCounter = 0; 
+    private boolean climbDone = false;
+    private boolean runMotorTest = false;
+    private boolean backDriveHatch = true;
+    private boolean retractClimber = false;
+    public boolean movingthething = true;
 
 
     public void robotInit() 
@@ -112,36 +125,157 @@ public class Robot extends TimedRobot {
 
     public void robotPeriodic() 
     {
+        System.out.println(hatch.encoderPosition());
         this.updateDashboard();
         this.setDashboard();
+        
     }
 
     public void autonomousInit() {}
 
     public void autonomousPeriodic() 
     {
-        this.primusPeriodic();
+        this.teleopPeriodic();
     }
 
-    public void teleopInit() {}
+    public void teleopInit()
+    {
+        climbDone = false;
+    }
 
     public void teleopPeriodic() 
     {
         this.primusPeriodic();
+
+        climb.setBrakeMode();
     }
+
+
+    public void testInit()
+    {
+        runMotorTest = false;
+    }
+
 
     public void testPeriodic() 
     {
-        this.primusPeriodic();
+
+        System.out.println("Motor Speed: " + hatch.getHatchGrabberSpeed() + ", Amperage: " + hatch.getHatchGrabberCurrent());
+
+        if (leftJoyStick.getRawButton(1))
+        {
+            runMotorTest = true;
+        }
+
+        else if (leftJoyStick.getRawButton(2))
+        {
+            runMotorTest = false;
+        }
+
+
+        if (runMotorTest)
+        {
+            if (hatch.getHatchGrabberCurrent() >= 3.6)
+            {
+                runMotorTest = false;
+            }
+            hatch.grabHatch(1);
+        }
+
+        else if (!runMotorTest)
+        {
+            hatch.grabHatch(0.00);
+        }
+
+
+        if (leftJoyStick.getRawButton(CLIMB_DIRECTION_EXTEND_BTN_ID) && !leftJoyStick.getRawButton(CLIMB_DIRECTION_RETRACT_BTN_ID))
+        { 
+            cargo.intakeCargo(-.45);
+
+            if(climbSliderValue < 1)
+            {
+                climbSliderValue += 0.025;
+            }
+            else
+            {
+                climbSliderValue = 1;
+            }
+
+            if(climb.getClimberMotorCurrent() < CLIMB_MOTOR_AMP_LIMIT)
+            {
+                if(!climb.climberFullyExtended())
+                {
+                    climb.moveClimber(climbSliderValue);
+                }
+                else
+                {
+                    climb.moveClimber(0);
+                }
+            }
+            else
+            {
+                climb.moveClimber(0);   
+            }
+        }
+
+        if(leftJoyStick.getRawButtonReleased(CLIMB_DIRECTION_EXTEND_BTN_ID))
+        {
+            retractClimber = true;
+        }
+
+        if(retractClimber)
+        {
+            if(climb.getClimberMotorCurrent() < CLIMB_MOTOR_AMP_LIMIT)
+            {
+                climb.moveClimber(-0.5);
+            }
+            else
+            {
+                climb.moveClimber(0);
+                retractClimber = false;
+            }
+        }
+
+
+        //Retract Climber
+        if (leftJoyStick.getRawButton(CLIMB_DIRECTION_RETRACT_BTN_ID) && !leftJoyStick.getRawButton(CLIMB_DIRECTION_EXTEND_BTN_ID))
+        {
+            if(climb.getClimberMotorCurrent() < CLIMB_MOTOR_AMP_LIMIT)
+            {
+                if(!climb.climberFullyRetracted())
+                {
+                    climb.moveClimber(-0.5);
+                }
+
+                else
+                {
+                    climb.moveClimber(0);
+                }
+                cargo.intakeCargo(0);
+            }
+
+            else
+            {
+                climb.moveClimber(0);
+            }
+        }
+
+
+
+        if(!leftJoyStick.getRawButton(CLIMB_DIRECTION_EXTEND_BTN_ID) && !leftJoyStick.getRawButton(CLIMB_DIRECTION_RETRACT_BTN_ID) && !rightJoyStick.getRawButton(INTAKE_BTN_ID) && !rightJoyStick.getRawButton(DELIVER_BTN_ID) )
+        {
+            climb.moveClimber(0);
+            cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
+            cargo.intakeCargo(0);
+        }
+
+
     }
 
 
 
     public void primusPeriodic() 
     {
-       
-            
-
 
         /* *********************************** */
         /* TOGGLE RIGHT JOYSTICK CONTROL MODES */
@@ -151,6 +285,8 @@ public class Robot extends TimedRobot {
         if (leftJoyStick.getRawButtonPressed(JOYSTICK_CARGO_MODE_BTN_ID)) {
             joyStickHatchMode = false;
             joyStickCargoMode = true;
+            
+            hatch.grabHatch(0);
         }
 
         // Switches joystick to hatch mode
@@ -197,39 +333,79 @@ public class Robot extends TimedRobot {
             /* HATCH INTAKE AND DELIVERY */
             /* ************************* */
 
+            System.out.println("Motor Speed: " + hatch.getHatchGrabberSpeed() + ", Amperage: " + hatch.getHatchGrabberCurrent());
+
+            if (rightJoyStick.getRawButton(INTAKE_BTN_ID))
+            {
+                backDriveHatch = false;
+            }
+
+            else if (rightJoyStick.getRawButton(DELIVER_BTN_ID))
+            {
+                backDriveHatch = true;
+            }
+
+            else
+            {
+                backDriveHatch = true;
+            }
+
+            
+                if (!backDriveHatch)
+                {
+                    //backDriveHatch = false;
+                    hatch.grabHatch(-HATCH_INTAKE_SPEED);
+                    movingthething = true;
+                }
+                else if (hatch.getHatchGrabberCurrent() >= 7 && movingthething == true)
+                {
+                    backDriveHatch = true;
+                }
+                else
+                {
+                    movingthething = false;
+                }
+                
+                
+
+            if (backDriveHatch && joyStickHatchMode)
+            {
+                if (rightJoyStick.getRawButton(DELIVER_BTN_ID))
+                {
+                    hatch.grabHatch(-HATCH_DELIVER_SPEED);
+                }
+                else
+                {
+                    hatch.grabHatch(HATCH_BACK_DRIVE_SPEED);
+                }
+                
+            }
+        
+
+            /*
             // Intake hatch
-            if (rightJoyStick.getRawButton(INTAKE_BTN_ID) && !hatch.isHatchOn())
+            if (rightJoyStick.getRawButton(INTAKE_BTN_ID) && !rightJoyStick.getRawButton(DELIVER_BTN_ID))
             {
                 hatch.grabHatch(HATCH_INTAKE_SPEED);
             }
 
             // Stop once hatch is on and limit switch is pressed
-            if (!rightJoyStick.getRawButton(DELIVER_BTN_ID) && hatch.isHatchOn())
+            if (!rightJoyStick.getRawButton(DELIVER_BTN_ID) && !rightJoyStick.getRawButton(INTAKE_BTN_ID))
             {
                 hatch.grabHatch(-.09);
             }
 
-            if(!rightJoyStick.getRawButton(DELIVER_BTN_ID) && !rightJoyStick.getRawButton(INTAKE_BTN_ID) && (hatch.getHatchIntakedSwitchOneState() || hatch.getHatchIntakedSwitchTwoState()))
-            {
-                    hatch.grabHatch(-.09);
-            }
-
-            //Stop inakting
-            if(!rightJoyStick.getRawButton(DELIVER_BTN_ID) && !rightJoyStick.getRawButton(INTAKE_BTN_ID) && !hatch.getHatchIntakedSwitchOneState() && !hatch.getHatchIntakedSwitchTwoState())
-            {
-                hatch.grabHatch(0);
-            }
-
 
             // Deliver hatch
-            if (rightJoyStick.getRawButton(DELIVER_BTN_ID))
+            if (rightJoyStick.getRawButton(DELIVER_BTN_ID) && !rightJoyStick.getRawButton(INTAKE_BTN_ID))
+            {
                 hatch.grabHatch(HATCH_DELIVER_SPEED);
+            }
 
             // Stop delivering once no button is being pressed
             // if (!rightJoyStick.getRawButton(DELIVER_BTN_ID) && !rightJoyStick.getRawButton(INTAKE_BTN_ID) && !hatch.isHatchOn())
             //     hatch.grabHatch(0);
-
-
+            */
             
             /* **************** */
             /*   CARGO INTAKE   */
@@ -254,7 +430,8 @@ public class Robot extends TimedRobot {
         /* CARGO JOYSTICK & CARGO ORIENTED DRIVE */
         /* ************************************* */
 
-        if (joyStickCargoMode && !joyStickHatchMode) {
+        if (joyStickCargoMode && !joyStickHatchMode) 
+        {
             // Switches the orientation of the drive so that the front of the robot is the cargo
             driveTrain.arcadeDrive(rightJoyStick.getX(), -rightJoyStick.getY());
 
@@ -370,15 +547,54 @@ public class Robot extends TimedRobot {
         climbInitiated = rightJoyStick.getRawButton(CLIMB_INITIATION_BTN);
         */
 
+ 
+        // climbSliderValue = climb.sliderCorrection(leftJoyStick);
 
-        climbSliderValue = climb.sliderCorrection(leftJoyStick);
+        //Extend climber
+        if (leftJoyStick.getRawButton(CLIMB_DIRECTION_EXTEND_BTN_ID) && !leftJoyStick.getRawButton(CLIMB_DIRECTION_RETRACT_BTN_ID))
+        { 
+            cargo.intakeCargo(-.45);
 
-        if (leftJoyStick.getRawButton(CLIMB_DIRECTION_EXTEND_BTN_ID))
-            climb.moveClimber(-climbSliderValue);
-        else if (leftJoyStick.getRawButton(CLIMB_DIRECTION_RETRACT_BTN_ID))
-            climb.moveClimber(climbSliderValue);
-        else
+            if(climbSliderValue < 1)
+            {
+                climbSliderValue += 0.025;
+            }
+            else
+            {
+                climbSliderValue = 1;
+            }
+
+            if(!climb.climberFullyExtended())
+            {
+                climb.moveClimber(climbSliderValue);
+            }
+            else
+            {
+                climb.moveClimber(0);
+            }
+        }
+
+
+        //Retract Climber
+        if (leftJoyStick.getRawButton(CLIMB_DIRECTION_RETRACT_BTN_ID) && !leftJoyStick.getRawButton(CLIMB_DIRECTION_EXTEND_BTN_ID))
+        {
+            if(!climb.climberFullyRetracted())
+            {
+            climb.moveClimber(-0.5);
+            }
+            else
+            {
+                climb.moveClimber(0);
+            }
+            cargo.intakeCargo(0);
+        }
+
+        if(!leftJoyStick.getRawButton(CLIMB_DIRECTION_EXTEND_BTN_ID) && !leftJoyStick.getRawButton(CLIMB_DIRECTION_RETRACT_BTN_ID) && !rightJoyStick.getRawButton(INTAKE_BTN_ID) && !rightJoyStick.getRawButton(DELIVER_BTN_ID) )
+        {
             climb.moveClimber(0);
+            cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
+            cargo.intakeCargo(0);
+        }
     }
 
     public void setDashboard() {
@@ -403,6 +619,12 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putNumber("Climb Motor Speed", climbSliderValue);
 
+        SmartDashboard.putNumber("Hatch Amp Limit", F_HATCH_AMP_LIMIT);
+        SmartDashboard.putNumber("Hatch Amp Timeout", F_HATCH_TIMEOUT);
+        SmartDashboard.putNumber("Inches Output", sensor.getSense());
+
+
+
     }
 
     public void updateDashboard() {
@@ -422,5 +644,9 @@ public class Robot extends TimedRobot {
         vision.setColor(false, 1, SmartDashboard.getNumber("H Lower", 0));
         vision.setColor(false, 2, SmartDashboard.getNumber("S Lower", 0));
         vision.setColor(false, 3, SmartDashboard.getNumber("V Lower", 0));
+
+        hatchAmpLimit = (int) SmartDashboard.getNumber("Hatch Amp Limit", F_HATCH_AMP_LIMIT);
+        hatchTimeout = (int) SmartDashboard.getNumber("Hatch Timeout", F_HATCH_TIMEOUT);
+
     }
 }
