@@ -7,9 +7,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.Encoder;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.wpilibj.Servo;
 
@@ -28,6 +30,9 @@ public class Robot extends TimedRobot {
     private final Vision vision = Vision.getInstance();
     private final Sensor sensor = Sensor.getInstance();
 
+    /* NavX Setup */
+    public static AHRS navX = new AHRS(SPI.Port.kMXP);
+
     /* Joystick IDs */
     private static final int RIGHT_JOYSTICK_ID = 0;
     private static final int LEFT_JOYSTICK_ID = 1;
@@ -35,9 +40,6 @@ public class Robot extends TimedRobot {
     /* Joystick Instances */
     private final Joystick rightJoyStick = new Joystick(RIGHT_JOYSTICK_ID);
     private final Joystick leftJoyStick = new Joystick(LEFT_JOYSTICK_ID);
-
-    /* NavX Object */
-    public AHRS navX = new AHRS(SerialPort.Port.kMXP);
 
     /* Joystick Axis */
     private static final int JOYSTICK_ROTATION_AXIS = 2;
@@ -75,7 +77,6 @@ public class Robot extends TimedRobot {
     private final double F_CARGO_MECHANISM_STOW_SPEED = -0.40;
     private final double F_CARGO_INTAKE_SPEED = -.9 ;
     private final double F_CARGO_SHOOT_BELT_SPEED = -0.5;
-
 
     /* Hatch Speeds */
     private double HATCH_DEPLOY_SPEED = -0.9;
@@ -119,8 +120,6 @@ public class Robot extends TimedRobot {
     private boolean backDriveHatch = true;
     private boolean retractClimber = false;
     public boolean movingthething = true;
-
-
 
 
     public void robotInit() 
@@ -167,7 +166,14 @@ public class Robot extends TimedRobot {
 
 
 
-
+        if (rightJoyStick.getRawButton(1))
+        {
+            driveTrain.seekDrive();   
+        }
+        else
+        {
+            driveTrain.tankDrive(0,0);
+        }
        /* if (leftJoyStick.getRawButton(1))
         {
             runMotorTest = true;
@@ -599,6 +605,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber(   "IMU_Yaw",              navX.getYaw());
         SmartDashboard.putNumber(   "IMU_Pitch",            navX.getPitch());
         SmartDashboard.putNumber(   "IMU_Roll",             navX.getRoll());
+
+        SmartDashboard.putNumber("motorpwr", DriveTrain.pIDDrive(40, navX.getYaw()));
 
     }
 

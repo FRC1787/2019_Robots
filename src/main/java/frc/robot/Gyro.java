@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-public final class Gyro {
-
-
-
+public class Gyro {
+    
 }

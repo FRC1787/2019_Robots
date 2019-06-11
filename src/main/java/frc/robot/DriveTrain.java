@@ -4,6 +4,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Joystick;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 
 public final class DriveTrain {
 
@@ -29,6 +32,20 @@ public final class DriveTrain {
 
     private double leftDriveVoltage;
     private double rightDriveVoltage;
+
+    //final PID values
+    private final static double PROPORTIONAL_TWEAK_CONSTANT = 0.0065; //0.0065
+    private final static double INTEGRAL_TWEAK_CONSTANT = 0.0; //.000007
+    private final static double DERIVATIVE__TWEAK_CONSTANT = 0.0;
+    private final static double ACCEPTABLE_ERROR_RANGE = 0.0;
+
+    //PID variables 
+    private static double error = 0;
+    private static double proportional = 0;
+    private static double derivative = 0;
+    private static double integral = 0; 
+    private static double previousError = 0;
+    private static double pIDMotorVoltage = 0;
 
     private DriveTrain() {
         leftMaster.setInverted(LEFT_MASTER_INVERTED);
@@ -125,5 +142,47 @@ public final class DriveTrain {
         rightMaster.set(rightSide);
         leftFollower.set(leftSide);
         rightFollower.set(rightSide);
+    }
+
+    public void seekDrive()
+    {
+        tankDrive(pIDDrive(40, Robot.navX.getYaw()), pIDDrive(40, Robot.navX.getYaw()));
+    }
+
+    public static double pIDDrive(double targetDiatance, double actualValue ) // enter target distance in feet
+	{ 
+
+		
+		error = targetDiatance - (actualValue);
+		proportional = error;
+		derivative = (previousError - error)/ 0.02;
+		integral += previousError;
+		previousError = error;
+
+		if (error > ACCEPTABLE_ERROR_RANGE || error < -ACCEPTABLE_ERROR_RANGE )
+		{
+			pIDMotorVoltage = truncateMotorOutput((PROPORTIONAL_TWEAK_CONSTANT * proportional) + (DERIVATIVE__TWEAK_CONSTANT * derivative) + (INTEGRAL_TWEAK_CONSTANT * integral));
+			return pIDMotorVoltage;
+		}
+		else
+		{
+			proportional = 0;
+			integral = 0;
+			derivative = 0;
+			previousError = 0;
+			return 0;
+		}
+		
+    }
+    
+    private static double truncateMotorOutput(double motorOutput) //Whatever the heck Jake and Van did
+    {
+          if (motorOutput > 1) {
+              return 0.5;
+          } else if (motorOutput < -1) {
+              return -0.5;
+          } else {
+              return motorOutput;
+          }
     }
 }
