@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
     private final Vision vision = Vision.getInstance();
     private final Sensor sensor = Sensor.getInstance();
 
-    /* NavX Setup */
+    /* NavX Object Setup */
     public static AHRS navX = new AHRS(SPI.Port.kMXP);
 
     /* Joystick IDs */
