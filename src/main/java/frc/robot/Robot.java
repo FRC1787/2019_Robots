@@ -168,7 +168,7 @@ public class Robot extends TimedRobot {
 
         if (rightJoyStick.getRawButton(1))
         {
-            driveTrain.seekDrive();   
+            driveTrain.seekDrive(angull());   
         }
         else
         {
@@ -571,6 +571,22 @@ public class Robot extends TimedRobot {
             cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
             cargo.intakeCargo(0);
         }
+    }
+
+    public double fixInput(double joyNum) //Adds deadzone to the center of the Joystick
+    {
+      if (joyNum > .15 || joyNum < .15)
+      return joyNum;
+      else
+      return 0;
+    }
+  
+    public double angull() //changes Joystick input to Encoder ticks
+    {
+      if (fixInput(rightJoyStick.getX()) == 0 && fixInput(rightJoyStick.getY()) == 0)
+      return 0;
+      else
+      return rightJoyStick.getDirectionDegrees();
     }
 
     public void setDashboard() {
