@@ -33,19 +33,21 @@ public final class DriveTrain {
     private double leftDriveVoltage;
     private double rightDriveVoltage;
 
-    //final PID values
-    private static double PROPORTIONAL_TWEAK_CONSTANT = 0.0065; //0.0065
-    private static double INTEGRAL_TWEAK_CONSTANT = 0.0; //.000007
-    private static double DERIVATIVE__TWEAK_CONSTANT = 0.0;
-    private static double ACCEPTABLE_ERROR_RANGE = 0.0;
+    //PID tweak variables
+    private static double proportionalTweak = 0.0065; //0.0065
+    private static double integralTweak = 0.0; //.000007
+    private static double DerivativeTweak = 0.0;
+    private static double okErrorRange = 0.0;
 
-    //PID variables 
+    //PID init variables 
     private static double error = 0;
     private static double proportional = 0;
     private static double derivative = 0;
     private static double integral = 0; 
     private static double previousError = 0;
     private static double pIDMotorVoltage = 0;
+
+    public double PLACEHOLDER = 0;
 
     private DriveTrain() {
         leftMaster.setInverted(LEFT_MASTER_INVERTED);
@@ -146,7 +148,14 @@ public final class DriveTrain {
 
     public void seekDrive(double destination, String feedBackSensor)
     {
-        tankDrive(pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor), pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor));
+        if (feedBackSensor == "navX")
+        {
+            tankDrive(pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor), pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor));
+        }
+        else if (feedBackSensor == "encoder")
+        {
+            tankDrive(pIDDrive(destination, PLACEHOLDER, feedBackSensor), pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor));
+        }
     }
 
     public double pIDDrive(double targetDiatance, double actualValue, String feedBackSensor) // enter target distance in feet
@@ -154,24 +163,24 @@ public final class DriveTrain {
 
         if (feedBackSensor == "navX")
         {
-         PROPORTIONAL_TWEAK_CONSTANT = 0.0065; //0.0065
-         INTEGRAL_TWEAK_CONSTANT = 0.0; //.000007
-         DERIVATIVE__TWEAK_CONSTANT = 0.0;
-         ACCEPTABLE_ERROR_RANGE = 0.0;
+         proportionalTweak = 0.0065; //0.0065
+         integralTweak = 0.0; //.000007
+         DerivativeTweak = 0.0;
+         okErrorRange = 0.0;
         }
         else if (feedBackSensor == "encoder")
         {
-         PROPORTIONAL_TWEAK_CONSTANT = 0.0065; //placeholers until ideal values for linear drive are found
-         INTEGRAL_TWEAK_CONSTANT = 0.0;
-         DERIVATIVE__TWEAK_CONSTANT = 0.0;
-         ACCEPTABLE_ERROR_RANGE = 0.0; 
+         proportionalTweak = 0.0065; //placeholers until ideal values for linear drive are found
+         integralTweak = 0.0;
+         DerivativeTweak = 0.0;
+         okErrorRange = 0.0; 
         }
         else
         {
-         PROPORTIONAL_TWEAK_CONSTANT = 0; //these just stay zero
-         INTEGRAL_TWEAK_CONSTANT = 0;
-         DERIVATIVE__TWEAK_CONSTANT = 0;
-         ACCEPTABLE_ERROR_RANGE = 0; 
+         proportionalTweak = 0; //these just stay zero
+         integralTweak = 0;
+         DerivativeTweak = 0;
+         okErrorRange = 0; 
         }
 		error = targetDiatance - (actualValue);
 		proportional = error;
@@ -179,9 +188,9 @@ public final class DriveTrain {
 		integral += previousError;
 		previousError = error;
 
-		if (error > ACCEPTABLE_ERROR_RANGE || error < -ACCEPTABLE_ERROR_RANGE )
+		if (error > okErrorRange || error < -okErrorRange )
 		{
-			pIDMotorVoltage = truncateMotorOutput((PROPORTIONAL_TWEAK_CONSTANT * proportional) + (DERIVATIVE__TWEAK_CONSTANT * derivative) + (INTEGRAL_TWEAK_CONSTANT * integral));
+			pIDMotorVoltage = truncateMotorOutput((proportionalTweak * proportional) + (DerivativeTweak * derivative) + (integralTweak * integral));
 			return pIDMotorVoltage;
 		}
 		else
