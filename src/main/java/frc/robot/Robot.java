@@ -138,7 +138,8 @@ public class Robot extends TimedRobot {
 
     public void autonomousPeriodic() 
     {
-        this.teleopPeriodic();
+        
+        //this.teleopPeriodic();
     }
 
     public void teleopInit()
@@ -168,7 +169,7 @@ public class Robot extends TimedRobot {
 
         if (rightJoyStick.getRawButton(1))
         {
-            driveTrain.seekDrive(angull());   
+            driveTrain.seekDrive(angull(), "navX");   
         }
         else
         {
@@ -622,7 +623,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber(   "IMU_Pitch",            navX.getPitch());
         SmartDashboard.putNumber(   "IMU_Roll",             navX.getRoll());
 
-        SmartDashboard.putNumber("motorpwr", DriveTrain.pIDDrive(40, navX.getYaw()));
+        SmartDashboard.putNumber("motorpwr", driveTrain.pIDDrive(40, navX.getYaw(), "navX"));
 
     }
 

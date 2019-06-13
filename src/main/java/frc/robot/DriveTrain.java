@@ -34,10 +34,10 @@ public final class DriveTrain {
     private double rightDriveVoltage;
 
     //final PID values
-    private final static double PROPORTIONAL_TWEAK_CONSTANT = 0.0065; //0.0065
-    private final static double INTEGRAL_TWEAK_CONSTANT = 0.0; //.000007
-    private final static double DERIVATIVE__TWEAK_CONSTANT = 0.0;
-    private final static double ACCEPTABLE_ERROR_RANGE = 0.0;
+    private static double PROPORTIONAL_TWEAK_CONSTANT = 0.0065; //0.0065
+    private static double INTEGRAL_TWEAK_CONSTANT = 0.0; //.000007
+    private static double DERIVATIVE__TWEAK_CONSTANT = 0.0;
+    private static double ACCEPTABLE_ERROR_RANGE = 0.0;
 
     //PID variables 
     private static double error = 0;
@@ -144,15 +144,35 @@ public final class DriveTrain {
         rightFollower.set(rightSide);
     }
 
-    public void seekDrive()
+    public void seekDrive(double destination, String feedBackSensor)
     {
-        tankDrive(pIDDrive(40, Robot.navX.getYaw()), pIDDrive(40, Robot.navX.getYaw()));
+        tankDrive(pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor), pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor));
     }
 
-    public static double pIDDrive(double targetDiatance, double actualValue ) // enter target distance in feet
+    public double pIDDrive(double targetDiatance, double actualValue, String feedBackSensor) // enter target distance in feet
 	{ 
 
-		
+        if (feedBackSensor == "navX")
+        {
+         PROPORTIONAL_TWEAK_CONSTANT = 0.0065; //0.0065
+         INTEGRAL_TWEAK_CONSTANT = 0.0; //.000007
+         DERIVATIVE__TWEAK_CONSTANT = 0.0;
+         ACCEPTABLE_ERROR_RANGE = 0.0;
+        }
+        else if (feedBackSensor == "encoder")
+        {
+         PROPORTIONAL_TWEAK_CONSTANT = 0.0065; //placeholers until ideal values for linear drive are found
+         INTEGRAL_TWEAK_CONSTANT = 0.0;
+         DERIVATIVE__TWEAK_CONSTANT = 0.0;
+         ACCEPTABLE_ERROR_RANGE = 0.0; 
+        }
+        else
+        {
+         PROPORTIONAL_TWEAK_CONSTANT = 0; //these just stay zero
+         INTEGRAL_TWEAK_CONSTANT = 0;
+         DERIVATIVE__TWEAK_CONSTANT = 0;
+         ACCEPTABLE_ERROR_RANGE = 0; 
+        }
 		error = targetDiatance - (actualValue);
 		proportional = error;
 		derivative = (previousError - error)/ 0.02;
@@ -185,4 +205,5 @@ public final class DriveTrain {
               return motorOutput;
           }
     }
+
 }
