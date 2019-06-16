@@ -173,13 +173,17 @@ public class Robot extends TimedRobot {
         {
             driveTrain.seekDrive(angull(), "navX");   
         }
-        else if (rightJoyStick.getRawButton(2))
+        if (rightJoyStick.getRawButtonPressed(2))
         {
-            angleAdd++;
+            testAngle = navX.getYaw() + 90;
+            /*angleAdd++;
             if (angleAdd == 1)
             {
                 testAngle = navX.getYaw() + 90;
-            }
+            } */ 
+        }
+        if (rightJoyStick.getRawButton(2))
+        {
             driveTrain.seekDrive(testAngle, "navX");
         }
         else
@@ -612,7 +616,7 @@ public class Robot extends TimedRobot {
     {
       if (fixInput(rightJoyStick.getX()) == 0 && fixInput(rightJoyStick.getY()) == 0)
       return 0;
-      else if (fixInput(rightJoyStick.getX()) == 0 && fixInput(rightJoyStick.getY()) == 0 && rightJoyStick.getDirectionDegrees() > 0)
+      else if (rightJoyStick.getDirectionDegrees() > 0)
       return rightJoyStick.getDirectionDegrees();
       else
       return
