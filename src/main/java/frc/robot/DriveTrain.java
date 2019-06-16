@@ -30,6 +30,22 @@ public final class DriveTrain {
     private double leftDriveVoltage;
     private double rightDriveVoltage;
 
+    //PID tweak variables
+    private static double proportionalTweak = 0.0065; //0.0065
+    private static double integralTweak = 0.0; //.000007
+    private static double DerivativeTweak = 0.0;
+    private static double okErrorRange = 0.0;
+
+    //PID init variables 
+    private static double error = 0;
+    private static double proportional = 0;
+    private static double derivative = 0;
+    private static double integral = 0; 
+    private static double previousError = 0;
+    private static double pIDMotorVoltage = 0;
+
+    public double PLACEHOLDER = 0;
+
     private DriveTrain() {
         leftMaster.setInverted(LEFT_MASTER_INVERTED);
         leftFollower.setInverted(LEFT_FOLLOWER_INVERTED);
@@ -126,4 +142,75 @@ public final class DriveTrain {
         leftFollower.set(leftSide);
         rightFollower.set(rightSide);
     }
+
+    public void seekDrive(double destination, String feedBackSensor)
+    {
+        if (feedBackSensor == "navX")
+        {
+            tankDrive(pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor), pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor));
+        }
+        else if (feedBackSensor == "encoder")
+        {
+            tankDrive(pIDDrive(destination, PLACEHOLDER, feedBackSensor), -(pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor)));
+        }
+
+    }
+
+    public double pIDDrive(double targetDisatance, double actualValue, String feedBackSensor) // enter target distance in feet
+	{ 
+
+        if (feedBackSensor == "navX")
+        {
+         proportionalTweak = 0.0065; //0.0065
+         integralTweak = 0.0; //.000007
+         DerivativeTweak = 0.0;
+         okErrorRange = 0.0;
+        }
+        else if (feedBackSensor == "encoder")
+        {
+         proportionalTweak = 0.0065; //placeholers until ideal values for linear drive are found
+         integralTweak = 0.0;
+         DerivativeTweak = 0.0;
+         okErrorRange = 0.0; 
+        }
+        else
+        {
+         proportionalTweak = 0; //these just stay zero
+         integralTweak = 0;
+         DerivativeTweak = 0;
+         okErrorRange = 0; 
+        }
+		error = targetDisatance - (actualValue);
+		proportional = error;
+		derivative = (previousError - error)/ 0.02;
+		integral += previousError;
+		previousError = error;
+
+		if (error > okErrorRange || error < -okErrorRange )
+		{
+			pIDMotorVoltage = truncateMotorOutput((proportionalTweak * proportional) + (DerivativeTweak * derivative) + (integralTweak * integral));
+			return pIDMotorVoltage;
+		}
+		else
+		{
+			proportional = 0;
+			integral = 0;
+			derivative = 0;
+			previousError = 0;
+			return 0;
+		}
+		
+    }
+    
+    private static double truncateMotorOutput(double motorOutput) //Whatever the heck Jake and Van did
+    {
+          if (motorOutput > 1) {
+              return 0.5;
+          } else if (motorOutput < -1) {
+              return -0.5;
+          } else {
+              return motorOutput;
+          }
+    }
+
 }

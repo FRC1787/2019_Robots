@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Servo;
 
 public class Climb {
     // Climb motor id
-    private static final int CLIMBING_MOTOR_ONE_ID = 4;
+    private static final int CLIMBING_MOTOR_ONE_ID = 7;
     
     //Limit switch channels
     private static final int CLIMB_FULLY_RETRACTED_LIMITSWITCH = 2;
@@ -23,7 +23,7 @@ public class Climb {
     private static final DigitalInput climbFullyRetractedLimitSwitch = new DigitalInput(CLIMB_FULLY_RETRACTED_LIMITSWITCH);
 
     //Motor objects
-    private final WPI_TalonSRX climbMotorOne = new WPI_TalonSRX(CLIMBING_MOTOR_ONE_ID);
+    private final WPI_VictorSPX climbMotorOne = new WPI_VictorSPX(CLIMBING_MOTOR_ONE_ID);
 
     // Singleton instance
     private static final Climb instance = new Climb();
@@ -84,9 +84,9 @@ public class Climb {
         return climbFullyRetractedLimitSwitch.get();
     }
 
-    public double getClimberMotorCurrent()
+   /* public double getClimberMotorCurrent()
     {
         return climbMotorOne.getOutputCurrent();
-    }
+    } */
     
 }
