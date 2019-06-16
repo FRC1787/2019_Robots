@@ -35,7 +35,7 @@ public final class DriveTrain {
     private static double proportionalTweak = 0.0065; //0.0065
     private static double integralTweak = 0.0; //.000007
     private static double DerivativeTweak = 0.0;
-    private static double okErrorRange = 0.0;
+    private static double okErrorRange = 0.7;
 
     //PID init variables 
     private static double error = 0;
@@ -162,9 +162,9 @@ public final class DriveTrain {
 
         if (feedBackSensor == "navX")
         {
-         proportionalTweak = 0.0065; //0.0065
+         proportionalTweak = 0.0047; //0.0065 0.0047
          integralTweak = 0.0; //.000007
-         DerivativeTweak = 0.0;
+         DerivativeTweak = 0.00001;
          okErrorRange = 0.0;
         }
         else if (feedBackSensor == "encoder")
@@ -181,7 +181,7 @@ public final class DriveTrain {
          DerivativeTweak = 0;
          okErrorRange = 0; 
         }
-		error = targetDisatance - (actualValue);
+		error = Math.abs(targetDisatance - (actualValue));
 		proportional = error;
 		derivative = (previousError - error)/ 0.02;
 		integral += previousError;
@@ -189,7 +189,7 @@ public final class DriveTrain {
 
 		if (error > okErrorRange || error < -okErrorRange )
 		{
-			pIDMotorVoltage = truncateMotorOutput((proportionalTweak * proportional) + (DerivativeTweak * derivative) + (integralTweak * integral));
+			pIDMotorVoltage = truncateMotorOutput((proportionalTweak * proportional) + (DerivativeTweak * derivative) + (integralTweak * integral), feedBackSensor);
 			return pIDMotorVoltage;
 		}
 		else
@@ -203,8 +203,10 @@ public final class DriveTrain {
 		
     }
     
-    private static double truncateMotorOutput(double motorOutput) //Whatever the heck Jake and Van did
+    private static double truncateMotorOutput(double motorOutput, String feedBackSensor) //Whatever the heck Jake and Van did
     {
+        if (feedBackSensor == "encoder")
+        {
           if (motorOutput > 1) {
               return 0.5;
           } else if (motorOutput < -1) {
@@ -212,6 +214,19 @@ public final class DriveTrain {
           } else {
               return motorOutput;
           }
+        }
+        if (feedBackSensor == "navX")
+        {
+            if (motorOutput > .4) {
+                return 0.4;
+            } else if (motorOutput < -.4) {
+                return -0.4;
+            } else {
+                return motorOutput;
+            }
+          }
+          else
+          return 0;
     }
 
 }

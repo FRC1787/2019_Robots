@@ -161,7 +161,7 @@ public class Robot extends TimedRobot {
 
     public void testInit()
     {
-        runMotorTest = false;
+       // runMotorTest = false;
     }
 
 
@@ -176,7 +176,7 @@ public class Robot extends TimedRobot {
         }
         if (rightJoyStick.getRawButtonPressed(2))
         {
-            if (gyro.navXAngull() <= 290){
+            if (gyro.navXAngull() <= 270){
             setAngle = gyro.navXAngull() + 90;
             }
             else{
@@ -662,7 +662,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber(   "IMU_Pitch",            navX.getPitch());
         SmartDashboard.putNumber(   "IMU_Roll",             navX.getRoll());
 
-        SmartDashboard.putNumber("motorpwr", driveTrain.pIDDrive(40, navX.getYaw(), "navX"));
+        SmartDashboard.putNumber("motorpwr", driveTrain.pIDDrive(setAngle, gyro.navXAngull(), "navX"));
         SmartDashboard.putNumber("Counter", iteratCounter);
         SmartDashboard.putNumber("setPoint", setAngle);
         SmartDashboard.putNumber("angull", angull());
