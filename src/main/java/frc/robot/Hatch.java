@@ -8,8 +8,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public final class Hatch
-{
+public final class Hatch {
+   
     // Hatch motor controller variables
     private static final int HATCH_GRABBING_MOTOR_ID = 6;
     private static final int HATCH_ARTICULATING_MOTOR_ID = 12;
@@ -119,9 +119,9 @@ public final class Hatch
     //     return false;
     // }
 
-    public double getHatchGrabberCurrent() 
+    /*public double getHatchGrabberCurrent() 
     {
         return hatchGrabber.getOutputCurrent();
-    }
+    } */
     
 }

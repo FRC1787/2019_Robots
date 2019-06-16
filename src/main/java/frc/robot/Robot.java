@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
     private final Hatch hatch = Hatch.getInstance();
     private final Vision vision = Vision.getInstance();
     private final Sensor sensor = Sensor.getInstance();
+    public final Gyro gyro = Gyro.getInstance();
 
     /* NavX Object Setup */
     public static AHRS navX = new AHRS(SPI.Port.kMXP);
@@ -120,8 +121,8 @@ public class Robot extends TimedRobot {
     private boolean backDriveHatch = true;
     private boolean retractClimber = false;
     public boolean movingthething = true;
-    public double angleAdd;
-    public double testAngle;
+    public double iteratCounter;
+    public double setAngle;
 
 
     public void robotInit() 
@@ -175,20 +176,25 @@ public class Robot extends TimedRobot {
         }
         if (rightJoyStick.getRawButtonPressed(2))
         {
-            testAngle = navX.getYaw() + 90;
-            /*angleAdd++;
-            if (angleAdd == 1)
+            if (gyro.navXAngull() <= 290){
+            setAngle = gyro.navXAngull() + 90;
+            }
+            else{
+                setAngle = gyro.navXAngull() - 270;
+            }
+            /*iteratCounter++;
+            if (iteratCounter == 1)
             {
-                testAngle = navX.getYaw() + 90;
+                setAngle = navX.getYaw() + 90;
             } */ 
         }
         if (rightJoyStick.getRawButton(2))
         {
-            driveTrain.seekDrive(testAngle, "navX");
+            driveTrain.seekDrive(setAngle, "navX");
         }
         else
         {
-            angleAdd = 0;
+            iteratCounter = 0;
             driveTrain.tankDrive(0,0);
         }
        /* if (leftJoyStick.getRawButton(1))
@@ -591,16 +597,16 @@ public class Robot extends TimedRobot {
 
         if(leftJoyStick.getRawButton(10))
         {
-            angleAdd ++;
-            if (angleAdd == 1)
+            iteratCounter ++;
+            if (iteratCounter == 1)
             {
-                testAngle = navX.getYaw() + 50;
+                setAngle = navX.getYaw() + 50;
             }
 
         }
         else
         {
-            angleAdd = 0;
+            iteratCounter = 0;
         }
     }
 
@@ -657,9 +663,11 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber(   "IMU_Roll",             navX.getRoll());
 
         SmartDashboard.putNumber("motorpwr", driveTrain.pIDDrive(40, navX.getYaw(), "navX"));
-        SmartDashboard.putNumber("Counter", angleAdd);
-        SmartDashboard.putNumber("setPoint", testAngle);
+        SmartDashboard.putNumber("Counter", iteratCounter);
+        SmartDashboard.putNumber("setPoint", setAngle);
         SmartDashboard.putNumber("angull", angull());
+        SmartDashboard.putNumber("NavXAngle", gyro.navXAngle());
+        SmartDashboard.putNumber("NavXAngull", gyro.navXAngull());
 
     }
 

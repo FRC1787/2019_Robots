@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Joystick;
 
+
 public final class DriveTrain {
 
     private static final int LEFT_MASTER_TALON_ID = 9;
@@ -147,11 +148,11 @@ public final class DriveTrain {
     {
         if (feedBackSensor == "navX")
         {
-            tankDrive(pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor), pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor));
+            tankDrive(pIDDrive(destination, Gyro.navXAngull(), feedBackSensor), pIDDrive(destination, Gyro.navXAngull(), feedBackSensor));
         }
         else if (feedBackSensor == "encoder")
         {
-            tankDrive(pIDDrive(destination, PLACEHOLDER, feedBackSensor), -(pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor)));
+            tankDrive(pIDDrive(destination, PLACEHOLDER, feedBackSensor), -(pIDDrive(destination, PLACEHOLDER, feedBackSensor)));
         }
 
     }
