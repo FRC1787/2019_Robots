@@ -4,9 +4,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Joystick;
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SerialPort;
 
 public final class DriveTrain {
 
@@ -154,11 +151,12 @@ public final class DriveTrain {
         }
         else if (feedBackSensor == "encoder")
         {
-            tankDrive(pIDDrive(destination, PLACEHOLDER, feedBackSensor), pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor));
+            tankDrive(pIDDrive(destination, PLACEHOLDER, feedBackSensor), -(pIDDrive(destination, Robot.navX.getYaw(), feedBackSensor)));
         }
+
     }
 
-    public double pIDDrive(double targetDiatance, double actualValue, String feedBackSensor) // enter target distance in feet
+    public double pIDDrive(double targetDisatance, double actualValue, String feedBackSensor) // enter target distance in feet
 	{ 
 
         if (feedBackSensor == "navX")
@@ -182,7 +180,7 @@ public final class DriveTrain {
          DerivativeTweak = 0;
          okErrorRange = 0; 
         }
-		error = targetDiatance - (actualValue);
+		error = targetDisatance - (actualValue);
 		proportional = error;
 		derivative = (previousError - error)/ 0.02;
 		integral += previousError;

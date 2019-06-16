@@ -120,6 +120,8 @@ public class Robot extends TimedRobot {
     private boolean backDriveHatch = true;
     private boolean retractClimber = false;
     public boolean movingthething = true;
+    public double angleAdd;
+    public double testAngle;
 
 
     public void robotInit() 
@@ -171,8 +173,18 @@ public class Robot extends TimedRobot {
         {
             driveTrain.seekDrive(angull(), "navX");   
         }
+        else if (rightJoyStick.getRawButton(2))
+        {
+            angleAdd++;
+            if (angleAdd == 1)
+            {
+                testAngle = navX.getYaw() + 90;
+            }
+            driveTrain.seekDrive(testAngle, "navX");
+        }
         else
         {
+            angleAdd = 0;
             driveTrain.tankDrive(0,0);
         }
        /* if (leftJoyStick.getRawButton(1))
@@ -572,6 +584,20 @@ public class Robot extends TimedRobot {
             cargo.stowCargoIntake(CARGO_MECHANISM_STOW_SPEED);
             cargo.intakeCargo(0);
         }
+
+        if(leftJoyStick.getRawButton(10))
+        {
+            angleAdd ++;
+            if (angleAdd == 1)
+            {
+                testAngle = navX.getYaw() + 50;
+            }
+
+        }
+        else
+        {
+            angleAdd = 0;
+        }
     }
 
     public double fixInput(double joyNum) //Adds deadzone to the center of the Joystick
@@ -586,8 +612,11 @@ public class Robot extends TimedRobot {
     {
       if (fixInput(rightJoyStick.getX()) == 0 && fixInput(rightJoyStick.getY()) == 0)
       return 0;
-      else
+      else if (fixInput(rightJoyStick.getX()) == 0 && fixInput(rightJoyStick.getY()) == 0 && rightJoyStick.getDirectionDegrees() > 0)
       return rightJoyStick.getDirectionDegrees();
+      else
+      return
+      rightJoyStick.getDirectionDegrees() + 360;
     }
 
     public void setDashboard() {
@@ -624,6 +653,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber(   "IMU_Roll",             navX.getRoll());
 
         SmartDashboard.putNumber("motorpwr", driveTrain.pIDDrive(40, navX.getYaw(), "navX"));
+        SmartDashboard.putNumber("Counter", angleAdd);
+        SmartDashboard.putNumber("setPoint", testAngle);
+        SmartDashboard.putNumber("angull", angull());
 
     }
 
