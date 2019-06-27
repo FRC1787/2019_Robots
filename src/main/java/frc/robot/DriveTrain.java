@@ -155,12 +155,12 @@ public final class DriveTrain {
         }
         else if (feedBackSensor == "encoder")
         {
-            tankDrive(pIDDrive(destination, Robot.rightEncoder.get(), feedBackSensor, seekType), -(pIDDrive(destination, Robot.rightEncoder.get(), feedBackSensor, seekType)));
+            tankDrive(-pIDDrive(destination, Robot.rightEncoder.get(), feedBackSensor, seekType), pIDDrive(destination, Robot.rightEncoder.get(), feedBackSensor, seekType));
         }
-        
+
     }
 
-    public double pIDDrive(double targetDisatance, double actualValue, String feedBackSensor, String seekType) // enter target distance in feet
+    public double pIDDrive(double targetDistance, double actualValue, String feedBackSensor, String seekType) // enter target distance in feet
 	{ 
 
         if (feedBackSensor == "navX")
@@ -185,24 +185,21 @@ public final class DriveTrain {
          okErrorRange = 0; 
         }
         if (seekType == "exact"){
-            error = targetDisatance - actualValue;
+            error = targetDistance - actualValue;
         }
         else if (seekType == "oneWay"){
-        error = Math.abs(targetDisatance - (actualValue));
+        error = Math.abs(targetDistance - (actualValue));
         }
 		proportional = error;
 		derivative = (previousError - error)/ 0.02;
 		integral += previousError;
 		previousError = error;
+       
 
-		if (error > okErrorRange || error < -okErrorRange )
+		if ((error > okErrorRange || error < -okErrorRange) && !(targetDistance < actualValue && seekType == "oneWay"))
 		{
 			pIDMotorVoltage = truncateMotorOutput((proportionalTweak * proportional) + (DerivativeTweak * derivative) + (integralTweak * integral), feedBackSensor);
 			return pIDMotorVoltage;
-        }
-        else if (targetDisatance - actualValue < 0 && seekType == "oneWay")
-        {
-            return 0;
         }
 		else
 		{

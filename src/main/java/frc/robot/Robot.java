@@ -134,7 +134,7 @@ public class Robot extends TimedRobot {
     public void robotInit() 
     {
         this.setDashboard();
-        rightEncoder.setReverseDirection(true);
+        rightEncoder.setReverseDirection(false);
     }
 
     public void robotPeriodic() 
