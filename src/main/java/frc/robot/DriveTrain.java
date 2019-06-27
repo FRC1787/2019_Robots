@@ -6,7 +6,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Joystick;
 
 
+
 public final class DriveTrain {
+
+    private Gyro gyro = Gyro.getInstance();
 
     private static final int LEFT_MASTER_TALON_ID = 9;
     private static final int LEFT_FOLLOWER_VICTOR_ID = 10;
@@ -144,25 +147,25 @@ public final class DriveTrain {
         rightFollower.set(rightSide);
     }
 
-    public void seekDrive(double destination, String feedBackSensor)
+    public void seekDrive(double destination, String feedBackSensor, String seekType)
     {
         if (feedBackSensor == "navX")
         {
-            tankDrive(pIDDrive(destination, Gyro.navXAngull(), feedBackSensor), pIDDrive(destination, Gyro.navXAngull(), feedBackSensor));
+            tankDrive(pIDDrive(destination, Gyro.navXAngull(), feedBackSensor, seekType), pIDDrive(destination, Gyro.navXAngull(), feedBackSensor, seekType));
         }
         else if (feedBackSensor == "encoder")
         {
-            tankDrive(pIDDrive(destination, PLACEHOLDER, feedBackSensor), -(pIDDrive(destination, PLACEHOLDER, feedBackSensor)));
+            tankDrive(pIDDrive(destination, Robot.rightEncoder.get(), feedBackSensor, seekType), -(pIDDrive(destination, Robot.rightEncoder.get(), feedBackSensor, seekType)));
         }
-
+        
     }
 
-    public double pIDDrive(double targetDisatance, double actualValue, String feedBackSensor) // enter target distance in feet
+    public double pIDDrive(double targetDisatance, double actualValue, String feedBackSensor, String seekType) // enter target distance in feet
 	{ 
 
         if (feedBackSensor == "navX")
         {
-         proportionalTweak = 0.0047; //0.0065 0.0047
+         proportionalTweak = 0.00647; //0.0065 0.0047
          integralTweak = 0.0; //.000007
          DerivativeTweak = 0.00001;
          okErrorRange = 0.0;
@@ -181,7 +184,12 @@ public final class DriveTrain {
          DerivativeTweak = 0;
          okErrorRange = 0; 
         }
-		error = Math.abs(targetDisatance - (actualValue));
+        if (seekType == "exact"){
+            error = targetDisatance - actualValue;
+        }
+        else if (seekType == "oneWay"){
+        error = Math.abs(targetDisatance - (actualValue));
+        }
 		proportional = error;
 		derivative = (previousError - error)/ 0.02;
 		integral += previousError;
@@ -191,7 +199,11 @@ public final class DriveTrain {
 		{
 			pIDMotorVoltage = truncateMotorOutput((proportionalTweak * proportional) + (DerivativeTweak * derivative) + (integralTweak * integral), feedBackSensor);
 			return pIDMotorVoltage;
-		}
+        }
+        else if (targetDisatance - actualValue < 0 && seekType == "oneWay")
+        {
+            return 0;
+        }
 		else
 		{
 			proportional = 0;
@@ -207,23 +219,28 @@ public final class DriveTrain {
     {
         if (feedBackSensor == "encoder")
         {
-          if (motorOutput > 1) {
-              return 0.5;
-          } else if (motorOutput < -1) {
-              return -0.5;
-          } else {
-              return motorOutput;
-          }
+          if (motorOutput > 1) 
+            return 0.5; 
+          
+          else if (motorOutput < -1) 
+            return -0.5;
+        
+          else 
+            return motorOutput;
+          
         }
+        
         if (feedBackSensor == "navX")
         {
-            if (motorOutput > .4) {
-                return 0.4;
-            } else if (motorOutput < -.4) {
-                return -0.4;
-            } else {
-                return motorOutput;
-            }
+            if (motorOutput > .4)
+               return 0.4; 
+            
+            else if (motorOutput < -.4)
+               return -0.4;
+            
+            else 
+               return motorOutput;
+            
           }
           else
           return 0;

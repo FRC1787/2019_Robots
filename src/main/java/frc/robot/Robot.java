@@ -34,6 +34,10 @@ public class Robot extends TimedRobot {
     /* NavX Object Setup */
     public static AHRS navX = new AHRS(SPI.Port.kMXP);
 
+    /* Encoder Object Setup */
+    public static Encoder rightEncoder = new Encoder(10, 11);
+    public static Encoder leftEncoder = new Encoder(12, 13);
+
     /* Joystick IDs */
     private static final int RIGHT_JOYSTICK_ID = 0;
     private static final int LEFT_JOYSTICK_ID = 1;
@@ -121,13 +125,16 @@ public class Robot extends TimedRobot {
     private boolean backDriveHatch = true;
     private boolean retractClimber = false;
     public boolean movingthething = true;
-    public double iteratCounter;
+    public double iterationCounter1;
+    public double iterationCounter2;
     public double setAngle;
+    public double setDistance;
 
 
     public void robotInit() 
     {
         this.setDashboard();
+        rightEncoder.setReverseDirection(true);
     }
 
     public void robotPeriodic() 
@@ -170,34 +177,50 @@ public class Robot extends TimedRobot {
 
 
 
-        if (rightJoyStick.getRawButton(1))
+        /*if (rightJoyStick.getRawButton(1))
         {
-            driveTrain.seekDrive(angull(), "navX");   
-        }
+            driveTrain.seekDrive(angull(), "navX", "exact");   
+        }*/
         if (rightJoyStick.getRawButtonPressed(2))
         {
             if (gyro.navXAngull() <= 270){
-            setAngle = gyro.navXAngull() + 90;
+                 setAngle = gyro.navXAngull() + 90;
             }
             else{
                 setAngle = gyro.navXAngull() - 270;
             }
-            /*iteratCounter++;
-            if (iteratCounter == 1)
+            /*iterationCounter1++;
+            if (iterationCounter1 == 1)
             {
                 setAngle = navX.getYaw() + 90;
-            } */ 
+            } */
         }
         if (rightJoyStick.getRawButton(2))
         {
-            driveTrain.seekDrive(setAngle, "navX");
+            driveTrain.seekDrive(setAngle, "navX", "oneWay");
         }
         else
         {
-            iteratCounter = 0;
+            iterationCounter1 = 0;
             driveTrain.tankDrive(0,0);
         }
-       /* if (leftJoyStick.getRawButton(1))
+        
+        if (rightJoyStick.getRawButtonPressed(3))
+        {
+            setDistance = rightEncoder.get() + 4000;
+        }
+        if (rightJoyStick.getRawButton(3))
+        {
+            driveTrain.seekDrive(setDistance, "encoder", "oneWay");
+        }
+        else
+        {
+            driveTrain.tankDrive(0,0);
+        }
+       
+       
+       
+        /* if (leftJoyStick.getRawButton(1))
         {
             runMotorTest = true;
         }
@@ -597,8 +620,8 @@ public class Robot extends TimedRobot {
 
         if(leftJoyStick.getRawButton(10))
         {
-            iteratCounter ++;
-            if (iteratCounter == 1)
+            iterationCounter1 ++;
+            if (iterationCounter1 == 1)
             {
                 setAngle = navX.getYaw() + 50;
             }
@@ -606,7 +629,7 @@ public class Robot extends TimedRobot {
         }
         else
         {
-            iteratCounter = 0;
+            iterationCounter1 = 0;
         }
     }
 
@@ -625,8 +648,7 @@ public class Robot extends TimedRobot {
       else if (rightJoyStick.getDirectionDegrees() > 0)
       return rightJoyStick.getDirectionDegrees();
       else
-      return
-      rightJoyStick.getDirectionDegrees() + 360;
+      return rightJoyStick.getDirectionDegrees() + 360;
     }
 
     public void setDashboard() {
@@ -662,12 +684,14 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber(   "IMU_Pitch",            navX.getPitch());
         SmartDashboard.putNumber(   "IMU_Roll",             navX.getRoll());
 
-        SmartDashboard.putNumber("motorpwr", driveTrain.pIDDrive(setAngle, gyro.navXAngull(), "navX"));
-        SmartDashboard.putNumber("Counter", iteratCounter);
-        SmartDashboard.putNumber("setPoint", setAngle);
+        SmartDashboard.putNumber("motorpwr", driveTrain.pIDDrive(setAngle, gyro.navXAngull(), "navX", "oneWay"));
+        SmartDashboard.putNumber("Counter", iterationCounter1);
+        SmartDashboard.putNumber("setAngle", setAngle);
+        SmartDashboard.putNumber("setDistance", setDistance);
         SmartDashboard.putNumber("angull", angull());
         SmartDashboard.putNumber("NavXAngle", gyro.navXAngle());
         SmartDashboard.putNumber("NavXAngull", gyro.navXAngull());
+        SmartDashboard.putNumber("RightEncoder", rightEncoder.get());
 
     }
 
