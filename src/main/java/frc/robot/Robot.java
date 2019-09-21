@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
     private final Hatch hatch = Hatch.getInstance();
     private final Vision vision = Vision.getInstance();
     private final Sensor sensor = Sensor.getInstance();
-    public final Gyro gyro = Gyro.getInstance();
+    //public final Gyro gyro = Gyro.getInstance();
 
     /* NavX Object Setup */
     public static AHRS navX = new AHRS(SPI.Port.kMXP);
@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
     /* Cargo Speeds */
     private final double F_CARGO_MECHANISM_DEPLOY_SPEED = 0.4;
     private final double F_CARGO_MECHANISM_STOW_SPEED = -0.40;
-    private final double F_CARGO_INTAKE_SPEED = -.9 ;
+    private final double F_CARGO_INTAKE_SPEED = -.8 ;
     private final double F_CARGO_SHOOT_BELT_SPEED = -0.5;
 
     /* Hatch Speeds */
@@ -127,8 +127,9 @@ public class Robot extends TimedRobot {
     public boolean movingthething = true;
     public double iterationCounter1;
     public double iterationCounter2;
-    public double setAngle;
-    public double setDistance;
+    public static double setAngle;
+    public static double setDistance;
+    public static double autoNumber;
 
 
     public void robotInit() 
@@ -149,7 +150,7 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() 
     {
         
-        //this.teleopPeriodic();
+        this.teleopPeriodic();
     }
 
     public void teleopInit()
@@ -176,11 +177,10 @@ public class Robot extends TimedRobot {
     {   
 
 
-
         /*if (rightJoyStick.getRawButton(1))
         {
             driveTrain.seekDrive(angull(), "navX", "exact");   
-        }*/
+        }
         if (rightJoyStick.getRawButtonPressed(2))
         {
             if (gyro.navXAngull() <= 270){
@@ -193,7 +193,7 @@ public class Robot extends TimedRobot {
             if (iterationCounter1 == 1)
             {
                 setAngle = navX.getYaw() + 90;
-            } */
+            } 
         }
         if (rightJoyStick.getRawButton(2))
         {
@@ -213,7 +213,7 @@ public class Robot extends TimedRobot {
         {
             driveTrain.seekDrive(setDistance, "encoder", "oneWay");
         }
-        else
+        /*else
         {
             driveTrain.tankDrive(0,0);
         }
@@ -651,6 +651,14 @@ public class Robot extends TimedRobot {
       return rightJoyStick.getDirectionDegrees() + 360;
     }
 
+    public static double noNegative(double input)
+    {
+        if (input >= 0)
+        return input;
+        else 
+        return 0;
+    }
+
     public void setDashboard() {
         SmartDashboard.putNumber("Hatch Deploy Speed", F_HATCH_DEPLOY_SPEED);
         SmartDashboard.putNumber("Hatch Stow Speed", F_HATCH_STOW_SPEED);
@@ -676,22 +684,22 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Hatch Amp Limit", F_HATCH_AMP_LIMIT);
         SmartDashboard.putNumber("Hatch Amp Timeout", F_HATCH_TIMEOUT);
         
-        SmartDashboard.putNumber("Inches Output", sensor.getSense());
+        //SmartDashboard.putNumber("Inches Output", sensor.getSense());
 
-        SmartDashboard.putBoolean(  "IMU_Connected",        navX.isConnected());
+        /*SmartDashboard.putBoolean(  "IMU_Connected",        navX.isConnected());
         SmartDashboard.putBoolean(  "IMU_IsCalibrating",    navX.isCalibrating());
         SmartDashboard.putNumber(   "IMU_Yaw",              navX.getYaw());
         SmartDashboard.putNumber(   "IMU_Pitch",            navX.getPitch());
-        SmartDashboard.putNumber(   "IMU_Roll",             navX.getRoll());
+        SmartDashboard.putNumber(   "IMU_Roll",             navX.getRoll());   */
 
-        SmartDashboard.putNumber("motorpwr", driveTrain.pIDDrive(setAngle, gyro.navXAngull(), "navX", "oneWay"));
-        SmartDashboard.putNumber("Counter", iterationCounter1);
-        SmartDashboard.putNumber("setAngle", setAngle);
-        SmartDashboard.putNumber("setDistance", setDistance);
-        SmartDashboard.putNumber("angull", angull());
-        SmartDashboard.putNumber("NavXAngle", gyro.navXAngle());
-        SmartDashboard.putNumber("NavXAngull", gyro.navXAngull());
-        SmartDashboard.putNumber("RightEncoder", rightEncoder.get());
+        //SmartDashboard.putNumber("motorpwr", driveTrain.pIDDrive(setAngle, gyro.navXAngull(), "navX", "oneWay"));
+        //SmartDashboard.putNumber("Counter", iterationCounter1);
+        //SmartDashboard.putNumber("setAngle", setAngle);
+        //SmartDashboard.putNumber("setDistance", setDistance);
+        //SmartDashboard.putNumber("angull", angull());
+        //SmartDashboard.putNumber("NavXAngle", gyro.navXAngle());
+        //SmartDashboard.putNumber("NavXAngull", gyro.navXAngull());
+        //SmartDashboard.putNumber("RightEncoder", rightEncoder.get());
 
     }
 

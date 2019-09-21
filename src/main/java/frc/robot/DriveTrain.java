@@ -76,7 +76,7 @@ public final class DriveTrain {
         return instance;
     }
 
-    public double rangeCorrection(double num) {
+    public double rangeCorrection(double num) { //LOOOK AT THISS I CHANGED IT AAAAAAAAAAAAAAAAAAHHHHH PUT IT BACK TO ONEEEE OR THE ROBOT WILL BE SLOOOOW
         if (num > -DEAD_ZONE_VALUE && num < DEAD_ZONE_VALUE)
             return 0;
         else if (num > 1)
@@ -165,9 +165,9 @@ public final class DriveTrain {
 
         if (feedBackSensor == "navX")
         {
-         proportionalTweak = 0.00647; //0.0065 0.0047
+         proportionalTweak = 0.0047; //0.0065 0.0047
          integralTweak = 0.0; //.000007
-         DerivativeTweak = 0.00001;
+         DerivativeTweak = 0.0000;
          okErrorRange = 0.0;
         }
         else if (feedBackSensor == "encoder")
@@ -188,7 +188,7 @@ public final class DriveTrain {
             error = targetDistance - actualValue;
         }
         else if (seekType == "oneWay"){
-        error = Math.abs(targetDistance - (actualValue));
+        error = Robot.noNegative(Math.abs(targetDistance - (actualValue)));
         }
 		proportional = error;
 		derivative = (previousError - error)/ 0.02;
@@ -196,10 +196,14 @@ public final class DriveTrain {
 		previousError = error;
        
 
-		if ((error > okErrorRange || error < -okErrorRange) && !(targetDistance < actualValue && seekType == "oneWay"))
+		if ((error > okErrorRange || error < -okErrorRange)) //&& !(targetDistance < actualValue && seekType == "oneWay")
 		{
 			pIDMotorVoltage = truncateMotorOutput((proportionalTweak * proportional) + (DerivativeTweak * derivative) + (integralTweak * integral), feedBackSensor);
 			return pIDMotorVoltage;
+        }
+        if ( targetDistance - actualValue < 0 )
+        {
+            return 0;
         }
 		else
 		{
@@ -207,7 +211,7 @@ public final class DriveTrain {
 			integral = 0;
 			derivative = 0;
 			previousError = 0;
-			return 0;
+            return 0;
 		}
 		
     }

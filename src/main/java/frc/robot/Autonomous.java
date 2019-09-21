@@ -8,6 +8,11 @@
 package frc.robot;
 
 
-
 public class Autonomous {
+
+
+    private double autoTimer;
+    
+    
+
 }
