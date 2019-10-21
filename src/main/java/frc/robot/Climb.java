@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Compressor;
 
 public class Climb {
     // Climb motor id
@@ -24,6 +26,14 @@ public class Climb {
 
     //Motor objects
     private final WPI_VictorSPX climbMotorOne = new WPI_VictorSPX(CLIMBING_MOTOR_ONE_ID);
+
+    /*Solenoid Objects*/
+    public Solenoid lifterLeftRetract = new Solenoid(0);
+    public Solenoid lifterLeftExtend = new Solenoid(1);
+    public Solenoid lifterRightRetract = new Solenoid(2);
+    public Solenoid lifterRightExtend = new Solenoid(3);
+    public Solenoid lifterBackExtend = new Solenoid(4);
+    public Solenoid lifterBackRetract = new Solenoid(5);
 
     // Singleton instance
     private static final Climb instance = new Climb();
@@ -53,6 +63,25 @@ public class Climb {
     //         climbPin.set(1); 
             
     // }
+
+    public void lifter(boolean state){
+        lifterLeftRetract.set(!state);
+        lifterLeftExtend.set(state);
+        lifterRightRetract.set(!state);
+        lifterRightExtend.set(state);
+        lifterBackRetract.set(!state);
+        lifterBackExtend.set(state);
+    }
+    public void lifterFront(boolean state){
+        lifterLeftRetract.set(!state);
+        lifterLeftExtend.set(state);
+        lifterRightRetract.set(!state);
+        lifterRightExtend.set(state);
+    }
+    public void lifterBack(boolean state){
+        lifterBackRetract.set(!state);
+        lifterBackExtend.set(state);
+    }
 
     public double sliderCorrection(Joystick joystick) 
     {

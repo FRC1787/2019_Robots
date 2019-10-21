@@ -1,5 +1,6 @@
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -12,8 +13,11 @@ import edu.wpi.first.wpilibj.Encoder;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.SolenoidBase;
 
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Solenoid;
 
 
 public class Robot extends TimedRobot {
@@ -37,6 +41,9 @@ public class Robot extends TimedRobot {
     /* Encoder Object Setup */
     public static Encoder rightEncoder = new Encoder(10, 11);
     public static Encoder leftEncoder = new Encoder(12, 13);
+
+    /*Compressor Object*/
+    public Compressor lifter = new Compressor();
 
     /* Joystick IDs */
     private static final int RIGHT_JOYSTICK_ID = 0;
@@ -136,6 +143,9 @@ public class Robot extends TimedRobot {
     {
         this.setDashboard();
         rightEncoder.setReverseDirection(false);
+        lifter.setClosedLoopControl(true);
+        climb.lifter(false);
+
     }
 
     public void robotPeriodic() 
@@ -574,6 +584,14 @@ public class Robot extends TimedRobot {
 
         //Extend climber
         if (leftJoyStick.getRawButton(CLIMB_DIRECTION_EXTEND_BTN_ID) && !leftJoyStick.getRawButton(CLIMB_DIRECTION_RETRACT_BTN_ID))
+        {
+            climb.lifter(true);
+        }
+        else
+        {
+            climb.lifterFront(false);
+        }
+        /*if (leftJoyStick.getRawButton(CLIMB_DIRECTION_EXTEND_BTN_ID) && !leftJoyStick.getRawButton(CLIMB_DIRECTION_RETRACT_BTN_ID))
         { 
             cargo.intakeCargo(-.45);
 
@@ -584,7 +602,7 @@ public class Robot extends TimedRobot {
             else
             {
                 climbSliderValue = 1;
-            } */
+            } 
 
             if(!climb.climberFullyExtended())
             {
@@ -594,11 +612,15 @@ public class Robot extends TimedRobot {
             {
                 climb.moveClimber(0);
             }
-        }
+        } */
 
 
         //Retract Climber
         if (leftJoyStick.getRawButton(CLIMB_DIRECTION_RETRACT_BTN_ID) && !leftJoyStick.getRawButton(CLIMB_DIRECTION_EXTEND_BTN_ID))
+        {
+            climb.lifterBack(false);
+        }
+        /*if (leftJoyStick.getRawButton(CLIMB_DIRECTION_RETRACT_BTN_ID) && !leftJoyStick.getRawButton(CLIMB_DIRECTION_EXTEND_BTN_ID))
         {
             if(!climb.climberFullyRetracted())
             {
@@ -630,7 +652,7 @@ public class Robot extends TimedRobot {
         else
         {
             iterationCounter1 = 0;
-        }
+        } */
     }
 
     public double fixInput(double joyNum) //Adds deadzone to the center of the Joystick
