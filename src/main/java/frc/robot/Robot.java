@@ -16,9 +16,6 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.SolenoidBase;
 
-import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.Solenoid;
-
 
 public class Robot extends TimedRobot {
 

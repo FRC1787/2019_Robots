@@ -28,12 +28,10 @@ public class Climb {
     private final WPI_VictorSPX climbMotorOne = new WPI_VictorSPX(CLIMBING_MOTOR_ONE_ID);
 
     /*Solenoid Objects*/
-    public Solenoid lifterLeftRetract = new Solenoid(0);
-    public Solenoid lifterLeftExtend = new Solenoid(1);
-    public Solenoid lifterRightRetract = new Solenoid(2);
-    public Solenoid lifterRightExtend = new Solenoid(3);
-    public Solenoid lifterBackExtend = new Solenoid(4);
-    public Solenoid lifterBackRetract = new Solenoid(5);
+    public Solenoid lifterFrontRetract = new Solenoid(0); //A
+    public Solenoid lifterFrontExtend = new Solenoid(1); //B
+    public Solenoid lifterBackRetract = new Solenoid(2); //A
+    public Solenoid lifterBackExtend = new Solenoid(3); //B
 
     // Singleton instance
     private static final Climb instance = new Climb();
@@ -65,18 +63,14 @@ public class Climb {
     // }
 
     public void lifter(boolean state){
-        lifterLeftRetract.set(!state);
-        lifterLeftExtend.set(state);
-        lifterRightRetract.set(!state);
-        lifterRightExtend.set(state);
+        lifterFrontRetract.set(!state);
+        lifterFrontExtend.set(state);
         lifterBackRetract.set(!state);
         lifterBackExtend.set(state);
     }
     public void lifterFront(boolean state){
-        lifterLeftRetract.set(!state);
-        lifterLeftExtend.set(state);
-        lifterRightRetract.set(!state);
-        lifterRightExtend.set(state);
+        lifterFrontRetract.set(!state);
+        lifterFrontExtend.set(state);
     }
     public void lifterBack(boolean state){
         lifterBackRetract.set(!state);
