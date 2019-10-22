@@ -2,9 +2,14 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Joystick;
 
+
+
 public final class DriveTrain {
+
+    private Gyro gyro = Gyro.getInstance();
 
     private static final int LEFT_MASTER_TALON_ID = 9;
     private static final int LEFT_FOLLOWER_VICTOR_ID = 10;
@@ -28,6 +33,22 @@ public final class DriveTrain {
 
     private double leftDriveVoltage;
     private double rightDriveVoltage;
+
+    //PID tweak variables
+    private static double proportionalTweak = 0.0065; //0.0065
+    private static double integralTweak = 0.0; //.000007
+    private static double DerivativeTweak = 0.0;
+    private static double okErrorRange = 0.7;
+
+    //PID init variables 
+    private static double error = 0;
+    private static double proportional = 0;
+    private static double derivative = 0;
+    private static double integral = 0; 
+    private static double previousError = 0;
+    private static double pIDMotorVoltage = 0;
+
+    public double PLACEHOLDER = 0;
 
     private DriveTrain() {
         leftMaster.setInverted(LEFT_MASTER_INVERTED);
@@ -55,7 +76,7 @@ public final class DriveTrain {
         return instance;
     }
 
-    public double rangeCorrection(double num) {
+    public double rangeCorrection(double num) { //LOOOK AT THISS I CHANGED IT AAAAAAAAAAAAAAAAAAHHHHH PUT IT BACK TO ONEEEE OR THE ROBOT WILL BE SLOOOOW
         if (num > -DEAD_ZONE_VALUE && num < DEAD_ZONE_VALUE)
             return 0;
         else if (num > 1)
@@ -125,4 +146,105 @@ public final class DriveTrain {
         leftFollower.set(leftSide);
         rightFollower.set(rightSide);
     }
+
+    public void seekDrive(double destination, String feedBackSensor, String seekType)
+    {
+        if (feedBackSensor == "navX")
+        {
+            tankDrive(pIDDrive(destination, Gyro.navXAngull(), feedBackSensor, seekType), pIDDrive(destination, Gyro.navXAngull(), feedBackSensor, seekType));
+        }
+        else if (feedBackSensor == "encoder")
+        {
+            tankDrive(-pIDDrive(destination, Robot.rightEncoder.get(), feedBackSensor, seekType), pIDDrive(destination, Robot.rightEncoder.get(), feedBackSensor, seekType));
+        }
+
+    }
+
+    public double pIDDrive(double targetDistance, double actualValue, String feedBackSensor, String seekType) // enter target distance in feet
+	{ 
+
+        if (feedBackSensor == "navX")
+        {
+         proportionalTweak = 0.0047; //0.0065 0.0047
+         integralTweak = 0.0; //.000007
+         DerivativeTweak = 0.0000;
+         okErrorRange = 0.0;
+        }
+        else if (feedBackSensor == "encoder")
+        {
+         proportionalTweak = 0.0065; //placeholers until ideal values for linear drive are found
+         integralTweak = 0.0;
+         DerivativeTweak = 0.0;
+         okErrorRange = 0.0; 
+        }
+        else
+        {
+         proportionalTweak = 0; //these just stay zero
+         integralTweak = 0;
+         DerivativeTweak = 0;
+         okErrorRange = 0; 
+        }
+        if (seekType == "exact"){
+            error = targetDistance - actualValue;
+        }
+        else if (seekType == "oneWay"){
+        error = Robot.noNegative(Math.abs(targetDistance - (actualValue)));
+        }
+		proportional = error;
+		derivative = (previousError - error)/ 0.02;
+		integral += previousError;
+		previousError = error;
+       
+
+		if ((error > okErrorRange || error < -okErrorRange)) //&& !(targetDistance < actualValue && seekType == "oneWay")
+		{
+			pIDMotorVoltage = truncateMotorOutput((proportionalTweak * proportional) + (DerivativeTweak * derivative) + (integralTweak * integral), feedBackSensor);
+			return pIDMotorVoltage;
+        }
+        if ( targetDistance - actualValue < 0 )
+        {
+            return 0;
+        }
+		else
+		{
+			proportional = 0;
+			integral = 0;
+			derivative = 0;
+			previousError = 0;
+            return 0;
+		}
+		
+    }
+    
+    private static double truncateMotorOutput(double motorOutput, String feedBackSensor) //Whatever the heck Jake and Van did
+    {
+        if (feedBackSensor == "encoder")
+        {
+          if (motorOutput > 1) 
+            return 0.5; 
+          
+          else if (motorOutput < -1) 
+            return -0.5;
+        
+          else 
+            return motorOutput;
+          
+        }
+        
+        if (feedBackSensor == "navX")
+        {
+            if (motorOutput > .4)
+               return 0.4; 
+            
+            else if (motorOutput < -.4)
+               return -0.4;
+            
+            else 
+               return motorOutput;
+            
+          }
+          else
+          return 0;
+    }
+
 }
