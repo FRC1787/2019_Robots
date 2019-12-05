@@ -50,6 +50,7 @@ public class Vision {
     double filterContoursMaxRatio = 1000;
 
     List<MatOfPoint> filteredContours;
+    
 
     // Colors used to draw contours..........new Scalar(B, G, R);
     public static final Scalar COLOR_BLACK = new Scalar(0, 0, 0);
