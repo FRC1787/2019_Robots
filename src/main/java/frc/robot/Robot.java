@@ -164,6 +164,7 @@ public class Robot extends TimedRobot {
     {
         climbDone = false;
         //allowedToIntake = true;
+        climb.lifter(false);
     }
 
     public void teleopPeriodic() 
