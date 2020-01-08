@@ -36,8 +36,7 @@ public class Climb {
     // Singleton instance
     private static final Climb instance = new Climb();
 
-    public Climb() 
-    {
+    public Climb() {
         // Put the climb motor into brake mode
         climbMotorOne.setNeutralMode(NeutralMode.Brake);
     }
@@ -79,7 +78,7 @@ public class Climb {
 
     public double sliderCorrection(Joystick joystick) 
     {
-        return -(joystick.getRawAxis(3) - 1) / 2;
+        return -( joystick.getRawAxis(3) - 1 ) / 2;
     }
 
     // Moves the robot using climb motor
@@ -97,12 +96,12 @@ public class Climb {
         climbMotorOne.setNeutralMode(NeutralMode.Brake);
     }
 
-    public boolean climberFullyExtended ()
+    public boolean climberFullyExtended()
     {
         return climbFullyExtendedLimitSwitch.get();
     }
 
-    public boolean climberFullyRetracted ()
+    public boolean climberFullyRetracted()
     {
         return climbFullyRetractedLimitSwitch.get();
     }
